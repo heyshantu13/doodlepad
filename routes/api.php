@@ -22,7 +22,10 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
+    Route::post('sendOTP','AuthController@checkmobile');
+    Route::post('verifyOTP','AuthController@verifyOTP');
     Route::post('signup', 'AuthController@signup');
+    Route::post('create-profile', 'AuthController@signup');
   
     Route::group([
       'middleware' => 'auth:api'

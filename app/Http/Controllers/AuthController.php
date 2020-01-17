@@ -1,5 +1,10 @@
 <?php
 
+/*  Author:  Shantanu K
+    Email: heyshantu13@gmail.com
+*/
+
+
 namespace App\Http\Controllers;
 
 
@@ -16,29 +21,86 @@ class AuthController extends Controller
 {
 
     private $createUser;
+
+
+    public function checkmobile(Request $request){
+
+         
+
+        if ($request->isMethod('post')) {
+
+             $request->validate([
+             'mobile' => 'required|string|min:10|max:10|unique:users',
+        ]);      
+              $sendOTP = new MSG91();
+              $isOTPSend = $sendOTP->sendOTP($request->mobile);
+
+              if($isOTPSend->type == 'success'){
+               return response()->json([
+                    'status'=>true,
+            'message' => 'Otp Sent Successfully.',
+        ], 201);
+            };
+
+    
+        }
+
+    }
+
+      public function verifyOTP(Request $request)
+    {
+
+       $request->validate([
+             'mobile' => 'required|string|min:10|max:10|unique:users',
+             'otp' => 'required|min:4'
+        ]);
+
+       $validateOTP = new MSG91();
+       $isOTPVerified = $validateOTP->verifyOTP($request->mobile,$request->otp);
+
+         if($isOTPVerified->type == 'success'){
+               return response()->json([
+                    'status'=>true,
+            'message' => 'Otp Verified Successfully.',
+        ], 201);
+            }
+            else{
+                 return response()->json([
+                    'status'=>false,
+            'message' => 'Incorrect OTP.',
+        ], 201);
+            }
+
+    
+
+
+
+     
+     }
+
     
 
     public function signup(CreateUserValidate $request)
     {
-        $sendOTP = new MSG91();
+       
 
         if($request->mobile != NULL){
 
-            $isOTPSend = $sendOTP->sendOTP($request->mobile);
+          
 
-            if($isOTPSend->type == 'success'){
+          
                 $createUser = new User([
                 'fullname' => $request->fullname,
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password)
-            ]);
+           
                  $createUser->save();
 
                   return response()->json([
                     'status'=>true,
             'message' => 'Account Successfully Created.',
-        ], 201);
+        ], 401);
 
             }
         }
@@ -68,10 +130,7 @@ class AuthController extends Controller
 
     }
 
-    public function verifyOTP(CreateUserValidate $request)
-    {
-
-    }
+  
   
     /**
      * Login user and create token
@@ -86,10 +145,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'username' => 'required|string|',
             'password' => 'required|string',
             'remember_me' => 'boolean'
-        ]);        $credentials = request(['email', 'password']);        if(!Auth::attempt($credentials))
+        ]);        
+        $credentials = request(['username', 'password']);        if(!Auth::attempt($credentials))
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);        
