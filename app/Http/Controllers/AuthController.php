@@ -84,7 +84,7 @@ class AuthController extends Controller
     {
        
 
-        if($request->mobile != NULL){
+        /*if($request->mobile != NULL){
 
           
 
@@ -124,7 +124,7 @@ class AuthController extends Controller
             'message' => 'Account Successfully Created.',
         ], 201);
 
-        }
+        }*/
 
 
 
