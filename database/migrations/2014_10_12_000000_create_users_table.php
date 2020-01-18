@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
             $table->char('otp',4)->nullable();
             $table->tinyInteger('active')->default(0)->unsigned();
             $table->boolean('is_verified')->default('0');
-            $table->enum('gender', ['male', 'female'])->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
