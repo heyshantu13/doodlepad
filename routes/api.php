@@ -22,10 +22,11 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
-    Route::post('sendOTP','AuthController@checkmobile');
-    Route::post('verifyOTP','AuthController@verifyOTP');
-    Route::post('signup', 'AuthController@signup');
-    Route::post('create-profile', 'AuthController@signup');
+    Route::post('sendOTP','AuthController@checkmobile')->middleware('throttle:3,1');
+    Route::post('resendOTP','AuthController@checkmobile')->middleware('throttle:3,1');
+    Route::post('verifyOTP','AuthController@verifyOTP')->middleware('throttle:3,1');
+    Route::post('create-account', 'AuthController@signup');
+    Route::post('create-profile', 'AuthController@signup')->middleware('auth:api');
   
     Route::group([
       'middleware' => 'auth:api'

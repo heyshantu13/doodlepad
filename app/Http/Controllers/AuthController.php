@@ -83,51 +83,35 @@ class AuthController extends Controller
     public function signup(CreateUserValidate $request)
     {
        
-
-        /*if($request->mobile != NULL){
-
-          
-
+        if($request->mobile != NULL){
           
                 $createUser = new User([
                 'fullname' => $request->fullname,
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
-                'password'=>bcrypt($request->password)
+                'password'=>bcrypt($request->password),
+            ]);
            
                  $createUser->save();
+                  $tokenResult = $createUser->createToken('Doodlepad Token');
+        $token = $tokenResult->token;  
 
-                  return response()->json([
+                
+                      return response()->json([
                     'status'=>true,
             'message' => 'Account Successfully Created.',
+             'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->getPreciseTimestamp(3)
         ], 401);
+                 }
 
-            }
-        }
+                
 
-        if($request->email != NULL){
-
-                $otp = rand(1111,9999);
-
-             $createUser = new User([
-                'fullname' => $request->fullname,
-                'username'=> $request->username,
-                'mobile'=> $request->mobile,
-                'password'=>bcrypt($request->password)
-            ]);
-                $createUser->otp = $otp;
-                 $createUser->save();
-                 SendOtpJob::dispatch()->delay(now()->addSeconds(2));
-
-                  return response()->json([
-                    'status'=>true,
-            'message' => 'Account Successfully Created.',
-        ], 201);
-
-        }*/
-
-
-
+            
+      
     }
 
   
