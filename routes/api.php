@@ -23,7 +23,7 @@ Route::group([
 ], function () {
     Route::post('login', 'AuthController@login');
     Route::post('sendOTP','AuthController@checkmobile');
-    Route::post('verifyOTP','AuthController@verifyOTP');
+    Route::post('verifyOTP','AuthController@verifyOTP')->middleware('throttle:3,1');
     Route::post('create-user', 'AuthController@signup');
     Route::post('create-profile', 'AuthController@createProfile');
   
