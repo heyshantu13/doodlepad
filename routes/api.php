@@ -18,18 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-// ->middleware('throttle:3,1');
-
-
 Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
     Route::post('sendOTP','AuthController@checkmobile');
-    Route::post('resendOTP','AuthController@checkmobile');
     Route::post('verifyOTP','AuthController@verifyOTP');
-    Route::post('create-account', 'AuthController@signup');
-    Route::post('create-profile', 'AuthController@createProfile')->middleware('auth:api');
+    Route::post('create-user', 'AuthController@signup');
+    Route::post('create-profile', 'AuthController@createProfile');
   
     Route::group([
       'middleware' => 'auth:api'
