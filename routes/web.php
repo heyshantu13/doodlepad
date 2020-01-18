@@ -11,22 +11,9 @@
 |
 */
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendOtpMailable;
 
 
 
-Route::get('sendmail',function(){
-Mail::to('heyshantu13@gmail.com')->send(new SendOtpMailable());
-});
-
-
-Route::get('find',function(){
-
-$data = App\User::where('mobile','9765679147');
-
-	
-});
 
 
 Route::get('/', function () {
@@ -36,7 +23,11 @@ Route::get('/', function () {
 
 
 
-Auth::routes();
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 
