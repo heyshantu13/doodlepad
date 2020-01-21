@@ -131,7 +131,16 @@ class AuthController extends Controller
 
              $profile = UserProfile::where('user_id', Auth::user()->id)->first();
        if (!$profile) {
-           $profile = new UserProfile();
+           $profile = new UserProfile([
+            'gender' => request()->gender,
+            'bio' => request()->bio,
+            'date_of_birth'=>request()->date_of_birth,
+            'fcm_registration_id'=> request()->fcm_registration_id
+           ]);
+
+           $profile->user_id = Auth::user()->id;
+           $profile->save();
+
            return response()->json([
                     'status'=>true,
             'message' => 'Profile Created Successfully.',
