@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use App\UserProfile;
 use App\Http\Requests\CreateUserValidate;
 use App\MSG91;
 use App\Jobs\SendOtpJob;
@@ -117,14 +118,46 @@ class AuthController extends Controller
 
     public function createProfile(Request $request){
 
-        return response()->json($request->user());
+          if ($request->isMethod('post')) {
+
+             $request->validate([
+             'gender' => 'required|string|max:7',
+             'bio' => 'required|min:1|max:140',
+             'date_of_birth' => 'required',
+             'fcm_registration_id'=> 'required|unique:user_profiles'
+        ]);
+
+
+
+             $profile = UserProfile::where('user_id', Auth::user()->id)->first();
+       if (!$profile) {
+           $profile = new UserProfile();
+           return response()->json([
+                    'status'=>true,
+            'message' => 'Profile Created Successfully.',
+        ], 201);
+        }
+        else{
+            return response()->json([
+                    'status'=>false,
+            'message' => 'Something Went Wrong!',
+        ], 201);
+        }
+
+      
+
+
+}
+
+     
+
+     
     }
 
   
   
     /**
      * Login user and create token
-     *
      * @param  [string] email
      * @param  [string] password
      * @param  [boolean] remember_me
@@ -132,24 +165,31 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
+
     public function login(Request $request)
     {
         $request->validate([
             'username' => 'required|string|',
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
+            'password' => 'required|string|min:8|max:14'
+            
         ]);        
-        $credentials = request(['username', 'password']);        if(!Auth::attempt($credentials))
+        $credentials = request(['username','password']);        
+        if(!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);        
-            $user = $request->user();        
-            $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;       
+                 'status'=>false,
+                'message' => 'username or password is invalid'
+            ], 401);      
+
+            $user = $request->user();  
+
+            $tokenResult = $user->createToken('Doodlepad Access Token');
+        $token = $tokenResult->token;  
+
          if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);        
         $token->save();       
          return response()->json([
+            'status'=>true,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
@@ -179,4 +219,55 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function resetPassword(Request $request){
+
+          $request->validate([
+             'mobile' => 'required|string|min:10|max:10',
+        ]);      
+
+         $profile = User::where('mobile', $request->mobile)->first();
+
+         if(!$profile)
+         {
+            return response()->json([
+                 'status'=>false,
+                'message' => 'Cant find account'
+            ], 401);      
+         }
+         else{
+            $sendOTP = new MSG91();
+              $isOTPSend = $sendOTP->sendOTP($request->mobile);
+
+              if($isOTPSend->type == 'success'){
+               return response()->json([
+                    'status'=>true,
+            'message' => 'Otp Sent Successfully.',
+        ], 201);
+         }
+     }
+     
+
+
+      }
+
+public function newPassword(Request $request){
+
+     $request->validate([
+             'mobile' => 'required|string|min:10|max:10',
+             'otp' => 'required|max:4',
+             'password'=> 'required|string|min:8|max:14'
+
+        ]);     
+
+     return response()->json([
+                    'status'=>true,
+            'message' => 'Password Changed Successfully.',
+        ], 201);
+}
+
+
+
+ 
+
 }
