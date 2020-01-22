@@ -17,6 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('uploadfile',function(){
+
+     Storage::disk('do')->putFile('uploads', request()->file, 'public');
+
+});
+
 
 Route::group([
     'prefix' => 'auth'
