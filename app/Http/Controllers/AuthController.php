@@ -125,7 +125,7 @@ class AuthController extends Controller
              'bio' => 'required|min:1|max:140',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'required|unique:user_profiles',
-             'profile_picture_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+             'profile_picture_url' => 'required|string'
         ]);
 
 
@@ -139,7 +139,7 @@ class AuthController extends Controller
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
             'fcm_registration_id'=> request()->fcm_registration_id,
-            'profile_picture_url' => '',
+            'profile_picture_url' => request()->profile_picture_url,
            ]);
 
            $profile->user_id = Auth::user()->id;

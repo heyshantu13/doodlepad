@@ -27,13 +27,14 @@ Route::post('uploadfile',function(){
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', 'AuthController@login');
+    Route::post('login', 'AuthController@login')->middleware('throttle:4,5');
     Route::post('sendOTP','AuthController@checkmobile')->middleware('throttle:4,10');
     Route::post('verifyOTP','AuthController@verifyOTP')->middleware('throttle:4,1');
     Route::post('create-user', 'AuthController@signup');
     Route::post('create-profile', 'AuthController@createProfile')->middleware('auth:api');
     Route::post('reset', 'AuthController@resetPassword')->middleware('throttle:4,10');
-    Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,10');;
+    Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,10');
+     Route::get('user', 'AuthController@user')->middleware('auth:api');
 
     Route::group([
       'middleware' => 'auth:api'
@@ -41,4 +42,12 @@ Route::group([
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
+
+
+     Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::get('search', 'UserController@search');
+    });
+
 });
