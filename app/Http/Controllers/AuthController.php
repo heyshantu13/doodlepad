@@ -125,7 +125,7 @@ class AuthController extends Controller
              'bio' => 'required|min:1|max:140',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'required|unique:user_profiles',
-             'profile_picture_url' => 'required|string'
+             'profile_picture_url' => 'required'
         ]);
 
 

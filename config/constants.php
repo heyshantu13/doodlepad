@@ -16,7 +16,7 @@ return [
     'COMMENT_ACTIVITY_DISLIKE' => POST_ACTIVITY_TYPE['DISLIKE'],
     'enums' => [
         'gender' => [GENDER['MALE'], GENDER['FEMALE']],
-        'post_type' => [POST_TYPE['TEXT'], POST_TYPE['IMAGE'], POST_TYPE['VIDEO'], POST_TYPE['AUDIO'], POST_TYPE['GIF']],
+        'post_type' => [POST_TYPE['TEXT'], POST_TYPE['IMAGE'], POST_TYPE['VIDEO'], POST_TYPE['AUDIO'], POST_TYPE['DOODLE']],
         'post_activities' => [POST_ACTIVITY_TYPE['COMMENT'], POST_ACTIVITY_TYPE['LIKE'], POST_ACTIVITY_TYPE['DISLIKE']],
         'comment_activities' => [COMMENT_ACTIVITY_TYPE['LIKE'], COMMENT_ACTIVITY_TYPE['DISLIKE']]
     ],

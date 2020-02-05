@@ -17,7 +17,7 @@ class CreateUserProfilesTable extends Migration
              $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
             $table->mediumText('bio');
-            $table->text('profile_pic_url')->nullable();
+            $table->longText('profile_pic_url')->nullable();
             $table->text('doodle_url')->nullable();
             $table->date('date_of_birth');
             $table->boolean('is_private')->default('0');
