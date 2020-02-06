@@ -36,7 +36,7 @@ Route::group([
     Route::post('sendOTP','AuthController@checkmobile');
     Route::post('verifyOTP','AuthController@verifyOTP');
     Route::post('create-user', 'AuthController@signup');
-    Route::put('create-profile', 'AuthController@createProfile');
+    Route::post('create-profile', 'AuthController@createProfile');
     Route::post('reset', 'AuthController@resetPassword')->middleware('throttle:4,10');
     Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,10');
      Route::get('user', 'AuthController@user')->middleware('auth:api');
