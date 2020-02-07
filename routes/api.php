@@ -19,7 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('uploadfile',function(){
 
-     Storage::disk('do')->putFile('uploads', request()->file, 'public');
+$fileName = "user_image.jpg";
+$path = request()->file('photo')->move(public_path("/"),$fileName);
+$photoURL = url('/',$fileName);
+return $photoURL;
+
+
 
 });
 

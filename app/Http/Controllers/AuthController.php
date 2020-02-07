@@ -69,7 +69,7 @@ class AuthController extends Controller
                  return response()->json([
                     'status'=>false,
             'message' => 'Incorrect OTP.',
-        ], 406);
+        ], 201);
             }
 
     
@@ -106,7 +106,7 @@ class AuthController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->getPreciseTimestamp(3)
-        ], 201);
+        ], 401);
                  }
 
                 
@@ -115,6 +115,53 @@ class AuthController extends Controller
       
     }
 
+
+    public function createProfile(Request $request){
+
+          if ($request->isMethod('post')) {
+
+             $request->validate([
+             'gender' => 'required|string|max:7',
+             'bio' => 'required|min:1|max:140',
+             'date_of_birth' => 'required',
+             'fcm_registration_id'=> 'required|unique:user_profiles'
+        ]);
+
+
+
+             $profile = UserProfile::where('user_id', Auth::user()->id)->first();
+       if (!$profile) {
+           $profile = new UserProfile([
+            'gender' => request()->gender,
+            'bio' => request()->bio,
+            'date_of_birth'=>request()->date_of_birth,
+            'fcm_registration_id'=> request()->fcm_registration_id
+           ]);
+
+           $profile->user_id = Auth::user()->id;
+           $profile->save();
+
+           return response()->json([
+                    'status'=>true,
+            'message' => 'Profile Created Successfully.',
+        ], 201);
+        }
+        else{
+            return response()->json([
+                    'status'=>false,
+            'message' => 'Something Went Wrong!',
+        ], 201);
+        }
+
+      
+
+
+}
+
+     
+
+     
+    }
 
   
   
@@ -181,48 +228,6 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
-
-      public function createProfile(Request $request){
-
-          if ($request->isMethod('post')) {
-
-             $request->validate([
-             'gender' => 'required|string|max:7',
-             'bio' => 'required|min:1|max:140',
-             'date_of_birth' => 'required',
-             'fcm_registration_id'=> 'required|unique:user_profiles'
-        ]);
-
-
-
-             $profile = UserProfile::where('user_id', Auth::user()->id)->first();
-       if (!$profile) {
-           $profile = new UserProfile([
-            'gender' => request()->gender,
-            'bio' => request()->bio,
-            'date_of_birth'=>request()->date_of_birth,
-            'fcm_registration_id'=> request()->fcm_registration_id
-           ]);
-
-           $profile->user_id = Auth::user()->id;
-           $profile->save();
-
-           return response()->json([
-                    'status'=>true,
-            'message' => 'Profile Created Successfully.',
-        ], 201);
-        }
-        else{
-            return response()->json([
-                    'status'=>false,
-            'message' => 'Something Went Wrong!',
-        ], 201);
-        }
-
-      
-
-
-}
 
     public function resetPassword(Request $request){
 
