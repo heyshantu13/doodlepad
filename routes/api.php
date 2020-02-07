@@ -27,7 +27,7 @@ Route::post('uploadfile',function(){
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', 'AuthController@login')->middleware('throttle:4,5');
+    Route::post('login', 'AuthController@login');
     Route::post('sendOTP','AuthController@checkmobile');
     Route::post('verifyOTP','AuthController@verifyOTP');
     Route::post('create-user', 'AuthController@signup');
