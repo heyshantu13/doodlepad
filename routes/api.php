@@ -17,16 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('uploadfile',function(){
 
-$fileName = rand(1111,9999)."user_image.jpg";
-$path = request()->file('photo')->move(public_path("/"),$fileName);
-$photoURL = url('/',$fileName);
-return $photoURL;
-
-
-
-});
 
 
 Route::group([

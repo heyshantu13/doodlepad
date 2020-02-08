@@ -228,7 +228,11 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $profile = UserProfile::where('user_id', Auth::user()->id)->first();
+        return response()->json([
+            'userdetails' =>$request->user(),
+            'profiledetails'=>$profile,
+        ]);
     }
 
     public function resetPassword(Request $request){
