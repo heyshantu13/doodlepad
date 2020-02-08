@@ -10,6 +10,6 @@ use Laravel\Passport\HasApiTokens;
 class UserProfile extends Model
 {
      protected $fillable = [
-        'bio', 'date_of_birth', 'gender','profile_pic_url'
+        'bio', 'date_of_birth', 'gender','profile_picture_url'
     ];
 }
