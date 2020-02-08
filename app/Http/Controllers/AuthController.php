@@ -108,12 +108,10 @@ class AuthController extends Controller
             )->getPreciseTimestamp(3)
         ], 401);
                  }
-
-                
-
-            
       
     }
+
+
 
 
     public function createProfile(Request $request){
@@ -124,19 +122,23 @@ class AuthController extends Controller
              'gender' => 'required|string|max:7',
              'bio' => 'required|min:1|max:140',
              'date_of_birth' => 'required',
-             'fcm_registration_id'=> 'required|unique:user_profiles'
+             'fcm_registration_id'=> 'required|unique:user_profiles',
+             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096'
         ]);
 
 
-
+ $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
              $profile = UserProfile::where('user_id', Auth::user()->id)->first();
        if (!$profile) {
            $profile = new UserProfile([
             'gender' => request()->gender,
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
-            'fcm_registration_id'=> request()->fcm_registration_id
+            'fcm_registration_id'=> request()->fcm_registration_id,
+            'profile_picture_url'=>$imageName,
            ]);
+
+           request()->file('profile_picture_url')->move(public_path("/"),$imageName);
 
            $profile->user_id = Auth::user()->id;
            $profile->save();
@@ -149,7 +151,7 @@ class AuthController extends Controller
         else{
             return response()->json([
                     'status'=>false,
-            'message' => 'Something Went Wrong!',
+            'message' => 'Account Already Exist!',
         ], 201);
         }
 
