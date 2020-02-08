@@ -229,10 +229,15 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $profile = UserProfile::where('user_id', Auth::user()->id)->first();
-        return response()->json([
-            'userdetails' =>$request->user(),
+
+        $response = collect([
+             'userdetails' =>$request->user(['id','fullname','username']),
             'profiledetails'=>$profile,
+
         ]);
+        return response()->json($response);
+
+      
     }
 
     public function resetPassword(Request $request){
@@ -279,6 +284,12 @@ public function newPassword(Request $request){
                     'status'=>true,
             'message' => 'Password Changed Successfully.',
         ], 201);
+}
+
+public function checksession(){
+   return response()->json([
+                    'status'=>true,
+        ], 200);
 }
 
 

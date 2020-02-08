@@ -31,6 +31,7 @@ Route::group([
     Route::post('reset', 'AuthController@resetPassword')->middleware('throttle:4,10');
     Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,10');
      Route::get('user', 'AuthController@user')->middleware('auth:api');
+     Route::get('checksession','AuthController@checksession')->middleware('auth:api');
 
     Route::group([
       'middleware' => 'auth:api'
