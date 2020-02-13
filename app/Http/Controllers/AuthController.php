@@ -106,7 +106,7 @@ class AuthController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->getPreciseTimestamp(3)
-        ], 401);
+        ], 200);
                  }
       
     }
