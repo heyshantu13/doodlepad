@@ -50,7 +50,7 @@ Route::group([
       Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::post('update-profile', 'UserController@updateProfile');
+        Route::post('changeProfile', 'UserController@updateProfile');
         
     });
 
