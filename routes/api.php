@@ -47,4 +47,11 @@ Route::group([
         Route::get('search', 'UserController@search');
     });
 
+      Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::post('update-profile', 'UserController@updateProfile');
+        
+    });
+
 });
