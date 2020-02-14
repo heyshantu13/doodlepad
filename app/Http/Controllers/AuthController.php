@@ -123,7 +123,7 @@ class AuthController extends Controller
              'bio' => 'required|min:1|max:140',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'required|unique:user_profiles',
-             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096'
+             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:6096'
         ]);
 
 
@@ -228,14 +228,7 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        $profile = UserProfile::where('user_id', Auth::user()->id)->first();
-
-        $response = collect([
-             'userdetails' =>$request->user(['id','fullname','username']),
-            'profiledetails'=>$profile,
-
-        ]);
-        return response()->json($response);
+        return response()->json($request->user());
 
       
     }
