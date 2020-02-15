@@ -15,6 +15,7 @@ use App\User;
 use App\UserProfile;
 use App\Http\Requests\CreateUserValidate;
 use App\MSG91;
+use FirebaseJWT;
 use App\Jobs\SendOtpJob;
 
 
@@ -206,7 +207,8 @@ $url = "http://api.doodlepad.in/";   // For sample
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'jwt_token' => ''
         ]);
     }
   

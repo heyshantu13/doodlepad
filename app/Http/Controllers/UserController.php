@@ -70,9 +70,9 @@ class UserController extends Controller
          $profile = User::find($userID)->first(['id','fullname','username','is_verified','active']);
         $profileDeatils = UserProfile::where('user_id',$userID)->first(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
         $status = ['status'=>true]; 
-        $collection = collect([$status,$profile,$profileDeatils]);
+        $collection = collect($profile);
          if($collection){
-          return response()->json($collection, 200);
+          return response()->json($collection->merge($profileDeatils,$status), 200);
          }
          else{
           return response()->json(['status'=>false], 500);
