@@ -20,14 +20,15 @@ class UserController extends Controller
 
           $search = $request->q;
         $profiles = User::where('username', 'like', '%' . $search . '%')->paginate();
-        return response()->json($profiles);
+        return response()->json($profiles,200);
 
 
 	}
 
 	public function updateProfile(Request $request){
 
-		 $profile = UserProfile::where('user_id', Auth::user()->id)->firstOrFail();
+     $profile = UserProfile::where('user_id', Auth::user()->id)->firstOrFail();
+     $url = "http://api.doodlepad.in/"; //sample url
 
 		$request->validate([
             
@@ -37,7 +38,7 @@ class UserController extends Controller
         $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
          request()->file('profile_picture_url')->move(public_path("/"),$imageName);
 
-        $profile->profile_picture_url = $imageName;
+        $profile->profile_picture_url = $url.$imageName;
 
 
         $profile->save();
@@ -45,7 +46,7 @@ class UserController extends Controller
         return response()->json([
                     'status'=>true,
             'message' => 'Profile Updated Successfully.',
-            'profile_picture_url' => 'http://api.doodlepad.in/'.$imageName,
+            'profile_picture_url' => $url.$imageName,
         ], 200);
 
 
