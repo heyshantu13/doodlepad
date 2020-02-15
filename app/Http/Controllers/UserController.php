@@ -12,7 +12,8 @@ use Illuminate\Support\Collection;
 
 class UserController extends Controller
 {
-    //
+  
+  
 
 	public function search(Request $request){
 		  $user = Auth::user();
@@ -35,19 +36,24 @@ class UserController extends Controller
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096'
         ]);
 
-        $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
-         request()->file('profile_picture_url')->move(public_path("/"),$imageName);
+       
 
-        $profile->profile_picture_url = $url.$imageName;
+        try {
+          $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
+          request()->file('profile_picture_url')->move(public_path("/"),$imageName);
+         $profile->profile_picture_url = $url.$imageName;
+         $profile->save();
+         return response()->json([
+          'status'=>true,
+  'message' => 'Profile Updated Successfully.',
+  'profile_picture_url' => $url.$imageName,
+], 200);
+        }
+        catch(\Exception $ex) {
+          abort(400);
+      }
 
-
-        $profile->save();
-
-        return response()->json([
-                    'status'=>true,
-            'message' => 'Profile Updated Successfully.',
-            'profile_picture_url' => $url.$imageName,
-        ], 200);
+       
 
 
 
