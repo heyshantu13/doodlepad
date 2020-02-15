@@ -126,6 +126,7 @@ class AuthController extends Controller
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:6096'
         ]);
 
+$url = "http://api.doodlepad.in/";   // For sample
 
  $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
              $profile = UserProfile::where('user_id', Auth::user()->id)->first();
@@ -135,7 +136,7 @@ class AuthController extends Controller
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
             'fcm_registration_id'=> request()->fcm_registration_id,
-            'profile_picture_url'=>$imageName,
+            'profile_picture_url'=>$url.$imageName,
            ]);
 
            request()->file('profile_picture_url')->move(public_path("/"),$imageName);
