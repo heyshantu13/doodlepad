@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "626032214188",
+    "firebase_url": "https://doodlepad-8e883.firebaseio.com",
+    "project_id": "doodlepad-8e883",
+    "storage_bucket": "doodlepad-8e883.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626032214188:android:114e4b3866a978e4f01f09",
+        "android_client_info": {
+          "package_name": "in.doodlepad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626032214188-598m8r8mp32shhkr3qg06100hd3ahn6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcpTghNycn_ReW9543R_vh5GziyKECF3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626032214188-598m8r8mp32shhkr3qg06100hd3ahn6r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

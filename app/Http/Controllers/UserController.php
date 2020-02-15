@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\User;
 use App\UserProfile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 
 class UserController extends Controller
@@ -49,7 +50,32 @@ class UserController extends Controller
 
 
 
-	}
+  }
+  
+  /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function user(Request $request)
+    {
+         $userID = Auth::user()->id;
+         $profile = User::find($userID)->first(['id','fullname','username','is_verified','active']);
+        $profileDeatils = UserProfile::where('user_id',$userID)->first(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
+        $status = ['status'=>true]; 
+        $collection = collect([$status,$profile,$profileDeatils]);
+         if($collection){
+          return response()->json($collection, 200);
+         }
+         else{
+          return response()->json(['status'=>false], 500);
+         }
+         
+  
+
+      
+    }
+
 
 
 
