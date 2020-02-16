@@ -15,14 +15,25 @@ use App\User;
 use App\UserProfile;
 use App\Http\Requests\CreateUserValidate;
 use App\MSG91;
-use FirebaseJWT;
 use App\Jobs\SendOtpJob;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Auth as FirebaseAuth;
+use Kreait\Firebase\Exception\Auth\AuthError;
+
 
 
 class AuthController extends Controller
 {
 
     private $createUser;
+    public $auth;
+
+   public function __construct(){
+    $this->auth = (new Factory)
+    ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
+    ->createAuth();
+   }
+
 
 
     public function checkmobile(Request $request){
@@ -95,7 +106,7 @@ class AuthController extends Controller
             ]);
            
                  $createUser->save();
-                  $tokenResult = $createUser->createToken('Doodlepad Token');
+                  $tokenResult = $createUser->createToken('Doodlepad Access Token');
         $token = $tokenResult->token;  
 
                 
@@ -143,12 +154,31 @@ $url = "http://api.doodlepad.in/";   // For sample
            request()->file('profile_picture_url')->move(public_path("/"),$imageName);
 
            $profile->user_id = Auth::user()->id;
-           $profile->save();
+           $userProperties = [
+            'phoneNumber'=>'+91'.Auth::user()->mobile,
+            'uid'=>Auth::user()->id ,
+            'displayName' => Auth::user()->fullname,
+            'photoUrl' =>$url.$imageName,
+            'disabled' => false,
+        ];
+           try{
+            $createdUser = $this->auth->createUser($userProperties);
+            $profile->save();
+            $jwtToken = $this->auth->createCustomToken((string)Auth::user()->id);
+            return response()->json([
+                'status'=>true,
+        'message' => 'Profile Created Successfully.',
+        'jwt_token' => (string) $jwtToken,
+    ], 201);
+            }
+        catch(AuthError $e){
+            return response()->json([
+                'status'=>false,
+        'message' => 'Something Went Wrong!',
+    ], 400);
+        }
 
-           return response()->json([
-                    'status'=>true,
-            'message' => 'Profile Created Successfully.',
-        ], 201);
+          
         }
         else{
             return response()->json([
@@ -158,13 +188,10 @@ $url = "http://api.doodlepad.in/";   // For sample
         }
 
       
-
+            
 
 }
 
-     
-
-     
     }
 
   
@@ -177,12 +204,13 @@ $url = "http://api.doodlepad.in/";   // For sample
      * @return [string] access_token
      * @return [string] token_type
      * @return [string] expires_at
+     * @return [string] jwt_token
      */
 
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|',
+            'username' => 'required|string|min:4|max:16',
             'password' => 'required|string|min:8|max:14'
             
         ]);        
@@ -190,14 +218,18 @@ $url = "http://api.doodlepad.in/";   // For sample
         if(!Auth::attempt($credentials))
             return response()->json([
                  'status'=>false,
-                'message' => 'username or password is invalid'
+                'message' => 'Username or Password is Invalid'
             ], 401);      
 
-            $user = $request->user();  
+            $user = $request->user(); 
 
             $tokenResult = $user->createToken('Doodlepad Access Token');
         $token = $tokenResult->token;  
-
+        
+            $uid = $user->id;
+       
+        $jwtToken = $this->auth->createCustomToken((string)$uid);
+       
          if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);        
         $token->save();       
@@ -208,7 +240,7 @@ $url = "http://api.doodlepad.in/";   // For sample
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString(),
-            'jwt_token' => ''
+            'jwt_token' => (string) $jwtToken,
         ]);
     }
   
@@ -278,7 +310,32 @@ public function checksession(){
         ], 200);
 }
 
+    public function jwtAuth(){
+ 
 
+ 
+
+    $userProperties = [
+        'phoneNumber'=>'+918668777233',
+        'password' => '123456789',
+        'uid'=> '2',
+        'displayName' => 'Shantanu Kulkarni',
+        'photoUrl' => 'http://www.example.com/12345678/photo.png',
+        'disabled' => false,
+    ];
+
+    try{
+        $createdUser = $this->auth->createUser($userProperties);
+
+     
+    }
+    catch(AuthError $e){
+echo "error";
+    }
+    
+  
+
+    }
 
  
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a59c52cbf249d4aee81165ea80e3ce25",
+    "content-hash": "375b6652883cad2b0b5e9d91f3872a4a",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2604,6 +2604,93 @@
                 "x509"
             ],
             "time": "2019-09-17T03:41:22+00:00"
+        },
+        {
+            "name": "plokko/firebase-php",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plokko/firebase-php.git",
+                "reference": "bcfa1e9e73257e8c38f39ee485d317f5a15174a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plokko/firebase-php/zipball/bcfa1e9e73257e8c38f39ee485d317f5a15174a7",
+                "reference": "bcfa1e9e73257e8c38f39ee485d317f5a15174a7",
+                "shasum": ""
+            },
+            "require": {
+                "firebase/php-jwt": "^5.0",
+                "google/auth": "^1.2.1",
+                "guzzlehttp/guzzle": "^6.3",
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Plokko\\Firebase\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Firebase API php implementation",
+            "time": "2018-09-05T12:22:34+00:00"
+        },
+        {
+            "name": "plokko/laravel-firebase",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plokko/laravel-firebase.git",
+                "reference": "d1619f0aa6365d1cfbe78880eaa20dc79deed8f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plokko/laravel-firebase/zipball/d1619f0aa6365d1cfbe78880eaa20dc79deed8f6",
+                "reference": "d1619f0aa6365d1cfbe78880eaa20dc79deed8f6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.4.0",
+                "php": ">=5.6",
+                "plokko/firebase-php": "^0.1.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.6.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Plokko\\LaravelFirebase\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "FirebaseDb": "Plokko\\LaravelFirebase\\Facades\\FirebaseDb",
+                        "FirebaseJWT": "Plokko\\LaravelFirebase\\Facades\\FirebaseJWT",
+                        "FCM": "Plokko\\LaravelFirebase\\Facades\\FCM"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Plokko\\LaravelFirebase\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel Firebase integration",
+            "keywords": [
+                "FCM",
+                "firebase",
+                "laravel",
+                "realtime database"
+            ],
+            "time": "2019-10-01T15:53:58+00:00"
         },
         {
             "name": "psr/cache",
