@@ -68,7 +68,7 @@ class UserController extends Controller
     {
          $userID = Auth::user()->id;
          $profile = User::find($userID)->first(['id','fullname','username','is_verified','active']);
-        $profileDeatils = UserProfile::where('user_id',$userID)->first(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
+        $profileDeatils = UserProfile::where('user_id',Auth::user()->id)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
         $status = ['status'=>true]; 
         $collection = collect($profile);
          if($collection){
@@ -77,6 +77,8 @@ class UserController extends Controller
          else{
           return response()->json(['status'=>false], 500);
          }
+      
+        
          
   
 

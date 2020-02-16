@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "626032214188",
-    "firebase_url": "https://doodlepad-8e883.firebaseio.com",
-    "project_id": "doodlepad-8e883",
-    "storage_bucket": "doodlepad-8e883.appspot.com"
+    "project_number": "914766769423",
+    "firebase_url": "https://doodlepadfirebaseindia.firebaseio.com",
+    "project_id": "doodlepadfirebaseindia",
+    "storage_bucket": "doodlepadfirebaseindia.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:626032214188:android:114e4b3866a978e4f01f09",
+        "mobilesdk_app_id": "1:914766769423:android:8cbe72eb3a5592ded3e27a",
         "android_client_info": {
-          "package_name": "in.doodlepad"
+          "package_name": "com.example.doodlepad"
         }
       },
       "oauth_client": [
         {
-          "client_id": "626032214188-598m8r8mp32shhkr3qg06100hd3ahn6r.apps.googleusercontent.com",
+          "client_id": "914766769423-pe84sj9ka5ugk71nqbs723j8o8tj33sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doodlepad",
+            "certificate_hash": "ff727a065e1a9e80563c0d909e9b18e8679aa0e6"
+          }
+        },
+        {
+          "client_id": "914766769423-uk1qu4j6bmrbhihps9s2u0d7i3aogcg3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCcpTghNycn_ReW9543R_vh5GziyKECF3s"
+          "current_key": "AIzaSyCR9BHHYj7W4vulPIUXK_YAPTqLsob92sI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "626032214188-598m8r8mp32shhkr3qg06100hd3ahn6r.apps.googleusercontent.com",
+              "client_id": "914766769423-uk1qu4j6bmrbhihps9s2u0d7i3aogcg3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
