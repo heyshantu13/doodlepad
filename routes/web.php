@@ -30,3 +30,5 @@ Auth::routes([
 
 
 
+Route::get('/do','UserController@getinfo');
+

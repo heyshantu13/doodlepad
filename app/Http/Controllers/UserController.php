@@ -8,7 +8,7 @@ use App\User;
 use App\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
-
+use App\AwsSpace;
 
 class UserController extends Controller
 {
@@ -68,7 +68,7 @@ class UserController extends Controller
     {
          $userID = Auth::user()->id;
          $profile = User::where('id',$userID)->first(['id','fullname','username','is_verified','active']);
-         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
+         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id','bio']);
          $collection = collect($profile);
          if($collection){
           return response()->json($collection->merge($profileDeatils), 200);
@@ -80,6 +80,12 @@ class UserController extends Controller
     }
 
 
+      public function getinfo(){
+        $dospace = new AwsSpace();
+       return $dospace->getSpaceInfo();
+      }
+
+   
 
 
 

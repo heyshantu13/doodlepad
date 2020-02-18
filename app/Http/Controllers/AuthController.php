@@ -106,8 +106,8 @@ class AuthController extends Controller
             ]);
            
                  $createUser->save();
-                  $tokenResult = $createUser->createToken('Doodlepad Access Token');
-        $token = $tokenResult->token;  
+                $tokenResult = $createUser->createToken('Doodlepad Access Token');
+                $token = $tokenResult->token;  
 
                 
                       return response()->json([
@@ -135,7 +135,7 @@ class AuthController extends Controller
              'bio' => 'required|min:1|max:140',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'required|unique:user_profiles',
-             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:6096'
+             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
 
 $url = "http://api.doodlepad.in/";   // For sample
