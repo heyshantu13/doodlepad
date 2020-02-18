@@ -67,21 +67,15 @@ class UserController extends Controller
     public function user(Request $request)
     {
          $userID = Auth::user()->id;
-         $profile = User::find($userID)->first(['id','fullname','username','is_verified','active']);
-        $profileDeatils = UserProfile::where('user_id',Auth::user()->id)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
-        $status = ['status'=>true]; 
-        $collection = collect($profile);
+         $profile = User::where('id',$userID)->first(['id','fullname','username','is_verified','active']);
+         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id']);
+         $collection = collect($profile);
          if($collection){
-          return response()->json($collection->merge($profileDeatils,$status), 200);
+          return response()->json($collection->merge($profileDeatils), 200);
          }
          else{
           return response()->json(['status'=>false], 500);
          }
-      
-        
-         
-  
-
       
     }
 
