@@ -178,7 +178,7 @@ return [
 
         /*3rd party Providers*/
 
-        // Overtrue\LaravelFollow\FollowServiceProvider::class,
+        Overtrue\LaravelFollow\FollowServiceProvider::class,
 
     ],
 

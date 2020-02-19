@@ -337,6 +337,10 @@ echo "error";
 
     }
 
+    public function getfirebaseuser(){
+        return $this->auth->getUser('2');
+    }
+
  
 
 }

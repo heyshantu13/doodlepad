@@ -15,7 +15,7 @@ class CreateUserProfilesTable extends Migration
     {
           Schema::create('user_profiles', function (Blueprint $table) {
              $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
             $table->mediumText('bio');
             $table->longText('profile_picture_url')->nullable();
             $table->text('doodle_url')->nullable();
