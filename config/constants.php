@@ -20,5 +20,5 @@ return [
         'post_activities' => [POST_ACTIVITY_TYPE['COMMENT'], POST_ACTIVITY_TYPE['LIKE'], POST_ACTIVITY_TYPE['DISLIKE']],
         'comment_activities' => [COMMENT_ACTIVITY_TYPE['LIKE'], COMMENT_ACTIVITY_TYPE['DISLIKE']]
     ],
-    'paginate_per_page' => env('PAGINATE_PER_PAGE', 15)
+    'paginate_per_page' => env('PAGINATE_PER_PAGE', 10)
 ];

@@ -16,7 +16,11 @@
 
 
 
-Route::get('/', 'AuthController@jwtAuth');
+Route::get('/', function(){
+    return abort(400);
+});
+
+Route::get('/firebase','AuthController@getfirebaseuser');
 
 
 

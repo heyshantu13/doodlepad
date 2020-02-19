@@ -33,7 +33,9 @@ class UserController extends Controller
 
 		$request->validate([
             
-             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096'
+             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096',
+             'bio' => 'required|string',
+             'gender'=>'required',
         ]);
 
        
