@@ -81,6 +81,21 @@ class UserController extends Controller
       
     }
 
+    public function getUser($id){
+
+     
+      $profile = User::where('id',$id)->first(['id','fullname','username','is_verified','active']);
+      $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id','bio']);
+      $collection = collect($profile);
+      if($collection){
+       return response()->json($collection->merge($profileDeatils), 200);
+      }
+      else{
+       return response()->json(null, 404);
+      }
+
+    }
+
 
       public function getinfo(){
         $dospace = new AwsSpace();

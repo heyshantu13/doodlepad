@@ -34,10 +34,11 @@ Route::group([
     Route::get('checksession','AuthController@checksession')->middleware('auth:api');
 
     Route::group([
-      'middleware' => 'auth:api'
+       'middleware' => 'auth:api'
     ], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'UserController@user');
+        Route::get('getUserDetails/{id}', 'UserController@getUser');
     });
 
 
