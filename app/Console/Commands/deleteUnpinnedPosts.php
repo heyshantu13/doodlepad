@@ -39,6 +39,7 @@ class deleteUnpinnedPosts extends Command
      */
     public function handle()
     {
-        Post::where('is_pinned', 0)->whereDate('created_at', '<', Carbon::now()->subHours(1))->delete();
+        Post::where('is_pinned', 0)->whereDate('created_at', '<', Carbon::now()->subHours(24))->delete();
+        return "Task Added";
     }
 }
