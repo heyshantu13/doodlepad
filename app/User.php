@@ -37,4 +37,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function userprofiles(){
+        return $this->hasMany('App\UserProfile','user_id','id')->select(['user_id','bio','profile_picture_url','is_private','gender']);
+    }
 }

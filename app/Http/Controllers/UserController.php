@@ -9,6 +9,10 @@ use App\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use App\AwsSpace;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+
+
 
 class UserController extends Controller
 {
@@ -17,11 +21,37 @@ class UserController extends Controller
 
 	public function search(Request $request){
 		  $user = Auth::user();
-        $profile = User::where('id', $user->id)->firstOrFail();
+      $profile = User::where('id', $user->id)->firstOrFail();
 
-          $search = $request->q;
-        $profiles = User::where('username', 'like', '%' . $search . '%')->paginate();
+    //   $countsQuery = [
+    //     'followers as is_following' => function ($query) use ($profile) {
+    //         $query->where('followables.user_profile_id', $profile->id);
+    //     },
+    //     'following as following_count',
+    //     'followers as followers_count'
+    // ];
+
+
+        $request->validate([
+          'q' =>'required|string'
+        ]);
+       $search = $request->q;
+
+      $user = User::with('userprofiles')->get();
+      $profiles = User::select(['id','fullname','username'])
+      ->where('username', 'like', '%' . $search . '%')
+      ->orWhere('fullname', 'like','%'.$search.'%')
+      ->with('userprofiles')
+      ->paginate(10);
+      try{
         return response()->json($profiles,200);
+      }
+      catch(\Exception $ex) {
+
+        return response()->json(null,501);
+      }
+      
+
 
 
 	}
@@ -35,7 +65,6 @@ class UserController extends Controller
             
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096',
              'bio' => 'required|string',
-             'gender'=>'required',
         ]);
 
        
@@ -52,7 +81,7 @@ class UserController extends Controller
 ], 200);
         }
         catch(\Exception $ex) {
-          abort(400);
+          return response()->json(null,408);
       }
 
        

@@ -29,8 +29,8 @@ class CreateUserValidate extends FormRequest
              
              'email' => 'required|email|unique:users',
             'fullname' => 'required|string|max:50',
-            'password' => 'required|min:8|max:12',
-            'username' => 'required|string|unique:users|alpha_dash|max:16'
+            'password' => 'required|min:8|max:16',
+            'username' => 'required|string|unique:users|alpha_dash|max:20|min:4'
          
 
         ];

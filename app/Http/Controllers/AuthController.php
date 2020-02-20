@@ -2,6 +2,7 @@
 
 /*  Author:  Shantanu K
     Email: heyshantu13@gmail.com
+    Description:  Authentication Management Controller
 */
 
 
@@ -27,50 +28,42 @@ class AuthController extends Controller
 
     private $createUser;
     public $auth;
+    private $otp;
 
    public function __construct(){
     $this->auth = (new Factory)
     ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
     ->createAuth();
+    $this->otp = new MSG91();
    }
 
 
 
     public function checkmobile(Request $request){
-
-         
-
         if ($request->isMethod('post')) {
-
              $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
         ]);      
-              $sendOTP = new MSG91();
-              $isOTPSend = $sendOTP->sendOTP($request->mobile);
-
+             
+              $isOTPSend =  $this->otp->sendOTP($request->mobile);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
-            'message' => 'Otp Sent Successfully.',
-        ], 201);
+                    'message' => 'Otp Sent Successfully.',
+                ], 201);
             };
-
-    
         }
 
     }
 
       public function verifyOTP(Request $request)
     {
-
        $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
              'otp' => 'required|min:4'
         ]);
-
        $validateOTP = new MSG91();
-       $isOTPVerified = $validateOTP->verifyOTP($request->mobile,$request->otp);
-
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -83,53 +76,38 @@ class AuthController extends Controller
             'message' => 'Incorrect OTP.',
         ], 201);
             }
-
-    
-
-
-
-     
      }
 
     
 
     public function signup(CreateUserValidate $request)
     {
-       
         if($request->mobile != NULL){
-          
                 $createUser = new User([
                 'fullname' => $request->fullname,
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
             ]);
-           
                  $createUser->save();
                 $tokenResult = $createUser->createToken('Doodlepad Access Token');
                 $token = $tokenResult->token;  
-
-                
                       return response()->json([
                     'status'=>true,
             'message' => 'Account Successfully Created.',
              'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->getPreciseTimestamp(3)
         ], 200);
                  }
-      
     }
 
 
 
 
     public function createProfile(Request $request){
-
           if ($request->isMethod('post')) {
-
              $request->validate([
              'gender' => 'required|string|max:7',
              'bio' => 'required|min:1|max:140',
@@ -137,21 +115,24 @@ class AuthController extends Controller
              'fcm_registration_id'=> 'required|unique:user_profiles',
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
+            $url = "http://api.doodlepad.in/";   // For sample
 
-$url = "http://api.doodlepad.in/";   // For sample
-
- $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
-             $profile = UserProfile::where('user_id', Auth::user()->id)->first();
-       if (!$profile) {
-           $profile = new UserProfile([
+        $imageName = rand(1111,9999).time().'.'.request()
+        ->profile_picture_url
+        ->getClientOriginalExtension();
+            $profile = UserProfile::where('user_id', Auth::user()->id)
+            ->first();
+            if (!$profile) {
+                $profile = new UserProfile([
             'gender' => request()->gender,
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
             'fcm_registration_id'=> request()->fcm_registration_id,
             'profile_picture_url'=>$url.$imageName,
-           ]);
+            ]);
 
-           request()->file('profile_picture_url')->move(public_path("/"),$imageName);
+           request()->file('profile_picture_url')
+           ->move(public_path("/"),$imageName);
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
@@ -160,25 +141,23 @@ $url = "http://api.doodlepad.in/";   // For sample
             'displayName' => Auth::user()->fullname,
             'photoUrl' =>$url.$imageName,
             'disabled' => false,
-        ];
+            ];
            try{
             $createdUser = $this->auth->createUser($userProperties);
             $profile->save();
             $jwtToken = $this->auth->createCustomToken((string)Auth::user()->id);
             return response()->json([
                 'status'=>true,
-        'message' => 'Profile Created Successfully.',
-        'jwt_token' => (string) $jwtToken,
-    ], 201);
+                'message' => 'Profile Created Successfully.',
+                'jwt_token' => (string) $jwtToken,
+            ], 201);
             }
-        catch(AuthError $e){
+            catch(AuthError $e){
             return response()->json([
                 'status'=>false,
-        'message' => 'Something Went Wrong!',
-    ], 400);
+                'message' => 'Something Went Wrong!',
+            ], 400);
         }
-
-          
         }
         else{
             return response()->json([
@@ -186,15 +165,10 @@ $url = "http://api.doodlepad.in/";   // For sample
             'message' => 'Account Already Exist!',
         ], 201);
         }
-
-      
-            
-
 }
 
     }
 
-  
   
     /**
      * Login user and create token
@@ -202,7 +176,6 @@ $url = "http://api.doodlepad.in/";   // For sample
      * @param  [string] password
      * @param  [boolean] remember_me
      * @return [string] access_token
-     * @return [string] token_type
      * @return [string] expires_at
      * @return [string] jwt_token
      */
@@ -210,7 +183,7 @@ $url = "http://api.doodlepad.in/";   // For sample
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|min:4|max:16',
+            'username' => 'required|string|min:4|max:20',
             'password' => 'required|string|min:8|max:14'
             
         ]);        
@@ -227,6 +200,8 @@ $url = "http://api.doodlepad.in/";   // For sample
         $token = $tokenResult->token;  
         
             $uid = $user->id;
+
+            $isProfileCreated = UserProfile::where('user_id',$uid)->first();
        
         $jwtToken = $this->auth->createCustomToken((string)$uid);
        
@@ -236,11 +211,11 @@ $url = "http://api.doodlepad.in/";   // For sample
          return response()->json([
             'status'=>true,
             'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString(),
             'jwt_token' => (string) $jwtToken,
+            'profilecreated'=> ($isProfileCreated) ? (true) : (false),
         ]);
     }
   
@@ -252,7 +227,7 @@ $url = "http://api.doodlepad.in/";   // For sample
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();        return response()->json([
-            'message' => 'Successfully logged out'
+            'message' => 'Successfully Logged Out'
         ]);
     }
   
@@ -271,17 +246,17 @@ $url = "http://api.doodlepad.in/";   // For sample
             return response()->json([
                  'status'=>false,
                 'message' => 'Cant find account'
-            ], 401);      
+            ], 404);      
          }
          else{
-            $sendOTP = new MSG91();
-              $isOTPSend = $sendOTP->sendOTP($request->mobile);
+          
+              $isOTPSend = $this->otp->sendOTP($request->mobile);
 
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
             'message' => 'Otp Sent Successfully.',
-        ], 201);
+        ], 200);
          }
      }
      
@@ -304,42 +279,8 @@ public function newPassword(Request $request){
         ], 201);
 }
 
-public function checksession(){
-   return response()->json([
-                    'status'=>true,
-        ], 200);
-}
 
-    public function jwtAuth(){
- 
-
- 
-
-    $userProperties = [
-        'phoneNumber'=>'+918668777233',
-        'password' => '123456789',
-        'uid'=> '2',
-        'displayName' => 'Shantanu Kulkarni',
-        'photoUrl' => 'http://www.example.com/12345678/photo.png',
-        'disabled' => false,
-    ];
-
-    try{
-        $createdUser = $this->auth->createUser($userProperties);
-
-     
-    }
-    catch(AuthError $e){
-echo "error";
-    }
     
-  
-
-    }
-
-    public function getfirebaseuser(){
-        return $this->auth->getUser('2');
-    }
 
  
 
