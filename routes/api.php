@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-
+Route::post('profile/follow/{userProfile}', 'UserController@follow')->middleware('auth:api');
 
 Route::group([
     'prefix' => 'auth'
@@ -34,6 +34,7 @@ Route::group([
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'UserController@user');
         Route::get('getUserDetails/{id}', 'UserController@getUser');
+       
     });
 
 

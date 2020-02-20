@@ -131,6 +131,21 @@ class UserController extends Controller
        return $dospace->getSpaceInfo();
       }
 
+      public function follow(UserProfile $userProfile)
+      {
+          $success = 0; // no action
+          $user = Auth::user();
+          $currentProfile = UserProfile::where('user_id', $user->id)->first();
+          if ($currentProfile->isFollowing($userProfile)) {
+              $currentProfile->unfollow($userProfile);
+              $success = 1; // unfollow
+          } else {
+              $currentProfile->follow($userProfile);
+              $success = 2; // follow
+          }
+          return response()->json(array("success" => $success));
+      }
+  
    
 
 

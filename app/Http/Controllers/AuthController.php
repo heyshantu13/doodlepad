@@ -281,7 +281,7 @@ public function newPassword(Request $request){
 
 
     public function checksession(){
-        return response()->json(true,200);
+        return response()->json(['message'=>true],200);
     }
 
  
