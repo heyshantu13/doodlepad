@@ -280,7 +280,9 @@ public function newPassword(Request $request){
 }
 
 
-    
+    public function checksession(){
+        return response()->json(true,200);
+    }
 
  
 
