@@ -13,7 +13,7 @@ class CreatePostTable extends Migration
      */
     public function up()
     {
-        Schema::create('post', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->unsignedBigInteger('id');
             $table->bigIncrements('user_profile_id')->unsigned();
             $table->enum('type', config('constants.enums.post_type'));
