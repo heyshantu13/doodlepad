@@ -26,9 +26,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            Post::where('is_pinned', 0)->whereDate('created_at', '<', Carbon::now()->subHours(1))->delete();
-        })->everyThirtyMinutes();
+
+        $schedule->command('posts:delete')
+        ->everyThirtyMinutes();
+
+        // $schedule->call(function () {
+        //     Post::where('is_pinned', 0)->whereDate('created_at', '<', Carbon::now()->subHours(1))->delete();
+        // })->everyThirtyMinutes();
     }
 
     /**
