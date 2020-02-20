@@ -17,10 +17,10 @@
 
 
 Route::get('/', function(){
-    return abort(400);
+   return "Success";
 });
 
-Route::get('/firebase','AuthController@getfirebaseuser');
+
 
 
 

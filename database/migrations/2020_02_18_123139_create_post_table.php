@@ -26,6 +26,7 @@ class CreatePostTable extends Migration
             $table->string('path',500)->nullable();
             $table->string('thumbnail_url')->nullable();
             $table->string('text_location')->nullable();
+            $table->boolean('is_pinned')->default(false);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_profile_id')
