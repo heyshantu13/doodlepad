@@ -15,6 +15,12 @@ use Illuminate\Http\Request;
 
 Route::post('/do','UserController@getinfo');
 
+
+// Update FCM Token
+
+Route::put('refreshFCM','UserController@refreshFCMid')->middleware('auth:api');
+ Route::post('profile/follow/{userProfile}', 'UserController@follow')->middleware('auth:api');
+
 Route::group([
     'prefix' => 'auth'
 ], function () {
@@ -54,9 +60,10 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'posts'
+    'prefix' => 'posts',
+    'middleware'=>'auth:api',
 ],function(){
-    Route::put('/new', 'AuthController@login');
+    Route::post('/new', 'PostController@createPost');
     Route::delete('/post/{id}','PostController@deletePost');
 
 });

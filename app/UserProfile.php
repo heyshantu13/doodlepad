@@ -10,12 +10,13 @@ use Overtrue\LaravelFollow\Traits\CanFollow;
 use Overtrue\LaravelFollow\Traits\CanBeFollowed;
 
 
+
 class UserProfile extends Model
 {
-    use  CanFollow, CanBeFollowed;
+    use CanFollow, CanBeFollowed;
 
      protected $fillable = [
-        'bio', 'date_of_birth', 'gender','profile_picture_url'
+        'bio', 'date_of_birth', 'gender','profile_picture_url','fcm_registration_id'
     ];
 
     public function followers()

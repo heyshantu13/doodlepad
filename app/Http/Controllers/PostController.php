@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
 use App\UserProfile;
 use App\Post;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\CreatePostValidate;
+
 
 
 class PostController extends Controller
@@ -17,18 +17,23 @@ class PostController extends Controller
     //
 
 
-        public function createPost(Request $request){
+        public function createPost(CreatePostValidate $request){
 
-            if(request()->type == "TEXT"){
-                $userID = Auth::user()->id;
-                $request->validate([
-                    'type' => 'required',
-                    'text'=> 'required|string',
-                    'alignment'=>'required',
-                    'color'=>'required|min:1|max:1',
-                    'caption'=>'required|string'
-               ]);     
-            }
+          $user = Auth::user();
+        $profile = UserProfile::where('user_id', $user->id)->first();
+        $post = new Post();
+        $post->text = $request->text;
+        $post->type = $request->type;
+        $post->alignment = $request->alignment;
+        $post->user_profile_id = $profile->id;
+        $post->caption = $request->caption;
+        $post->text_location = $request->text_location;
+        $post->longitude = $request->longitude;
+        $post->latitude = $request->latitude;
+        $post->media_url = $request->media_url;
+        $post->save();
+
+        return response()->json(Post::find($post->id),200);
            
 
         }

@@ -4,6 +4,7 @@ const POST_TYPE = ['TEXT' => 'text', 'IMAGE' => 'image', 'VIDEO' => 'video', 'AU
 const POST_ACTIVITY_TYPE = ['COMMENT' => 'comment', 'LIKE' => 'like', 'DISLIKE' => 'dislike', 'FOLLOW' => 'follow'];
 const COMMENT_ACTIVITY_TYPE = ['LIKE' => 'like', 'REPLY' => 'reply'];
 // const COMMENT_ACTIVITY_REPLY = ['REPLY'=>'reply'];
+const ALIGNMENT = ['left'=>'left','right'=>'right','center'=>'center'];
 return [
     'MALE' => GENDER['MALE'],
     'FEMALE' => GENDER['FEMALE'],
@@ -17,6 +18,8 @@ return [
     'COMMENT_ACTIVITY_LIKE' => COMMENT_ACTIVITY_TYPE['LIKE'],
     'COMMENT_ACTIVITY_REPLY' => COMMENT_ACTIVITY_TYPE['REPLY'],
     'enums' => [
+        'text_post'=>'TEXT',
+        'alignment'=>[ALIGNMENT['left'],ALIGNMENT['center'],ALIGNMENT['right']],
         'gender' => [GENDER['MALE'], GENDER['FEMALE']],
         'post_type' => [POST_TYPE['TEXT'], POST_TYPE['IMAGE'], POST_TYPE['VIDEO'], POST_TYPE['AUDIO'], POST_TYPE['DOODLE']],
         'post_activities' => [POST_ACTIVITY_TYPE['COMMENT'], POST_ACTIVITY_TYPE['LIKE']],

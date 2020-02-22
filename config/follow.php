@@ -15,7 +15,7 @@ return [
      */
     //'user_model' => config('auth.providers.users.model', App\User::class),
 
-    'user_model' => 'App\Models\UserProfile',
+    'user_model' => 'App\UserProfile',
 
     /*
      * Table name of users table.

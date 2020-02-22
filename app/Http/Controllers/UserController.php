@@ -135,11 +135,8 @@ class UserController extends Controller
 
       public function getinfo(){
 
-
-     
           $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
           request()->file('profile_picture_url');
-
           $dofiles = Aws::putObject([
      'Bucket' => 'doodlepadin',
      'Key'    => 'file.ext',
@@ -148,11 +145,8 @@ class UserController extends Controller
 ]);
 
           return $dofiles;
-      
-
-
-
       }
+
 
       public function follow(UserProfile $userProfile)
       {
@@ -167,6 +161,29 @@ class UserController extends Controller
               $success = 2; // follow
           }
           return response()->json(array("success" => $success));
+      }
+
+
+      public function refreshFCMid(Request $request){
+
+        $request->validate([
+            'fcm_registration_id' => 'required|string'
+        ]);
+
+        $uid = Auth::user()->id;
+        $profile = UserProfile::where('user_id',$uid)->first();
+
+        if($profile){
+          $profile->fcm_registration_id = $request->fcm_registration_id;
+        $profile->save();
+        return response()->json(['message'=>true],200);
+        }
+        else{
+           return response()->json(['message'=>false],200);
+        }
+        
+
+
       }
   
    
