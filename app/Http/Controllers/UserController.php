@@ -1,5 +1,13 @@
 <?php
 
+
+/*
+@Author: Shantanu K.
+@email:heyshantu13@gmail.com
+@git: heyshantu
+
+*/
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
