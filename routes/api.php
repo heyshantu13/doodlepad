@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('profile/follow/{userProfile}', 'UserController@follow')->middleware('auth:api');
+Route::post('/do','UserController@getinfo');
 
 Route::group([
     'prefix' => 'auth'

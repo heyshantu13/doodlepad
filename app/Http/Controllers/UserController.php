@@ -12,6 +12,8 @@ use App\AwsSpace;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
+use Aws\S3\S3Client as AWS;
+
 
 
 class UserController extends Controller
@@ -112,6 +114,11 @@ class UserController extends Controller
 
     public function getUser($id){
 
+      // $request->validate([
+            
+      //        'id'=>'required|string',
+      //   ]);
+
      
       $profile = User::where('id',$id)->first(['id','fullname','username','is_verified','active']);
       $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id','bio']);
@@ -127,8 +134,24 @@ class UserController extends Controller
 
 
       public function getinfo(){
-        $dospace = new AwsSpace();
-       return $dospace->getSpaceInfo();
+
+
+     
+          $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
+          request()->file('profile_picture_url');
+
+          $dofiles = Aws::putObject([
+     'Bucket' => 'doodlepadin',
+     'Key'    => 'file.ext',
+     'Body'   => request()->file('profile_picture_url'),
+     'ACL'    => 'private'
+]);
+
+          return $dofiles;
+      
+
+
+
       }
 
       public function follow(UserProfile $userProfile)
@@ -147,6 +170,7 @@ class UserController extends Controller
       }
   
    
+
 
 
 
