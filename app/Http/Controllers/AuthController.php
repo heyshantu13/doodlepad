@@ -196,8 +196,9 @@ class AuthController extends Controller
 
             $user = $request->user(); 
 
-            $tokenResult = $user->createToken('Doodlepad Access Token');
+          $tokenResult = $user->createToken('Doodlepad Access Token');
         $token = $tokenResult->token;  
+         $token->save();   
         
             $uid = $user->id;
 
@@ -211,7 +212,7 @@ class AuthController extends Controller
              ]);       
              $isProfileCreated->fcm_registration_id = $request->fcm_registration_id;
              $isProfileCreated->save();
-        $token->save();       
+            
          return response()->json([
             'status'=>true,
             'access_token' => $tokenResult->accessToken,

@@ -19,6 +19,17 @@ class CreateFollowablesTable extends Migration
             $table->string('followable_type')->index();
             $table->string('relation')->default('follow')->comment('folllow/like/subscribe/favorite/');
             $table->timestamp('created_at')->nullable();
+
+
+            /*
+
+      $table->foreign('user_profile_id')
+                ->references(config('follow.users_table_primary_key', 'id'))
+                ->on(config('follow.users_table_name', 'users'))
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+    
+            */
             
         });
     }
