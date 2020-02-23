@@ -182,7 +182,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+         $request->validate([
             'username' => 'required|string|min:4|max:20',
             'password' => 'required|string|min:8|max:14'
             
@@ -196,9 +196,8 @@ class AuthController extends Controller
 
             $user = $request->user(); 
 
-          $tokenResult = $user->createToken('Doodlepad Access Token');
+            $tokenResult = $user->createToken('Doodlepad Access Token');
         $token = $tokenResult->token;  
-         $token->save();   
         
             $uid = $user->id;
 
@@ -206,13 +205,9 @@ class AuthController extends Controller
        
         $jwtToken = $this->auth->createCustomToken((string)$uid);
        
-         if ($request->update == 1)
-             $request->validate([
-            'fcm_registration_id' => 'required|string',
-             ]);       
-             $isProfileCreated->fcm_registration_id = $request->fcm_registration_id;
-             $isProfileCreated->save();
-            
+         if ($request->remember_me)
+            $token->expires_at = Carbon::now()->addWeeks(1);        
+        $token->save();       
          return response()->json([
             'status'=>true,
             'access_token' => $tokenResult->accessToken,
