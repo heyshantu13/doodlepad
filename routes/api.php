@@ -13,10 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/do','UserController@getinfo');
+// Route::post('/do','UserController@getinfo');
 
 
-// Update FCM Token
+// Refresh FCM Token
 
 Route::put('refreshFCM','UserController@refreshFCMid')->middleware('auth:api');
  Route::post('profile/follow/{userProfile}', 'UserController@follow')->middleware('auth:api');
@@ -58,6 +58,9 @@ Route::group([
     });
 
 });
+
+
+// Manage Posts
 
 Route::group([
     'prefix' => 'posts',

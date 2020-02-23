@@ -198,21 +198,24 @@ class AuthController extends Controller
 
             $tokenResult = $user->createToken('Doodlepad Access Token');
         $token = $tokenResult->token;  
-        
-            $uid = $user->id;
+        $uid = $user->id;
 
             $isProfileCreated = UserProfile::where('user_id',$uid)->first();
        
-        $jwtToken = $this->auth->createCustomToken((string)$uid);
-       
-         if ($request->update == 1){
+         if ($request->update == 1 && $isProfileCreated){
             $request->validate([
             'fcm_registration_id' => 'required|string',
              ]);       
+            $isProfileCreated->fcm_registration_id = $request->fcm_registration_id;
+            $isProfileCreated->save();
                  
          }
             
         $token->save();       
+
+            
+       
+        $jwtToken = $this->auth->createCustomToken((string)$uid);
          return response()->json([
             'status'=>true,
             'access_token' => $tokenResult->accessToken,
