@@ -205,12 +205,14 @@ class AuthController extends Controller
        
         $jwtToken = $this->auth->createCustomToken((string)$uid);
        
-         if ($request->update == 1)
+         if ($request->update == 1){
             $request->validate([
             'fcm_registration_id' => 'required|string',
              ]);       
              $isProfileCreated->fcm_registration_id = $request->fcm_registration_id;
              $isProfileCreated->save();        
+         }
+            
         $token->save();       
          return response()->json([
             'status'=>true,
