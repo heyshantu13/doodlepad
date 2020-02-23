@@ -209,8 +209,7 @@ class AuthController extends Controller
             $request->validate([
             'fcm_registration_id' => 'required|string',
              ]);       
-             $isProfileCreated->fcm_registration_id = $request->fcm_registration_id;
-             $isProfileCreated->save();        
+                 
          }
             
         $token->save();       
