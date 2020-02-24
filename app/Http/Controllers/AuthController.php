@@ -110,7 +110,7 @@ class AuthController extends Controller
           if ($request->isMethod('post')) {
              $request->validate([
              'gender' => 'required|string|max:7',
-             'bio' => 'required|min:1|max:140',
+             'bio' => 'required|min:1|max:140|string',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'required|unique:user_profiles',
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
