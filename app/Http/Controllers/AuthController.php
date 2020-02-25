@@ -138,7 +138,7 @@ class AuthController extends Controller
            $userProperties = [
             'phoneNumber'=>'+91'.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
-            'displayName' => Auth::user()->fullname,
+            'displayName' => Auth::user()->username,
             'photoUrl' =>$url.$imageName,
             'disabled' => false,
             ];
