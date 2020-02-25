@@ -37,7 +37,7 @@ class CreateUserProfilesTable extends Migration
             $table->text('doodle_url')->nullable();
             $table->date('date_of_birth');
             $table->boolean('is_private')->default('0');
-            $table->string('fcm_registration_id')->nullable();
+            $table->text('fcm_registration_id')->nullable();
             $table->enum('gender', ['male', 'female']);
             $table->timestamps();
 

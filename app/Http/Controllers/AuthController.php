@@ -112,7 +112,7 @@ class AuthController extends Controller
              'gender' => 'required|string|max:7',
              'bio' => 'min:1|max:140|string',
              'date_of_birth' => 'required',
-             'fcm_registration_id'=> 'required|unique:user_profiles',
+             'fcm_registration_id'=> 'unique:user_profiles|string',
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
             $url = "http://api.doodlepad.in/";   // For sample
