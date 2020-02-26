@@ -41,4 +41,18 @@ class User extends Authenticatable
     public function userprofiles(){
         return $this->hasMany('App\UserProfile','user_id','id')->select(['user_id','bio','profile_picture_url','is_private','gender']);
     }
+
+    public function followers()
+{
+    return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->withTimestamps();
+}
+
+/**
+ * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+ */
+public function followings()
+{
+    return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
+}
+
 }

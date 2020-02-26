@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
 use App\AwsSpace;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use App\Follower;
 
 use Aws\S3\S3Client as AWS;
 
@@ -28,6 +29,71 @@ class UserController extends Controller
 {
   
   
+  public function checkFollowing($followerID){
+
+    $user = Auth::user();
+    $isFollowing = Follower::where('user_id',$user->id)->where('follower_id',$followerID)->first();
+    if($isFollowing){
+      return FALSE;
+    }
+    else{
+      return TRUE;
+    }
+
+  }
+
+    public function follow(int $profileID)
+      {
+          $success = 0; // no action
+          $user = Auth::user()->id;
+          $profile = User::where('id', $profileID)->firstOrFail();
+          if($profile)
+          {
+             $isFollowing = Self::checkFollowing($profileID);
+
+             if(!$isFollowing){
+              $profile->followers()->attach(auth()->user()->id);
+              return response()->json(['message'=>true],200);
+             }
+             else{
+               return response()->json(['message'=>false],200);
+             }
+          }
+          else{
+            return response()->json(['message'=>false],200);
+          }
+
+
+      }
+
+
+      public function followers()
+{
+          $user_id = Auth::user()->id;
+          $profile = User::where('id', $user_id)->firstOrFail();
+      $followers = $profile->followers;
+        return response()->json([
+          'message'=>true,
+          'followers'=>$followers,
+
+        ],200);
+    
+}
+
+ public function following()
+{
+          $user_id = Auth::user()->id;
+          $profile = User::where('id', $user_id)->firstOrFail();
+      $followings = $profile->followings;
+        return response()->json([
+          'message'=>true,
+          'followings'=>$followings,
+
+        ],200);
+    
+}
+
+
 
 	public function search(Request $request){
 		  $user = Auth::user();
@@ -156,20 +222,7 @@ class UserController extends Controller
       }
 
 
-      public function follow(UserProfile $userProfile)
-      {
-          $success = 0; // no action
-          $user = Auth::user();
-          $currentProfile = UserProfile::where('user_id', $user->id)->first();
-          if ($currentProfile->isFollowing($userProfile)) {
-              $currentProfile->unfollow($userProfile);
-              $success = 1; // unfollow
-          } else {
-              $currentProfile->follow($userProfile);
-              $success = 2; // follow
-          }
-          return response()->json(array("success" => $success));
-      }
+    
 
 
       public function refreshFCMid(Request $request){
