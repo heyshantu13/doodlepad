@@ -110,9 +110,9 @@ class AuthController extends Controller
           if ($request->isMethod('post')) {
              $request->validate([
              'gender' => 'required|string|max:7',
-             'bio' => 'min:1|max:140|string',
+             'bio' => 'min:1|max:140|string|required',
              'date_of_birth' => 'required',
-             'fcm_registration_id'=> 'unique:user_profiles|string',
+             'fcm_registration_id'=> 'string',
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
             $url = "http://api.doodlepad.in/";   // For sample
