@@ -70,9 +70,9 @@ Route::group([
     'prefix' => 'posts',
     'middleware'=>'auth:api',
 ],function(){
-    Route::post('/new', 'PostController@createPost');
-    Route::get('myposts','PostController@myPosts');
-    Route::delete('/post/{id}','PostController@deletePost');
+    Route::post('/new', 'PostController@createPost');  //v1/auth/posts/new
+    Route::get('myposts','PostController@myPosts'); //v1/auth/posts/myposts
+    Route::delete('/post/{id}/delete','PostController@deletePost') //  v1/auth/post/{1}/delete;
 
 });
 
