@@ -64,6 +64,7 @@ Route::group([
     Route::post('profile/{id}/follow', 'UserController@follow');
     Route::get('profile/followers','UserController@followers');
     Route::get('profile/following','UserController@following');
+     Route::get('profile/{id}/checkFollowing','UserController@checkFollowing');
 
 });
 
@@ -79,6 +80,8 @@ Route::group([
 
 
 });
+
+Route::get('/demo','AuthController@firebase');
 
 
 // Manage Posts

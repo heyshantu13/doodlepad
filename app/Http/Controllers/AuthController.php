@@ -29,12 +29,25 @@ class AuthController extends Controller
     private $createUser;
     public $auth;
     private $otp;
+    private $firebase;
 
    public function __construct(){
     $this->auth = (new Factory)
     ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
     ->createAuth();
     $this->otp = new MSG91();
+   }
+
+
+   public function firebase(){
+     $firebase = (new Factory)
+    ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
+    ->createDatabase();
+
+    $reference = $firebase->getReference('doodlepadfirebaseindia/data');
+    return $reference;
+
+
    }
 
 

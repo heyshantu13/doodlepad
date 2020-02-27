@@ -27,15 +27,43 @@ use Aws\S3\S3Client as AWS;
 
 class UserController extends Controller
 {
+
+  public function test(){
+    $user = User::with(['followers','followings'])->find(10);
+    return $user;
+  }
   
   
-  public function checkFollowing(int $id){
+  public function isFollowing(int $id){
      $user = Auth::user()->id;
 
     $isFollowing = DB::table('followers')->where('follower_id',$user)->where('user_id',$id)->exists();
 return $isFollowing;
+    
+}
 
- 
+  public function checkFollowing(int $id){
+     $user = Auth::user()->id;
+
+    $isFollowing = DB::table('followers')->where('follower_id',$user)->where('user_id',$id)->exists();
+    if($isFollowing){
+       return response()->json([
+          'status'=>true,
+          'message'=>'Following',
+        ],200);
+    }
+    else if(!$isFollowing){
+      return response()->json([
+          'status'=>true,
+          'message'=>'Follow',
+        ],200);
+    }
+    else{
+       return response()->json([
+          'status'=>true,
+          'message'=>'Requested',
+        ],200);
+    }
     
 }
 
@@ -45,7 +73,7 @@ return $isFollowing;
           $profile = User::where('id', $id)->firstOrFail();
           if($profile)
           {
-             $isFollowingOrNot = Self::checkFollowing($id);
+             $isFollowingOrNot = Self::isFollowing($id);
              //  @return already following message
 
              if($isFollowingOrNot){
@@ -80,7 +108,7 @@ return $isFollowing;
  public function following()
 {
           $user_id = Auth::user()->id;
-          $profile = User::where('id', $user_id)->firstOrFail();
+          $profile = User::with('userprofiles')->where('id', $user_id)->firstOrFail();
       $followings = $profile->followings;
         return response()->json([
           'message'=>true,
