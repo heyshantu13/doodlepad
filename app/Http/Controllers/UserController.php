@@ -29,36 +29,51 @@ class UserController extends Controller
 {
   
   
-  public function checkFollowing($followerID){
+  public function checkFollowing(int $id){
+     $user = Auth::user()->id;
 
-    // $user = Auth::user();
-    // $isFollowing = Follower::where('user_id',$user->id)->where('follower_id',$followerID)->first();
-    // if($isFollowing){
-    //   return TRUE;
-    // }
-    // else{
-    //   return FALSE;
-    // }
+    $isFollowing = DB::table('followers')->where('follower_id',$user)->where('user_id',$id)->exists();
+return $isFollowing;
 
-  }
+ 
+    
+}
 
-    public function follow(int $id)
-      {
-        
-
-      }
-
-
-      public function followers()
+   public function follow(int $id)
 {
           $user_id = Auth::user()->id;
-          $profile = User::where('id', $user_id)->firstOrFail();
-      $followers = $profile->followers;
-        return response()->json([
-          'message'=>true,
-          'followers'=>$followers,
+          $profile = User::where('id', $id)->firstOrFail();
+          if($profile)
+          {
+             $isFollowingOrNot = Self::checkFollowing($id);
+             //  @return already following message
 
+             if($isFollowingOrNot){
+              return response()->json([
+          'status'=>false,
+          'message'=>'already following',
         ],200);
+             }
+             else{
+              $profile->followers()->attach(auth()->user()->id);
+              return response()->json([
+          'status'=>true,
+          'message'=>'follow success',
+        ],200);
+             }
+
+           }
+
+
+           //  If User Not Found
+
+           else{
+              return response()->json([
+          'status'=>false,
+          'message'=>'Invalid Request',
+        ],408);
+           }
+
     
 }
 
@@ -70,6 +85,19 @@ class UserController extends Controller
         return response()->json([
           'message'=>true,
           'followings'=>$followings,
+
+        ],200);
+
+      }
+
+          public function followers()
+{
+          $user_id = Auth::user()->id;
+          $profile = User::where('id', $user_id)->firstOrFail();
+      $followers = $profile->followers;
+        return response()->json([
+          'message'=>true,
+          'followers'=>$followers->paginate(10),
 
         ],200);
     

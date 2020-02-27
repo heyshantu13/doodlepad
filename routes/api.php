@@ -60,6 +60,7 @@ Route::group([
       Route::group([
     'middleware'=>'auth:api',
 ],function(){
+     // Route::post('profile/{profileId}/checkFollowing', 'UserController@checkFollowing');
     Route::post('profile/{id}/follow', 'UserController@follow');
     Route::get('profile/followers','UserController@followers');
     Route::get('profile/following','UserController@following');

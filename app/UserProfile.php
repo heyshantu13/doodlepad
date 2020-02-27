@@ -17,6 +17,9 @@ class UserProfile extends Model
         'bio', 'date_of_birth', 'gender','profile_picture_url','fcm_registration_id'
     ];
 
+
+ 
+
   
 
 }
