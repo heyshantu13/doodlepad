@@ -32,7 +32,7 @@ class PostController extends Controller
         $post->latitude = $request->latitude;
         $post->media_url = $request->media_url;
         $post->save();
-        return response()->json(Post::find($post->id),200);
+        return response()->json(['status'=>true,'post'=>Post::find($post->id)],200);
            
 
         }
