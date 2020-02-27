@@ -31,38 +31,20 @@ class UserController extends Controller
   
   public function checkFollowing($followerID){
 
-    $user = Auth::user();
-    $isFollowing = Follower::where('user_id',$user->id)->where('follower_id',$followerID)->first();
-    if($isFollowing){
-      return FALSE;
-    }
-    else{
-      return TRUE;
-    }
+    // $user = Auth::user();
+    // $isFollowing = Follower::where('user_id',$user->id)->where('follower_id',$followerID)->first();
+    // if($isFollowing){
+    //   return TRUE;
+    // }
+    // else{
+    //   return FALSE;
+    // }
 
   }
 
-    public function follow(int $profileID)
+    public function follow(int $id)
       {
-          $success = 0; // no action
-          $user = Auth::user()->id;
-          $profile = User::where('id', $profileID)->firstOrFail();
-          if($profile)
-          {
-             $isFollowing = Self::checkFollowing($profileID);
-
-             if(!$isFollowing){
-              $profile->followers()->attach(auth()->user()->id);
-              return response()->json(['message'=>true],200);
-             }
-             else{
-               return response()->json(['message'=>false],200);
-             }
-          }
-          else{
-            return response()->json(['message'=>false],200);
-          }
-
+        
 
       }
 

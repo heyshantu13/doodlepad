@@ -46,6 +46,16 @@ class CreatePostValidate extends FormRequest
                     'longitude'=>'string',
                     'latitude'=>'string',
             ];
+          if(request()->type == "IMAGE")
+            return [
+            
+                'media_url' => 'required|image|mimes:png,jpeg,jpg|max:8096',
+                'type' => ['required', Rule::in(['IMAGE'])],
+                'caption'=>'string|max:140|min:1',
+                'text_location'=>'string|max:30',
+                    'longitude'=>'string',
+                    'latitude'=>'string',
+            ];  
             
          else
             return[

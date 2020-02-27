@@ -19,8 +19,7 @@ use Illuminate\Http\Request;
 // Refresh FCM Token
 
 Route::put('refreshFCM','UserController@refreshFCMid')->middleware('auth:api');
- Route::post('profile/follow/{userProfile}', 'UserController@follow')->middleware('auth:api');
- Route::post('profile/followers/{userProfile}', 'UserController@followers')->middleware('auth:api');
+
 
 Route::group([
     'prefix' => 'auth'
@@ -58,12 +57,16 @@ Route::group([
         
     });
 
+      Route::group([
+    'middleware'=>'auth:api',
+],function(){
+    Route::post('profile/{id}/follow', 'UserController@follow');
+    Route::get('profile/followers','UserController@followers');
+    Route::get('profile/following','UserController@following');
+
 });
 
-
-// Manage Posts
-
-Route::group([
+      Route::group([
     'prefix' => 'posts',
     'middleware'=>'auth:api',
 ],function(){
@@ -73,13 +76,13 @@ Route::group([
 
 });
 
-// Follow,Unfollow,Following
-
-Route::group([
-    'middleware'=>'auth:api',
-],function(){
-    Route::post('follow/{id}', 'UserController@follow');
-    Route::get('/followers','UserController@followers');
-     Route::get('/following','UserController@following');
 
 });
+
+
+// Manage Posts
+
+
+
+// Follow,Unfollow,Following
+
