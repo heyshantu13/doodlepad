@@ -39,16 +39,7 @@ class AuthController extends Controller
    }
 
 
-   public function firebase(){
-     $firebase = (new Factory)
-    ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
-    ->createDatabase();
-
-    $reference = $firebase->getReference('doodlepadfirebaseindia/data');
-    return $reference;
-
-
-   }
+   
 
 
 

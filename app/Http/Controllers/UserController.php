@@ -155,7 +155,6 @@ return $isFollowing;
       $profiles = User::select(['id','fullname','username'])
       ->where('username', 'like', '%' . $search . '%')
       ->orWhere('fullname', 'like','%'.$search.'%')
-      ->with('userprofiles')
       ->paginate(10);
       try{
         return response()->json($profiles,200);
