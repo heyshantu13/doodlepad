@@ -36,6 +36,9 @@ class AuthController extends Controller
     ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
     ->createAuth();
     $this->otp = new MSG91();
+     $this->firebase = (new Factory())
+    ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
+    ->createDatabase();
    }
 
 
@@ -82,11 +85,19 @@ class AuthController extends Controller
             }
      }
 
+
+     public function signupuser(Request $request){
+        $request->validate([
+           
+             'otp' => 'required|min:4'
+        ]);
+     }
+
     
 
     public function signup(CreateUserValidate $request)
     {
-        if($request->mobile != NULL){
+         if($request->mobile != NULL){
                 $createUser = new User([
                 'fullname' => $request->fullname,
                 'username'=> $request->username,
@@ -148,7 +159,23 @@ class AuthController extends Controller
             ];
            try{
             $createdUser = $this->auth->createUser($userProperties);
-            $profile->save();
+            $isSaved = $profile->save();
+            if($isSaved){
+                   $userdetails = array(
+            'username'=> Auth::user()->username,
+            'Image_url'=> $url.$imageName,
+            'uid'=> Auth::user()->id,
+            'fullname'=> Auth::user()->fullname
+    );
+
+  
+ $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userdetails);
+            }
+
+
+
+
+
             $jwtToken = $this->auth->createCustomToken((string)Auth::user()->id);
             return response()->json([
                 'status'=>true,

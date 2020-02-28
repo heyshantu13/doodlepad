@@ -81,7 +81,7 @@ Route::group([
 
 });
 
-Route::get('/demo','AuthController@firebase');
+// Route::post('/demo','UserSignUp@signup');
 
 
 // Manage Posts

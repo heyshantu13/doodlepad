@@ -28,10 +28,7 @@ use Aws\S3\S3Client as AWS;
 class UserController extends Controller
 {
 
-  public function test(){
-    $user = User::with(['followers','followings'])->find(10);
-    return $user;
-  }
+
   
   
   public function isFollowing(int $id){

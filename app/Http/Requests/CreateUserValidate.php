@@ -24,18 +24,18 @@ class CreateUserValidate extends FormRequest
     public function rules()
     {
 
-        if(request()->email != NULL){
-            return [
+        // if(request()->email != NULL){
+        //     return [
              
-             'email' => 'required|email|unique:users',
-            'fullname' => 'required|string|max:50',
-            'password' => 'required|min:8|max:16',
-            'username' => 'required|string|unique:users|alpha_dash|max:20|min:4'
+        //      'email' => 'required|email|unique:users',
+        //     'fullname' => 'required|string|max:50',
+        //     'password' => 'required|min:8|max:16',
+        //     'username' => 'required|string|unique:users|alpha_dash|max:20|min:4'
          
 
-        ];
-        }
-         else {
+        // ];
+        // }
+        //  else {
             return [
              
              'mobile' => 'required|string|min:10|max:10|unique:users',
@@ -45,7 +45,7 @@ class CreateUserValidate extends FormRequest
          
 
         ];
-        }
+        // }
 
 
 
