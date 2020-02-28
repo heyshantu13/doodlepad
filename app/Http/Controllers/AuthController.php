@@ -164,11 +164,9 @@ class AuthController extends Controller
                    $userdetails = array(
             'username'=> Auth::user()->username,
             'Image_url'=> $url.$imageName,
-            'uid'=> Auth::user()->id,
+            'uid'=> (string) Auth::user()->id,
             'fullname'=> Auth::user()->fullname
     );
-
-  
  $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userdetails);
             }
 
