@@ -21,7 +21,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Follower;
 
-use Aws\S3\S3Client as AWS;
+use Aws\S3\S3Client;
+
 
 
 
@@ -243,16 +244,9 @@ return $isFollowing;
 
       public function getinfo(){
 
-          $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
-          request()->file('profile_picture_url');
-          $dofiles = Aws::putObject([
-     'Bucket' => 'doodlepadin',
-     'Key'    => 'file.ext',
-     'Body'   => request()->file('profile_picture_url'),
-     'ACL'    => 'private'
-]);
+          
+         
 
-          return $dofiles;
       }
 
 
