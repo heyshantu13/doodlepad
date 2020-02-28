@@ -122,7 +122,7 @@ return $isFollowing;
       $followers = $profile->followers;
         return response()->json([
           'message'=>true,
-          'followers'=>$followers->paginate(10),
+          'followers'=>$followers,
 
         ],200);
     
