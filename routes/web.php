@@ -11,13 +11,6 @@
 |
 */
 
-use Carbon\Carbon;
-
-Route::get('/time',function(){
-
-    return Carbon::now()->addHours(5)->toDateTimeString();
-});
-
 
 
 

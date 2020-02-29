@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/do','PostController@uploadimage');
-
 
 // Refresh FCM Token
 
