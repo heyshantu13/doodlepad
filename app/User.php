@@ -55,8 +55,7 @@ class User extends Authenticatable
 	 */
 	public function followings()
 	{
-	    return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->as('details')->using('App\UserProfilePivot');
-
+	    return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->as('followerid');
 	    
 	}
 

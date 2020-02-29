@@ -76,36 +76,38 @@ class PostController extends Controller
 //     echo $e->getMessage() . "\n";
 // }
 
+  $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
+//           request()->file('profile_picture_url');
+
+       // Configure a client using Spaces
+$client = new AWS([
+        'version' => 'latest',
+            'region'  => env('DO_SPACES_REGION'),
+            'endpoint' => env('DO_SPACES_ENDPOINT'),
+            'credentials' => [
+                    'key'    => env('DO_SPACES_KEY'),
+                    'secret' => env('DO_SPACES_SECRET'),
+            ],
+]);
 
 
-        // Configure a client using Spaces
-// $client = new AWS([
-//         'version' => 'latest',
-//             'region'  => env('DO_SPACES_REGION'),
-//             'endpoint' => env('DO_SPACES_ENDPOINT'),
-//             'credentials' => [
-//                     'key'    => env('DO_SPACES_KEY'),
-//                     'secret' => env('DO_SPACES_SECRET'),
-//             ],
-// ]);
+
+// Listing all Spaces in the region
+$spaces = $client->listBuckets();
+foreach ($spaces['Buckets'] as $space){
+    echo $space['Name']."\n";
+}
 
 
+// Upload a file to the Space
+$insert = $client->putObject(array(
+        'Bucket' => 'doodlepadin',
+        'Key'    => 'images1222221',
+        'SourceFile'   =>  request()->file('profile_picture_url'),
+        'ContentType' => 'image/jpeg'
+    ));
 
-// // Listing all Spaces in the region
-// $spaces = $client->listBuckets();
-// foreach ($spaces['Buckets'] as $space){
-//     echo $space['Name']."\n";
-// }
-
-
-// // Upload a file to the Space
-// $insert = $client->putObject([
-//      'Bucket' => 'doodlepadin',
-//      'Key'    => 'file.ext',
-//      'Body'   => 'The contents of the file'
-// ]);
-
-// return $insert;
+return $insert;
 
     }
 

@@ -75,16 +75,17 @@ return $isFollowing;
              //  @return already following message
 
              if($isFollowingOrNot){
+               $isFollowing = DB::table('followers')->where('follower_id',$user_id)->where('user_id',$id)->delete();
               return response()->json([
-          'status'=>false,
-          'message'=>'already following',
+          'status'=>true,
+          'message'=>'Unfollow Success',
         ],200);
              }
              else{
               $profile->followers()->attach(auth()->user()->id);
               return response()->json([
           'status'=>true,
-          'message'=>'follow success',
+          'message'=>'Follow Success',
         ],200);
              }
 
@@ -106,12 +107,11 @@ return $isFollowing;
  public function following()
 {
           $user_id = Auth::user()->id;
-          $profile = User::with('userprofiles')->where('id', $user_id)->firstOrFail();
-      $followings = $profile->followings;
+          // $profile = User::with('userprofiles')->where('id', $user_id)->firstOrFail();
+          $followings = User::find(54)->followings()->with('userprofiles')->paginate(10);
         return response()->json([
           'message'=>true,
           'followings'=>$followings,
-
         ],200);
 
       }
@@ -153,7 +153,7 @@ return $isFollowing;
       $profiles = User::select(['id','fullname','username'])
       ->where('username', 'like', '%' . $search . '%')
       ->orWhere('fullname', 'like','%'.$search.'%')
-       ->with('userprofiles')
+      ->with('userprofiles')
       ->paginate(10);
       try{
         return response()->json($profiles,200);
@@ -243,15 +243,7 @@ return $isFollowing;
     }
 
 
-      public function getinfo(){
 
-          
-         
-
-      }
-
-
-    
 
 
       public function refreshFCMid(Request $request){
