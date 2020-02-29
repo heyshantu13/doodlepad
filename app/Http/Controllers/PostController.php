@@ -128,7 +128,7 @@ return $insert;
       
         $imageName = rand(1111,9999).time().'.'.request()
         ->media_url;
-        request()->file('profile_picture_url')
+        request()->file('media_url')
         ->move(public_path("/"),$imageName);
 
         $post->media_url = $url.$imageName;
