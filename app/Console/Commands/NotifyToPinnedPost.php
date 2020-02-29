@@ -3,24 +3,22 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Post;
-use Carbon\Carbon;
 
-class deleteUnpinnedPosts extends Command
+class NotifyToPinnedPost extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'posts:delete';
+    protected $signature = 'posts:notify';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete Posts After 24 Hours';
+    protected $description = 'Notify User Before Deleting Post';
 
     /**
      * Create a new command instance.
@@ -39,10 +37,6 @@ class deleteUnpinnedPosts extends Command
      */
     public function handle()
     {
-        // Post::where('is_pinned', 0)->where('created_at', '>', Carbon::now()->addHours(1)->toDateTimeString())->delete();
-        Post::where('is_pinned', 0)
-        ->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString())
-        ->delete();
-        return "Task Added";
+        //
     }
 }

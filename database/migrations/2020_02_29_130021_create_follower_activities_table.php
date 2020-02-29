@@ -15,7 +15,14 @@ class CreateFollowerActivitiesTable extends Migration
     {
         Schema::create('follower_activities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('follower_id')->unsigned();
+        $table->integer('user_id')->unsigned();
+        $table->timestamps();
+
+        $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->timestamps();
+            $table->softDeletes();
         });
     }
 
