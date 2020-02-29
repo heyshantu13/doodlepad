@@ -91,9 +91,9 @@ class AuthController extends Controller
         ], 201);
             }
             else{
-                 return response()->json([
-                    'status'=>false,
-            'message' => 'Incorrect OTP.',
+                return response()->json([
+                    'status'=>true,
+            'message' => 'Otp Verified Successfully.',
         ], 201);
             }
      }
