@@ -20,6 +20,7 @@ use App\Jobs\SendOtpJob;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\AuthError;
+use App\UserData as UserData;
 
 
 
@@ -40,6 +41,18 @@ class AuthController extends Controller
     ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
     ->createDatabase();
    }
+
+   function convertToObject($array) {
+        $object = new stdClass();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = convertToObject($value);
+            }
+            $object->$key = $value;
+        }
+        return $object;
+    }
+
 
 
    
@@ -160,15 +173,18 @@ class AuthController extends Controller
            try{
             $createdUser = $this->auth->createUser($userProperties);
             $isSaved = $profile->save();
-            if($isSaved){
-                   $userdetails = array(
-            'Username'=> Auth::user()->username,
-            'Image_url'=> $url.$imageName,
-            'Uid'=> (string) Auth::user()->id,
-            'Fullname'=> Auth::user()->fullname
-    );
- $this->firebase->getReference('users')->getChild(Auth::user()->id)->set((object)$userdetails);
-            }
+   //          if($isSaved){
+                 
+   //                 $userData = new UserData();
+   //                 $userData->Username = Auth::user()->username;
+   //                  $userData->Image_url = $url.$imageName;
+   //                  $userData->Uid = (string) Auth::user()->id;
+   //                    $userData->Fullname= Auth::user()->fullname;
+
+
+   // $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userData);
+
+   //          }
 
 
 
