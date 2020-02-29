@@ -113,7 +113,7 @@ return $insert;
 
 
         public function createPost(CreatePostValidate $request){
-
+            $url = "http://api.doodlepad.in/";   // For sample
           $user = Auth::user();
         $profile = UserProfile::where('user_id', $user->id)->first();
         $post = new Post();
@@ -125,7 +125,14 @@ return $insert;
         $post->text_location = $request->text_location;
         $post->longitude = $request->longitude;
         $post->latitude = $request->latitude;
-        $post->media_url = $request->media_url;
+      
+        $imageName = rand(1111,9999).time().'.'.request()
+        ->media_url;
+        request()->file('profile_picture_url')
+        ->move(public_path("/"),$imageName);
+
+        $post->media_url = $url.$imageName;
+        $post->filename =$imageName; 
         $post->save();
         return response()->json(['status'=>true,'post'=>Post::find($post->id)],200);
            
