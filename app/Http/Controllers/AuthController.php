@@ -20,8 +20,7 @@ use App\Jobs\SendOtpJob;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\AuthError;
-use App\UserData as UserData;
-
+use Illuminate\Support\Facades\Storage;
 
 
 class AuthController extends Controller
@@ -134,11 +133,11 @@ class AuthController extends Controller
              'fcm_registration_id'=> 'string',
              'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
-            $url = "http://api.doodlepad.in/";   // For sample
-
-        $imageName = rand(1111,9999).time().'.'.request()
-        ->profile_picture_url
-        ->getClientOriginalExtension();
+               $file = request()->file('profile_picture_url');
+            $name=time().$file->getClientOriginalName();
+            $filePath = 'profiles/' . $name;
+              $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+         
             $profile = UserProfile::where('user_id', Auth::user()->id)
             ->first();
             if (!$profile) {
@@ -147,18 +146,16 @@ class AuthController extends Controller
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
             'fcm_registration_id'=> request()->fcm_registration_id,
-            'profile_picture_url'=>$url.$imageName,
+            'profile_picture_url'=>env('AWS_URL')."/".$filePath,
             ]);
 
-           request()->file('profile_picture_url')
-           ->move(public_path("/"),$imageName);
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
             'phoneNumber'=>'+91'.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
-            'photoUrl' =>$url.$imageName,
+            'photoUrl' =>env('AWS_URL')."/".$filePath,
             'disabled' => false,
             ];
            try{

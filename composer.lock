@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e5b7da43bc511b7d174aecee7cc159a",
+    "content-hash": "568459cb8e0d4cd2b1e674131fe59ad7",
     "packages": [
+        {
+            "name": "adimihaila/ceph-client",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adrianmihaila/working-with-ceph-in-php.git",
+                "reference": "1a16c48251390e1c6e6ec579a2b77e991b759193"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adrianmihaila/working-with-ceph-in-php/zipball/1a16c48251390e1c6e6ec579a2b77e991b759193",
+                "reference": "1a16c48251390e1c6e6ec579a2b77e991b759193",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.47"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/ClientInterface.php",
+                    "src/CephClient.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Mihaila",
+                    "email": "adi.mihaila@outlook.com"
+                }
+            ],
+            "description": "Provides a CephClient for storing files in PHP.",
+            "homepage": "https://github.com/adrianmihaila/working-with-ceph-in-php",
+            "keywords": [
+                "AWS S3",
+                "Ceph Client",
+                "php",
+                "storage"
+            ],
+            "time": "2018-05-26T10:18:41+00:00"
+        },
         {
             "name": "aws/aws-sdk-php",
             "version": "3.133.24",
@@ -3354,6 +3401,45 @@
                 "uri"
             ],
             "time": "2017-06-14T03:57:53+00:00"
+        },
+        {
+            "name": "sociallydev/spaces-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SociallyDev/Spaces-API.git",
+                "reference": "ad0726e41e7a3a10c367917421c7b327256a358e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SociallyDev/Spaces-API/zipball/ad0726e41e7a3a10c367917421c7b327256a358e",
+                "reference": "ad0726e41e7a3a10c367917421c7b327256a358e",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.52",
+                "guzzlehttp/guzzle": "^6.3",
+                "mtdowling/jmespath.php": "^2.4",
+                "php": ">=5.3.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "spaces.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Devang Srivastava"
+                }
+            ],
+            "description": "An API wrapper for DigitalOcean's Spaces object storage designed for easy use.",
+            "time": "2019-06-04T20:37:39+00:00"
         },
         {
             "name": "superbalist/flysystem-google-storage",
@@ -6835,7 +6921,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "sociallydev/spaces-api": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

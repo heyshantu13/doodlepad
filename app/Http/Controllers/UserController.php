@@ -16,12 +16,10 @@ use App\User;
 use App\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
-use App\AwsSpace;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Follower;
-
-use Aws\S3\S3Client;
+// use Aws\S3\S3Client;
 
 
 
