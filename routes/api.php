@@ -72,7 +72,8 @@ Route::group([
 ],function(){
     Route::post('/new', 'PostController@createPost');  //v1/auth/posts/new
     Route::get('myposts','PostController@myPosts'); //v1/auth/posts/myposts
-    Route::delete('/post/{id}/delete','PostController@deletePost'); //  v1/auth/post/{1}/delete;
+    Route::delete('{id}/delete','PostController@deletePost'); //  v1/auth/posts/{1}/delete;
+    Route::patch('{id}/pin','PostController@pinPost');
 
 });
 
