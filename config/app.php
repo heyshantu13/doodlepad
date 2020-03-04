@@ -179,7 +179,7 @@ return [
         /*3rd party Providers*/
 
         // Overtrue\LaravelFollow\FollowServiceProvider::class,
-        LaravelFCM\FCMServiceProvider::class,
+        // LaravelFCM\FCMServiceProvider::class,
 
     ],
 
