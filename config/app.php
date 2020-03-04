@@ -231,7 +231,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'FCM'      => LaravelFCM\Facades\FCM::class,
+        // 'FCM'      => LaravelFCM\Facades\FCM::class,
 
     ],
 
