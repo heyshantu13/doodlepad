@@ -106,7 +106,7 @@ return $isFollowing;
 {
           $user_id = Auth::user()->id;
           // $profile = User::with('userprofiles')->where('id', $user_id)->firstOrFail();
-          $followings = User::find(54)->followings()->with('userprofiles')->paginate(10);
+          $followings = User::find($user_id)->followings()->with('userprofiles')->paginate(10);
         return response()->json([
           'message'=>true,
           'followings'=>$followings,
