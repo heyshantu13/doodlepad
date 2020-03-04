@@ -57,8 +57,14 @@ class PostController extends Controller
         $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
 
         $posts = Post::where('user_profile_id', $profile->id);
-        $posts = $posts->orderBy('created_at', 'desc')->paginate(10);
+            if($posts){
+                 return response()->json(['status'=>true,'posts'=>'Not Available'],200);
+            }
+            else{
+                 $posts = $posts->orderBy('created_at', 'desc')->paginate(10);
         return response()->json(['status'=>true,'posts'=>$posts],200);
+            }
+       
         }
 
 
