@@ -178,7 +178,8 @@ return [
 
         /*3rd party Providers*/
 
-        Overtrue\LaravelFollow\FollowServiceProvider::class,
+        // Overtrue\LaravelFollow\FollowServiceProvider::class,
+        LaravelFCM\FCMServiceProvider::class,
 
     ],
 
@@ -230,6 +231,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'FCM'      => LaravelFCM\Facades\FCM::class,
 
     ],
 

@@ -13,10 +13,9 @@
 
 
 
-
-
 Route::get('/', function(){
-   return "Success";
+   
+   
 });
 
 

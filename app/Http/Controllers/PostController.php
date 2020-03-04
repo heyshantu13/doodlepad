@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -10,7 +11,6 @@ use App\UserProfile;
 use App\Post;
 use App\Http\Requests\CreatePostValidate;
 use Illuminate\Support\Facades\Storage;
-
 
 
 
@@ -51,66 +51,47 @@ class PostController extends Controller
 
         }
 
-        public function myPosts(){
-
-           $user = Auth::user();
-        $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
-
-        // $posts = Post::where('user_profile_id', $profile->id);
-        // $posts = $posts->orderBy('created_at', 'desc')->paginate(10);
-        // return response()->json(['status'=>true,'posts'=>$posts],200);
-
-
-
-        $countsQuery = [
-          'post_activities as like_count' => function ($query) {
-              $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
-          },
-          
-          'post_activities as comment_count' => function ($query) {
-              $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-          },
-          'post_activities as liked' => function ($query) use ($profile) {
-              $query->where('user_profile_id', $profile->id)
-                  ->where('type', config('constants.POST_ACTIVITY_LIKE'));
-          },
-         
-          'post_activities as commented' => function ($query) use ($profile) {
-              $query->where('user_profile_id', $profile->id)
-                  ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-          }
-      ];
-
-      $posts = Post::where('user_profile_id', $profile->id);
-
-
-      $posts = $posts->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
-      return response()->json($posts);
 
        
-        }
+          public function myPosts(){
 
+            $user = Auth::user();
+         $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
+ 
+         // $posts = Post::where('user_profile_id', $profile->id);
+         // $posts = $posts->orderBy('created_at', 'desc')->paginate(10);
+         // return response()->json(['status'=>true,'posts'=>$posts],200);
+ 
+ 
+ 
+         $countsQuery = [
+           'post_activities as like_count' => function ($query) {
+               $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
+           },
+           
+           'post_activities as comment_count' => function ($query) {
+               $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+           },
+           'post_activities as liked' => function ($query) use ($profile) {
+               $query->where('user_profile_id', $profile->id)
+                   ->where('type', config('constants.POST_ACTIVITY_LIKE'));
+           },
+          
+           'post_activities as commented' => function ($query) use ($profile) {
+               $query->where('user_profile_id', $profile->id)
+                   ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+           }
+       ];
+ 
+       $posts = Post::where('user_profile_id', $profile->id);
+ 
+ 
+       $posts = $posts->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+       return response()->json($posts);
+ 
+        
+         }
+        
 
-        public function pinPost($id){
-             $user = Auth::user();
-        $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
-        $posts = Post::where('user_profile_id', $profile->id)
-        ->where('id',$id)->firstOrFail();
-        // if($posts->exists()){
-        //    if($posts->is_pinned == 1){
-        //     $posts->is_pinned == 0;
-        //     $posts->save();
-        //    }
-        //    else{
-        //         $posts->is_pinned == 1;
-        //     $posts->save();
-        //    }
-        // }
-         $posts->is_pinned() = 1;
-         $posts->save();
-
-         
-      
-
-        }
-}
+       
+      }

@@ -14,4 +14,9 @@ class Post extends Model
         'bio', 'date_of_birth', 'gender','profile_picture_url'
     ];
 
+    public function post_activities()
+    {
+        return $this->hasMany('App\PostActivity');
+    }
+
 }
