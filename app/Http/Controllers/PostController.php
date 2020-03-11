@@ -45,9 +45,9 @@ class PostController extends Controller
             $posts = Post::orderBy('created_at', 'desc');
         } else {
             // $following = array_merge($profile->followings()->all(), [$profile->id]);
-          $following =  $followings = User::find($user_id)->followings()->with('userprofiles')->all();
+          $following =  User::find($user->id)->followings()->pluck('user_id');
           
-            $posts = Post::whereIn('user_profile_id', $following)->orderBy('created_at', 'desc');
+            $posts = Post::whereIn('user_id', $following)->orderBy('created_at', 'desc');
         }
         if ($request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
@@ -56,7 +56,7 @@ class PostController extends Controller
             $posts = $posts->where('user_profile_id', $request->user_profile_id)->orderBy('created_at', 'desc');
         }
         $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
-        return response()->json($posts);
+        return response()->json($posts,200);
     }
    
 
