@@ -11,18 +11,10 @@
 |
 */
 
-use App\User;
 
 
 Route::get('/', function(){
    
-     $followings = User::find(2)->followings()->pluck('user_id');
-      return response()->json([
-          'message'=>true,
-          'followings'=>$followings,
-        ],200);
-
-
 
 
 });

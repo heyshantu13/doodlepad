@@ -130,37 +130,33 @@ return $isFollowing;
 
 
 	public function search(Request $request){
-		  $user = Auth::user();
-      $profile = User::where('id', $user->id)->firstOrFail();
-
-    //   $countsQuery = [
-    //     'followers as is_following' => function ($query) use ($profile) {
-    //         $query->where('followables.user_profile_id', $profile->id);
-    //     },
-    //     'following as following_count',
-    //     'followers as followers_count'
-    // ];
-
-
+		 
         $request->validate([
           'q' =>'required|string'
         ]);
+         $user = Auth::user();
+      $profile = User::where('id', $user->id)->firstOrFail();
        $search = $request->q;
 
-      $user = User::with('userprofiles')->get();
-      $profiles = User::select(['id','fullname','username'])
+        $countsQuery = [
+            'followers as is_following' => function ($query) use ($profile) {
+                $query->where('followers.user_id', $profile->user_id);
+            },
+            'followings as following_count',
+            'followers as followers_count'
+        ];
+
+
+          $profiles = User::select(['id','fullname','username'])
       ->where('username', 'like', '%' . $search . '%')
       ->orWhere('fullname', 'like','%'.$search.'%')
       ->with('userprofiles')
-      ->paginate(10);
-      try{
-        return response()->json($profiles,200);
-      }
-      catch(\Exception $ex) {
+      ->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
 
-        return response()->json(null,501);
-      }
-      
+        return response()->json($profiles,200);
+
+
+  
 
 
 

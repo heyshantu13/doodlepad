@@ -83,19 +83,13 @@ class AuthController extends Controller
             else{
                 return response()->json([
                     'status'=>true,
-            'message' => 'Otp Verified Successfully.',
+            'message' => 'Invalid Otp',
         ], 201);
             }
      }
 
 
-     public function signupuser(Request $request){
-        $request->validate([
-           
-             'otp' => 'required|min:4'
-        ]);
-     }
-
+    
     
 
     public function signup(CreateUserValidate $request)
@@ -294,6 +288,7 @@ class AuthController extends Controller
               $isOTPSend = $this->otp->sendOTP($request->mobile);
 
               if($isOTPSend->type == 'success'){
+
                return response()->json([
                     'status'=>true,
             'message' => 'Otp Sent Successfully.',
@@ -314,10 +309,15 @@ public function newPassword(Request $request){
 
         ]);     
 
-     return response()->json([
+         $user = User::where('mobile', $request->mobile)->first();
+         if($user){
+            $user->password = bcrypt($request->password);
+            $user->save();
+             return response()->json([
                     'status'=>true,
             'message' => 'Password Changed Successfully.',
         ], 201);
+         }
 }
 
 

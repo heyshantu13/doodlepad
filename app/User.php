@@ -47,7 +47,7 @@ class User extends Authenticatable
 	 */
 	public function followers()
 	{
-	    return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->using('App\UserProfilePivot')->withTimestamps();
+	    return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->withTimestamps();
 	}
 
 	/**

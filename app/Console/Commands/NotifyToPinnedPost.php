@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Post;
+use Carbon\Carbon;
+
 
 class NotifyToPinnedPost extends Command
 {
@@ -37,6 +40,9 @@ class NotifyToPinnedPost extends Command
      */
     public function handle()
     {
-        //
+       
+         
+
+        return "Task Added";
     }
 }
