@@ -18,8 +18,19 @@ class UserProfile extends Model
     ];
 
     public function user(){
-    	return $this->hasOne('App\UserProfile');
+    	return $this->hasOne('App\User');
     }
+
+     public function activities()
+    {
+        return $this->hasManyThrough('App\PostActivity', 'App\Post', 'user_profile_id', 'post_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
+
 
 
   

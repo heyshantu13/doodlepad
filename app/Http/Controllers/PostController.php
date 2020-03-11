@@ -16,6 +16,48 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+
+
+   public function index(Request $request)
+    {
+        $user = Auth::user();
+        $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
+
+        $countsQuery = [
+            'post_activities as like_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
+            },
+           
+            'post_activities as comment_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            },
+            'post_activities as liked' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('type', config('constants.POST_ACTIVITY_LIKE'));
+            },
+           
+            'post_activities as commented' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            }
+        ];
+        if ($request->treding === "1") {
+            $posts = Post::orderBy('created_at', 'desc');
+        } else {
+            // $following = array_merge($profile->followings()->all(), [$profile->id]);
+          $following =  $followings = User::find($user_id)->followings()->with('userprofiles')->all();
+          
+            $posts = Post::whereIn('user_profile_id', $following)->orderBy('created_at', 'desc');
+        }
+        if ($request->type) {
+            $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
+        }
+        if ($request->user_profile_id) {
+            $posts = $posts->where('user_profile_id', $request->user_profile_id)->orderBy('created_at', 'desc');
+        }
+        $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+        return response()->json($posts);
+    }
    
 
 
@@ -40,6 +82,7 @@ class PostController extends Controller
         $post->text_location = $request->text_location;
         $post->longitude = $request->longitude;
         $post->latitude = $request->latitude;
+        $post->user_id =  $user->id;
 
         $post->media_url = (request()->hasFile('media_url')) ?  env('AWS_URL')."/".$filePath : NULL;
         $post->filename = (request()->hasFile('media_url')) ?  $name : "";
