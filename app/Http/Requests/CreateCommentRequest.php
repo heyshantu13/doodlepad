@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreatePostValidate extends FormRequest
+class CreateCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,12 +30,6 @@ class CreatePostValidate extends FormRequest
                 'text' => 'required_without:media_url',
                 'media_url' => 'required_without:text',
                 'type' => ['required', Rule::in(['TEXT'])],
-                'alignment'=> ['required',Rule::in(['left','center','right'])],
-                'color' => 'required|min:1|max:1',
-                'caption'=>'string|max:140|min:1',
-                'text_location'=>'string|max:30',
-                    'longitude'=>'string',
-                    'latitude'=>'string',
             ];
         if(request()->type == "DOODLE")
             return [

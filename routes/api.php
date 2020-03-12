@@ -38,6 +38,7 @@ Route::group([
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'UserController@user');
         Route::get('getUserDetails/{id}', 'UserController@getUser');
+        Route::get('activities', 'PostActivityController@index')->name('activities.index');
        
     });
 
@@ -70,11 +71,18 @@ Route::group([
     'prefix' => 'posts',
     'middleware'=>'auth:api',
 ],function(){
-    Route::post('/new', 'PostController@createPost');  //v1/auth/posts/new
+    Route::post('/new', 'PostController@createPost');
     Route::get('myposts','PostController@myPosts'); //v1/auth/posts/myposts
     Route::delete('{id}/delete','PostController@deletePost'); //  v1/auth/posts/{1}/delete;
     Route::patch('{id}/pin','PostController@pinPost');
     Route::get('all','PostController@index');
+    Route::post('{post}/like', 'PostController@like');
+    Route::get('{post}/show', 'PostController@show');
+    Route::get('view/{post}/like','PostController@viewLikes');
+    Route::get('{post}/comments', 'CommentController@index');
+    Route::post('{post}/comments', 'CommentController@store');
+    Route::post('comments/{comment}/like', 'CommentController@like');
+
 
 });
 

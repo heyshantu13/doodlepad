@@ -137,6 +137,14 @@ class PostController extends Controller
         
          }
 
+          public function like(Post $post)
+    {
+        $status = $this->likeDislikePost($post, config('constants.POST_ACTIVITY_LIKE'));
+        return response()->json(array("id" => $post->id, "status" => $status), 200);
+    }
+
+
+
           private function likeDislikePost($post, $type)
     {
         $user = Auth::user();
@@ -157,6 +165,33 @@ class PostController extends Controller
 
         PostHelper::createPostActivity($profile, $post->id, $type);
         return 1; // like or dislike
+    }
+
+
+     public function show(Post $post)
+    {
+        $user = Auth::user();
+        $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
+
+        $countsQuery = [
+            'post_activities as like_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
+            },
+          
+            'post_activities as comment_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            },
+            'post_activities as liked' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('type', config('constants.POST_ACTIVITY_LIKE'));
+            },
+          
+            'post_activities as commented' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            }
+        ];
+        return response()->json(Post::where('id', $post->id)->withCount($countsQuery)->first());
     }
 
 

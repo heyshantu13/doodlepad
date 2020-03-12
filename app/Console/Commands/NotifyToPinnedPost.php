@@ -40,8 +40,6 @@ class NotifyToPinnedPost extends Command
      */
     public function handle()
     {
-       
-         
 
         return "Task Added";
     }

@@ -41,12 +41,6 @@ class AuthController extends Controller
     ->createDatabase();
    }
 
-  
-
-
-
-   
-
 
 
     public function checkmobile(Request $request){
@@ -309,8 +303,12 @@ public function newPassword(Request $request){
 
         ]);     
 
-         $user = User::where('mobile', $request->mobile)->first();
-         if($user){
+      $validateOTP = new MSG91();
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
+         if($isOTPVerified->type == 'success'){
+             $user = User::where('mobile', $request->mobile)->first();
+
+              if($user){
             $user->password = bcrypt($request->password);
             $user->save();
              return response()->json([
@@ -318,7 +316,17 @@ public function newPassword(Request $request){
             'message' => 'Password Changed Successfully.',
         ], 201);
          }
-}
+
+            }
+            else{
+                return response()->json([
+                    'status'=>true,
+            'message' => 'Invalid Otp',
+        ], 201);
+            }
+
+
+      }
 
 
     public function checksession(){
