@@ -31,9 +31,7 @@ class PushNotificationHelper
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
-        // $token = "dfic9akzTik:APA91bGBrpmTeXgCcxGEMCmqiY41SkMcqDO1zFbnRAO36sxaRi57glRXrSxDGqW2cqGpy3xfjbmclJZP6hErkYRmAcaR8eeg4uOfCpQO6kcNMBUCPt0D1d2zlpPwyZSKOiNd_z8TNUqr";
-
-        // echo $token;
+       
 
   FCM::sendTo($token, $option, $notification, $data);
     }

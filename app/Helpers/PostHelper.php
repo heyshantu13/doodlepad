@@ -21,6 +21,7 @@ class PostHelper
         $activity->type = $type;
         $activity->save();
         $username = User::where('id',$profile->user_id)->first(['username']);
+        $image = $profile->profile_picture_url;
        
      
 
@@ -33,7 +34,7 @@ class PostHelper
             case config('constants.POST_ACTIVITY_LIKE'):
                 
                 $body =  "@".$username->username." liked your post";
-                $data = ["post_id" => $postId];
+                $data = ["post_id" => $postId,"image" => $image];
                 break;
            
             case config('constants.POST_ACTIVITY_COMMENT'):
@@ -41,7 +42,9 @@ class PostHelper
                     return;
                 }
                 $body =  "@".$username->username. "commented on your post";
-                $data = ["post_id" => $postId];
+                $data = ["post_id" => $postId,
+                "image" => $image
+            ];
                 break;
         }
 	$notifyUser = UserProfile::where('id',Post::find($postId)->user_profile_id)->first(['fcm_registration_id']);
@@ -64,11 +67,11 @@ class PostHelper
         switch($type) {
             case config('constants.POST_ACTIVITY_LIKE'):
                 $body =  "@".$username->username." liked your comment";
-                $data = ["comment_id" => $commentId];
+                $data = ["comment_id" => $commentId,"image" => $image];
                 break;
             case config('constants.COMMENT_ACTIVITY_REPLY'):
                 $body =  "@".$username->username."reply your comment";
-                $data = ["comment_id" => $commentId];
+                $data = ["comment_id" => $commentId,"image" => $image];
                 break;
         }
 	$notifyUser = UserProfile::find(Comment::find($commentId)->user_profile_id)->first();
