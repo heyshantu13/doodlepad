@@ -80,15 +80,23 @@ class PostHelper
 
     static function createNotifyActivity($profileid, $postId)
     {
-          $activity = new PostActivity();
+        $isNotified = PostActivity::where('post_id',$postId)->where('user_profile_id',$profileid)->first(['id']);
+         $title = "Post Will Disappear Soon";
+         $body = "Your Post Will Disappear in few hour";
+           $data = ["post_id" => $postId];
+
+
+          
+          if(!$isNotified){
+                $activity = new PostActivity();
          $activity->user_profile_id = $profileid;
         $activity->post_id = $postId;
         $activity->type = "PINNED";
         $activity->save();
-
-         $title = "Doodlepad Post Will Disappear";
-         $body = "Your Post Will Disappear within 1 Hour";
-          $data = ["post_id" => $postId];
+          }
+        
+        
+        
 
          $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
