@@ -26,7 +26,7 @@ return [
         'alignment'=>[ALIGNMENT['left'],ALIGNMENT['center'],ALIGNMENT['right']],
         'gender' => [GENDER['MALE'], GENDER['FEMALE']],
         'post_type' => [POST_TYPE['TEXT'], POST_TYPE['IMAGE'], POST_TYPE['VIDEO'], POST_TYPE['AUDIO'], POST_TYPE['DOODLE']],
-        'post_activities' => [POST_ACTIVITY_TYPE['COMMENT'], POST_ACTIVITY_TYPE['LIKE']],
+        'post_activities' => [POST_ACTIVITY_TYPE['COMMENT'], POST_ACTIVITY_TYPE['LIKE'],['PINNED']],
         'comment_activities' => [COMMENT_ACTIVITY_TYPE['LIKE'], COMMENT_ACTIVITY_TYPE['REPLY']],
          'request_activities'=> ['DOODLE','FOLLOW'],
     ],

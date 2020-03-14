@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Post;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Helpers\PostHelper;
 
 
 class NotifyToPinnedPost extends Command
@@ -40,7 +41,14 @@ class NotifyToPinnedPost extends Command
      */
     public function handle()
     {
+       $results = DB::table('posts')->select('id','user_profile_id')
+->where('is_pinned',0)
+->where('created_at', '<', Carbon::now()->subHours(23)->toDateTimeString())->get();
 
-        return "Task Added";
+foreach ($results as $result) {
+   PostHelper::createNotifyActivity($result->user_profile_id,$result->id);
+}
+
+
     }
 }

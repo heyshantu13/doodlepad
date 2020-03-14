@@ -77,4 +77,22 @@ class PostHelper
 	$notifyUser = UserProfile::find(Comment::find($commentId)->user_profile_id)->first();
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
     }
+
+    static function createNotifyActivity($profileid, $postId)
+    {
+          $activity = new PostActivity();
+         $activity->user_profile_id = $profileid;
+        $activity->post_id = $postId;
+        $activity->type = "PINNED";
+        $activity->save();
+
+         $title = "Doodlepad Post Will Disappear";
+         $body = "Your Post Will Disappear within 1 Hour";
+          $data = ["post_id" => $postId];
+
+         $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
+        PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
+
+
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Post;
 use Carbon\Carbon;
+use App\PostActivity;
 
 class deleteUnpinnedPosts extends Command
 {
@@ -40,9 +41,12 @@ class deleteUnpinnedPosts extends Command
     public function handle()
     {
         // Post::where('is_pinned', 0)->where('created_at', '>', Carbon::now()->addHours(1)->toDateTimeString())->delete();
-        Post::where('is_pinned', 0)
+      Post::where('is_pinned', 0)
         ->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString())
         ->delete();
-        return "Task Added";
+
+      PostActivity::where('type', "PINNED")
+      ->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString())
+        ->delete();
     }
 }

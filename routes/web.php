@@ -13,10 +13,8 @@
 
 
 
-
 Route::get('/', function(){
    
-
 
 });
 

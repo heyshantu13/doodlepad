@@ -30,7 +30,13 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->command('posts:delete')
-        ->everyThirtyMinutes();
+        ->everyThirtyMinutes()
+        ->withoutOverlapping();
+
+         $schedule->command('posts:notify')
+        ->everyThirtyMinutes()
+        ->withoutOverlapping();
+
 
         // $schedule->call(function () {
         //     Post::where('is_pinned', 0)->whereDate('created_at', '<', Carbon::now()->subHours(1))->delete();
