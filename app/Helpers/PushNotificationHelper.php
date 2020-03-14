@@ -13,11 +13,10 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 
 class PushNotificationHelper
 {
-    static function send($token, $title, $body, $data,$imageurl = null)
+    static function send($token, $title, $body, $data)
     {
         $data['title'] = $title;
         $data['body'] = $body;
-        $data['image'] = $imageurl;
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
 
@@ -32,6 +31,6 @@ class PushNotificationHelper
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        FCM::sendTo($token, $option, null, $data);
+  FCM::sendTo($token, $option, $notification, $data);
     }
 }

@@ -117,8 +117,7 @@ return $isFollowing;
           public function followers()
 {
           $user_id = Auth::user()->id;
-          $profile = User::where('id', $user_id)->firstOrFail();
-      $followers = $profile->followers;
+          $followers = User::find($user_id)->followers()->with('userprofiles')->paginate(10);
         return response()->json([
           'message'=>true,
           'followers'=>$followers,
