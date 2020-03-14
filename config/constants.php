@@ -5,6 +5,7 @@ const POST_ACTIVITY_TYPE = ['COMMENT' => 'comment', 'LIKE' => 'like', 'DISLIKE' 
 const COMMENT_ACTIVITY_TYPE = ['LIKE' => 'like', 'REPLY' => 'reply'];
 // const COMMENT_ACTIVITY_REPLY = ['REPLY'=>'reply'];
 const ALIGNMENT = ['left'=>'left','right'=>'right','center'=>'center'];
+const FOLLOWTYPE = ['REQUESTED'=>'REQUESTED','FOLLOWING'=>'FOLLOWING'];
 return [
     'MALE' => GENDER['MALE'],
     'FEMALE' => GENDER['FEMALE'],
@@ -17,6 +18,9 @@ return [
     'POST_ACTIVITY_COMMENT' => POST_ACTIVITY_TYPE['COMMENT'],
     'COMMENT_ACTIVITY_LIKE' => COMMENT_ACTIVITY_TYPE['LIKE'],
     'COMMENT_ACTIVITY_REPLY' => COMMENT_ACTIVITY_TYPE['REPLY'],
+    'USER_FOLLOW_REQUESTED' => FOLLOWTYPE['REQUESTED'],
+    'USER_FOLLOW_FOLLOWING' => FOLLOWTYPE['FOLLOWING'],
+
     'enums' => [
         'text_post'=>'TEXT',
         'alignment'=>[ALIGNMENT['left'],ALIGNMENT['center'],ALIGNMENT['right']],

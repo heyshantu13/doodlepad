@@ -57,14 +57,14 @@ Route::group([
     });
 
       Route::group([
+          'prefix' => 'profile',
     'middleware'=>'auth:api',
 ],function(){
      // Route::post('profile/{profileId}/checkFollowing', 'UserController@checkFollowing');
-    Route::post('profile/{id}/follow', 'UserController@follow');
-    Route::get('profile/followers','UserController@followers');
-    Route::get('profile/following','UserController@following');
-     Route::get('profile/{id}/checkFollowing','UserController@checkFollowing');
-
+    Route::post('{user}/follow', 'UserController@follow');
+    Route::get('followers','UserController@followers');
+    Route::get('following','UserController@following');
+     Route::get('{id}/checkFollowing','UserController@checkFollowing');
 });
 
       Route::group([
@@ -74,7 +74,7 @@ Route::group([
     Route::post('/new', 'PostController@createPost');
     Route::get('myposts','PostController@myPosts'); //v1/auth/posts/myposts
     Route::delete('{id}/delete','PostController@destroy'); //  v1/auth/posts/{1}/delete;
-    Route::patch('{id}/pin','PostController@pinPost');
+    Route::patch('{id}/pin','PostController@pinned');
     Route::get('all','PostController@index');
     Route::post('{post}/like', 'PostController@like');
     Route::get('{post}/show', 'PostController@show');
@@ -87,16 +87,9 @@ Route::group([
 });
 
 
+
+
+
 });
-
-// Route::post('/demo','UserSignUp@signup');
-
-
-// Manage Posts
-
-
-
-// Follow,Unfollow,Following
-
 
 

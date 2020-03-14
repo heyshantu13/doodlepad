@@ -5,47 +5,42 @@
 
 namespace App\Helpers;
 
-use App\Post;
 use App\UserProfile;
-use App\User;
+use App\RequestActivity;
 use App\FollowerActivity;
+use App\User;
 
 class FollowerHelper
 {
-
-	 static function createFollowActivity($follower_id, $user_id)
+    static function FollowerActivity($followerid, $userid, $type)
     {
-        $activity = new PostActivity();
-        $activity->user_profile_id = $profile->id;
-        $activity->post_id = $postId;
-        $activity->type = $type;
-        $activity->save();
-        $username = User::where('id',$profile->user_id)->first(['username']);
-       
-     
+         $username = User::where('id',$followerid)->first(['username']);
+   
 
-	if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
-
-        $title = "New Activity on your post";
+        $title = "Doodlepad";
         $body = null;
         $data = array();
         switch($type) {
-            case config('constants.POST_ACTIVITY_LIKE'):
+            case config('constants.USER_FOLLOW_FOLLOWING'):
                 
-                $body =  "@".$username->username." liked your post";
-                $data = ["post_id" => $postId];
+                $body =  "@".$username->username." started following you.";
+                $data = ["user_id" => $userid];
                 break;
            
-            case config('constants.POST_ACTIVITY_COMMENT'):
-                if(!$profile->notification_on_comment) {
-                    return;
-                }
-                $body =  "@".$username->username. "commented on your post";
-                $data = ["post_id" => $postId];
+            case config('constants.USER_FOLLOW_REQUESTED'):
+            	 $activity = new RequestActivity();
+                 $activity->follower_id = $followerid;
+                 $activity->user_id = $userid;
+                 $activity->type = "FOLLOW";
+                 $activity->save();
+              
+                $body =  "@".$username->username. " has requested to following you.";
+                $data = ["user_id" => $userid];
                 break;
         }
-	$notifyUser = UserProfile::where('id',Post::find($postId)->user_profile_id)->first(['fcm_registration_id']);
+	$notifyUser = UserProfile::where('user_id',$userid)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
     }
 
+   
 }

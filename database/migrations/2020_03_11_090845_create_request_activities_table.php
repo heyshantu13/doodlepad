@@ -17,6 +17,7 @@ class CreateRequestActivitiesTable extends Migration
             $table->bigIncrements('id');
         $table->integer('follower_id')->unsigned();
         $table->integer('user_id')->unsigned();
+        $table->text('media_url')->nullable();
           $table->enum('type', config('constants.enums.request_activities'));
 
             $table->softDeletes();

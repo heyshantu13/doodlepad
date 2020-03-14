@@ -19,6 +19,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Follower;
+use App\Helpers\FollowerHelper;
+use App\RequestActivity;
 // use Aws\S3\S3Client;
 
 
@@ -29,14 +31,6 @@ class UserController extends Controller
 
 
   
-  
-  public function isFollowing(int $id){
-     $user = Auth::user()->id;
-
-    $isFollowing = DB::table('followers')->where('follower_id',$user)->where('user_id',$id)->exists();
-return $isFollowing;
-    
-}
 
   public function checkFollowing(int $id){
      $user = Auth::user()->id;
@@ -63,44 +57,7 @@ return $isFollowing;
     
 }
 
-   public function follow(int $id)
-{
-          $user_id = Auth::user()->id;
-          $profile = User::where('id', $id)->firstOrFail();
-          if($profile)
-          {
-             $isFollowingOrNot = Self::isFollowing($id);
-             //  @return already following message
 
-             if($isFollowingOrNot){
-               $isFollowing = DB::table('followers')->where('follower_id',$user_id)->where('user_id',$id)->delete();
-              return response()->json([
-          'status'=>true,
-          'message'=>'Unfollow Success',
-        ],200);
-             }
-             else{
-              $profile->followers()->attach(auth()->user()->id);
-              return response()->json([
-          'status'=>true,
-          'message'=>'Follow Success',
-        ],200);
-             }
-
-           }
-
-
-           //  If User Not Found
-
-           else{
-              return response()->json([
-          'status'=>false,
-          'message'=>'Invalid Request',
-        ],408);
-           }
-
-    
-}
 
  public function following()
 {
@@ -257,9 +214,74 @@ return $isFollowing;
            return response()->json(['message'=>false],200);
         }
         
-
-
       }
+
+      public function follow(User $user){
+         $message = $this->FollowUnfollowUser($user->id);
+        return response()->json(["status" => true,"id" => $user->id, "message"=>$message], 200);
+      }
+
+
+        private function FollowUnfollowUser(int $id)
+    {
+        $user = Auth::user();
+         $profile = User::where('id', $id)->firstOrFail();
+        $isFollowingOrNot = Follower::where('follower_id',$user->id)->where('user_id',$id)->first();
+        $is_private = UserProfile::where('user_id',$id)->first(['is_private']);
+
+        if ($isFollowingOrNot) {
+            $isFollowingOrNot->delete();
+             return "Unfollow Success";
+
+        }
+
+        //  if(!$isFollowingOrNot && $is_private){
+        //   $isrequestedOrNot = RequestActivity::where('follower_id',$user->id)
+        //   ->where('user_id',$id)
+        //   ->first();
+        //   if($isrequestedOrNot){
+        //     $isrequestedOrNot->delete();
+        //      return "Requested Cancelled";
+        //   }
+        //    FollowerHelper::FollowerActivity($user->id,$id,"REQUESTED");
+        //          return "Requested";
+        // }
+
+        
+        else{
+          // if account is private
+          if($is_private->is_private){
+
+// Check If Already Requested Or Not
+               $isrequestedOrNot = RequestActivity::where('follower_id',$user->id)
+          ->where('user_id',$id)
+          ->first();
+
+
+          if($isrequestedOrNot){
+            $isrequestedOrNot->delete();
+             return "Request Cancelled";
+           }
+           else{
+            FollowerHelper::FollowerActivity($user->id,$id,"REQUESTED");
+                 return "Requested";
+           }
+
+          }
+
+// For Public Account
+            $profile->followers()->attach(auth()->user()->id);
+           
+              FollowerHelper::FollowerActivity($user->id,$id,"FOLLOWING");
+                 return "Follow Success";
+
+        }
+      
+
+
+       
+    }
+
   
    
 
