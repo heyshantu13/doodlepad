@@ -40,7 +40,7 @@ class PostHelper
                 $data = ["post_id" => $postId];
                 break;
         }
-	$notifyUser = UserProfile::find(Post::find($postId)->user_profile_id)->first();
+	$notifyUser = UserProfile::where('id',Post::find($postId)->user_profile_id)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
     }
 
