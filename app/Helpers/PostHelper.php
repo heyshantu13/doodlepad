@@ -9,6 +9,7 @@ use App\Post;
 use App\UserProfile;
 use App\CommentActivity;
 use App\PostActivity;
+use App\User;
 
 class PostHelper
 {
@@ -19,6 +20,9 @@ class PostHelper
         $activity->post_id = $postId;
         $activity->type = $type;
         $activity->save();
+        $username = User::where('id',$profile->user_id)->first(['username']);
+       
+     
 
 	if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
 
@@ -28,7 +32,7 @@ class PostHelper
         switch($type) {
             case config('constants.POST_ACTIVITY_LIKE'):
                 
-                $body = "Someone liked your post";
+                $body =  "@".$username->username." liked your post";
                 $data = ["post_id" => $postId];
                 break;
            
@@ -36,7 +40,7 @@ class PostHelper
                 if(!$profile->notification_on_comment) {
                     return;
                 }
-                $body = "Someone commented on your post";
+                $body =  "@".$username->username. "commented on your post";
                 $data = ["post_id" => $postId];
                 break;
         }
@@ -59,11 +63,11 @@ class PostHelper
         $data = array();
         switch($type) {
             case config('constants.POST_ACTIVITY_LIKE'):
-                $body = "Someone liked your comment";
+                $body =  "@".$username->username." liked your comment";
                 $data = ["comment_id" => $commentId];
                 break;
             case config('constants.COMMENT_ACTIVITY_REPLY'):
-                $body = "Someone reply your comment";
+                $body =  "@".$username->username."reply your comment";
                 $data = ["comment_id" => $commentId];
                 break;
         }

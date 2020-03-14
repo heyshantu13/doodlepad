@@ -22,7 +22,8 @@ class PushNotificationHelper
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($body)
-            ->setSound('default');
+            ->setSound('default')
+            ->setClickAction("com.example.doodlepad_TARGET_NOTIFICATION");
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData($data);
