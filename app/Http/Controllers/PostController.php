@@ -139,7 +139,8 @@ class PostController extends Controller
        $posts = Post::where('user_profile_id', $profile->id);
  
  
-       $posts = $posts->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+       $posts = $posts->orderBy('created_at', 'desc')
+       ->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
        return response()->json($posts,200);
  
         

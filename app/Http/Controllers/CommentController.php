@@ -52,6 +52,7 @@ class CommentController extends Controller
         $profile = UserProfile::where('user_id', $user->id)->first();
         $comment = new Comment();
         $comment->text = $request->text;
+        $comment->type = $request->type;
         $comment->post_id = $post->id;
         $comment->user_profile_id = $profile->id;
         $comment->save();
@@ -60,7 +61,7 @@ class CommentController extends Controller
 	
         PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
 
-        return response()->json(Comment::find($comment->id));
+        return response()->json(Comment::find($comment->id),200);
     }
 
     public function destroy(Comment $comment) {
