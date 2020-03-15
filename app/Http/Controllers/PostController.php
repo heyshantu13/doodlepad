@@ -18,7 +18,7 @@ use App\Http\Requests\CreatePostValidate;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\PostHelper;
 use App\PostActivity;
-
+use Illuminate\Support\Collection;
 
 
 class PostController extends Controller
@@ -51,19 +51,22 @@ class PostController extends Controller
         if ($request->treding === "1") {
             $posts = Post::orderBy('created_at', 'desc');
         } else {
-            // $following = array_merge($profile->followings()->all(), [$profile->id]);
+      
           $following =  User::find($user->id)->followings()->pluck('user_id');
           
             $posts = Post::whereIn('user_id', $following)
             ->with('user')
             ->with('userprofile')
-            ->orWhere('user_id',$user->id)->orderBy('created_at', 'desc');
+            ->orWhere('user_id',$user->id)
+            // ->inRandomOrder()
+            ->orderBy('created_at', 'desc');
         }
         if ($request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
         }
         if ($request->user_profile_id) {
-            $posts = $posts->where('user_profile_id', $request->user_profile_id)->orderBy('created_at', 'desc');
+            $posts = $posts->where('user_profile_id', $request->user_profile_id)
+            ->orderBy('created_at', 'desc');
         }
         $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
         return response()->json($posts,200);

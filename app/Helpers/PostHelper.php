@@ -27,7 +27,7 @@ class PostHelper
 
 	if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
 
-        $title = "New Activity on your post";
+        $title = "Doodlepad";
         $body = null;
         $data = array();
         switch($type) {
@@ -61,7 +61,7 @@ class PostHelper
 
 	if(Comment::find($commentId)->user_profile_id->id == $profile->id) { return 1; }
 
-        $title = "New Activity on your post";
+        $title = "Doodlepad";
         $body = "";
         $data = array();
         switch($type) {
@@ -81,11 +81,9 @@ class PostHelper
     static function createNotifyActivity($profileid, $postId)
     {
         $isNotified = PostActivity::where('post_id',$postId)->where('user_profile_id',$profileid)->first(['id']);
-         $title = "Post Will Disappear Soon";
+         $title = "Doodlepad";
          $body = "Your Post Will Disappear in few hour";
            $data = ["post_id" => $postId];
-
-
           
           if(!$isNotified){
                 $activity = new PostActivity();
@@ -94,9 +92,6 @@ class PostHelper
         $activity->type = "PINNED";
         $activity->save();
           }
-        
-        
-        
 
          $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);

@@ -35,7 +35,7 @@ class UserController extends Controller
   public function checkFollowing(int $id){
      $user = Auth::user()->id;
 
-    $isFollowing = DB::table('followers')->where('follower_id',$user)->where('user_id',$id)->exists();
+    $isFollowing = Follower::where('follower_id',$user)->where('user_id',$id)->first();
     if($isFollowing){
        return response()->json([
           'status'=>true,

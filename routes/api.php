@@ -60,7 +60,6 @@ Route::group([
           'prefix' => 'profile',
     'middleware'=>'auth:api',
 ],function(){
-     // Route::post('profile/{profileId}/checkFollowing', 'UserController@checkFollowing');
     Route::post('{user}/follow', 'UserController@follow');
     Route::get('followers','UserController@followers');
     Route::get('following','UserController@following');
@@ -71,7 +70,7 @@ Route::group([
     'prefix' => 'posts',
     'middleware'=>'auth:api',
 ],function(){
-    Route::post('/new', 'PostController@createPost');
+    Route::post('new', 'PostController@createPost');
     Route::get('myposts','PostController@myPosts'); 
     Route::delete('{id}/delete','PostController@destroy');
     Route::patch('{id}/pin','PostController@pinned');
@@ -82,8 +81,6 @@ Route::group([
     Route::get('{post}/comments', 'CommentController@index');
     Route::post('{post}/comments', 'CommentController@store');
     Route::post('comments/{comment}/like', 'CommentController@like');
-
-
 });
 
 
