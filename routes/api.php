@@ -72,8 +72,8 @@ Route::group([
     'middleware'=>'auth:api',
 ],function(){
     Route::post('/new', 'PostController@createPost');
-    Route::get('myposts','PostController@myPosts'); //v1/auth/posts/myposts
-    Route::delete('{id}/delete','PostController@destroy'); //  v1/auth/posts/{1}/delete;
+    Route::get('myposts','PostController@myPosts'); 
+    Route::delete('{id}/delete','PostController@destroy');
     Route::patch('{id}/pin','PostController@pinned');
     Route::get('all','PostController@index');
     Route::post('{post}/like', 'PostController@like');

@@ -54,7 +54,10 @@ class PostController extends Controller
             // $following = array_merge($profile->followings()->all(), [$profile->id]);
           $following =  User::find($user->id)->followings()->pluck('user_id');
           
-            $posts = Post::whereIn('user_id', $following)->orWhere('user_id',$user->id)->orderBy('created_at', 'desc');
+            $posts = Post::whereIn('user_id', $following)
+            ->with('user')
+            ->with('userprofile')
+            ->orWhere('user_id',$user->id)->orderBy('created_at', 'desc');
         }
         if ($request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
@@ -99,9 +102,6 @@ class PostController extends Controller
         $post->filename = (request()->hasFile('media_url')) ?  $name : "";
         $post->save();
           return response()->json(['status'=>true,'post'=>Post::find($post->id)],200);
-        
-      
-           
 
         }
 
