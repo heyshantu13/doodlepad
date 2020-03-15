@@ -91,10 +91,11 @@ class PostHelper
         $activity->post_id = $postId;
         $activity->type = "PINNED";
         $activity->save();
+        $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
+        PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
           }
 
-         $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
-        PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
+        
 
 
     }
