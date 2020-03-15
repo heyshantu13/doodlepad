@@ -96,7 +96,7 @@ class UserController extends Controller
 
         $countsQuery = [
             'followers as is_following' => function ($query) use ($profile) {
-                $query->where('followers.user_id', $profile->user_id);
+                $query->where('followers.user_id', $profile->id);
             },
             'followings as following_count',
             'followers as followers_count'
@@ -161,20 +161,19 @@ class UserController extends Controller
     {
          $userID = Auth::user()->id;
          $profile = User::where('id',$userID)->first(['id','fullname','username','is_verified','active']);
-          $countsQuery = [
-            'followers as is_following' => function ($query) use ($profile) {
-                $query->where('followers.user_id', $profile->user_id);
-            },
-            'followings as following_count',
-            'followers as followers_count'
-        ];
-        
-         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id','bio']);
+        $info = array(
+            "follower_counts" => Follower::where('user_id',$userID)->count(),
+            "post_counts" => $profile->posts()->count(),
+          );
+
+         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','is_private','bio']);
+
          
 
          $collection = collect($profile);
+
          if($collection){
-          return response()->json($collection->merge($profileDeatils), 200);
+          return response()->json($collection->merge($profileDeatils)->merge($info), 200);
          }
          else{
           return response()->json(['status'=>false], 500);
@@ -189,12 +188,20 @@ class UserController extends Controller
       //        'id'=>'required|string',
       //   ]);
 
+      $info = null;
      
-      $profile = User::where('id',$id)->first(['id','fullname','username','is_verified','active']);
-      $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['user_id','profile_picture_url','date_of_birth','is_private','gender','fcm_registration_id','bio']);
+      $profile = User::where('id',$id)->firstOrFail(['id','fullname','username','is_verified','active']);
+      $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['user_id','profile_picture_url','is_private','bio']);
+      if($profile){
+        $info = array(
+            "follower_counts" => Follower::where('user_id',$id)->count(),
+            "post_counts" => $profile->posts()->count(),
+          );
+      }
+
       $collection = collect($profile);
       if($collection){
-       return response()->json($collection->merge($profileDeatils), 200);
+       return response()->json($collection->merge($profileDeatils)->merge($info), 200);
       }
       else{
        return response()->json(null, 404);
