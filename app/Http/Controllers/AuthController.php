@@ -149,20 +149,20 @@ class AuthController extends Controller
            try{
             $createdUser = $this->auth->createUser($userProperties);
             $isSaved = $profile->save();
-            if($isSaved){
+//             if($isSaved){
                  
-                      $userdetails = array(
-            'UserName'=> Auth::user()->username,
-            'Image_url'=> env('AWS_URL')."/".$filePath,
-            'id'=> Auth::user()->id,
+//                       $userdetails = array(
+//             'UserName'=> Auth::user()->username,
+//             'Image_url'=> env('AWS_URL')."/".$filePath,
+//             'id'=> Auth::user()->id,
             
-    );
-//                       $userData->Fullname= Auth::user()->fullname;
+//     );
+// //                       $userData->Fullname= Auth::user()->fullname;
 
 
-   $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userdetails);
+//    $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userdetails);
 
-            }
+//             }
 
 
 
