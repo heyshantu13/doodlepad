@@ -149,18 +149,18 @@ class AuthController extends Controller
            try{
             $createdUser = $this->auth->createUser($userProperties);
             $isSaved = $profile->save();
-   //          if($isSaved){
+            if($isSaved){
                  
-   //                 $userData = new UserData();
-   //                 $userData->Username = Auth::user()->username;
-   //                  $userData->Image_url = $url.$imageName;
-   //                  $userData->Uid = (string) Auth::user()->id;
-   //                    $userData->Fullname= Auth::user()->fullname;
+                   $userData = new UserData();
+                   $userData->UserName = Auth::user()->username;
+                    $userData->Image_url = $url.$imageName;
+                    $userData->id = (string) Auth::user()->id;
+//                       $userData->Fullname= Auth::user()->fullname;
 
 
-   // $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userData);
+   $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userData);
 
-   //          }
+            }
 
 
 
