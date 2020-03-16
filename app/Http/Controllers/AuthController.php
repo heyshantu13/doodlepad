@@ -153,7 +153,7 @@ class AuthController extends Controller
                  
                       $userdetails = array(
             'UserName'=> Auth::user()->username,
-            'Image_url'=> $url.$imageName,
+            'Image_url'=> env('AWS_URL')."/".$filePath,
             'id'=> Auth::user()->id,
             
     );
