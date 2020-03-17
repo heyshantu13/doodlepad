@@ -33,7 +33,7 @@ class PostHelper
         switch($type) {
             case config('constants.POST_ACTIVITY_LIKE'):
                 
-                $body =  "@".$username->username." liked your post";
+                $body =  "@".$username->username." liked your doodlepad post";
                 $data = ["post_id" => $postId,"image" => $image];
                 break;
            
@@ -41,7 +41,7 @@ class PostHelper
                 if(!$profile->notification_on_comment) {
                     return;
                 }
-                $body =  "@".$username->username. "commented on your post";
+                $body =  "@".$username->username. "commented on your doodlepad post";
                 $data = ["post_id" => $postId,
                 "image" => $image
             ];

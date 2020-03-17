@@ -30,4 +30,6 @@ class PostActivityController extends Controller
         ->paginate(config('constants.paginate_per_page'));
         return response()->json($activities,200);
     }
+
+
 }

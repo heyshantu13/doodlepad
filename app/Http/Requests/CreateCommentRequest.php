@@ -36,20 +36,14 @@ class CreateCommentRequest extends FormRequest
             
                 'media_url' => 'required|image|mimes:png,bmp|max:6096',
                 'type' => ['required', Rule::in(['DOODLE'])],
-                'caption'=>'string|max:140|min:1',
-                'text_location'=>'string|max:30',
-                    'longitude'=>'string',
-                    'latitude'=>'string',
+                    
             ];
           if(request()->type == "IMAGE")
             return [
             
                 'media_url' => 'required|image|mimes:png,jpeg,jpg,gif|max:8096',
                 'type' => ['required', Rule::in(['IMAGE'])],
-                'caption'=>'string|max:140|min:1',
-                'text_location'=>'string|max:30',
-                    'longitude'=>'string',
-                    'latitude'=>'string',
+                
             ];  
 
              if(request()->type == "VIDEO")
@@ -57,20 +51,14 @@ class CreateCommentRequest extends FormRequest
             
                 'media_url' => 'required|mimes:mp4,3gp,gif|',
                 'type' => ['required', Rule::in(['VIDEO'])],
-                'caption'=>'string|max:140|min:1',
-                'text_location'=>'string|max:30',
-                    'longitude'=>'string',
-                    'latitude'=>'string',
+               
             ];  
              if(request()->type == "AUDIO")
             return [
             
                 'media_url' => 'required|mimes:mp3,wav|',
                 'type' => ['required', Rule::in(['VIDEO'])],
-                'caption'=>'string|max:140|min:1',
-                'text_location'=>'string|max:30',
-                    'longitude'=>'string',
-                    'latitude'=>'string',
+               
             ];  
             
          else
