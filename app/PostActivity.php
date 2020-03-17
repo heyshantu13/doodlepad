@@ -9,7 +9,7 @@ class PostActivity extends Model
     //
      public function getUserProfileIdAttribute($value)
     {
-	return UserProfile::select(['id','gender', 'profile_picture_url','user_id'])->with('user:id,username')->find($value);
+	return UserProfile::select(['id','is_private', 'profile_picture_url','user_id'])->with('user:id,username')->find($value);
     }
 
     public function post()

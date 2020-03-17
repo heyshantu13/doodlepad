@@ -38,9 +38,7 @@ class PostHelper
                 break;
            
             case config('constants.POST_ACTIVITY_COMMENT'):
-                if(!$profile->notification_on_comment) {
-                    return;
-                }
+              
                 $body =  "@".$username->username. "commented on your doodlepad post";
                 $data = ["post_id" => $postId,
                 "image" => $image
@@ -70,7 +68,7 @@ class PostHelper
                 $data = ["comment_id" => $commentId,"image" => $image];
                 break;
             case config('constants.COMMENT_ACTIVITY_REPLY'):
-                $body =  "@".$username->username."reply your comment";
+                $body =  "@".$username->username."reply to your comment";
                 $data = ["comment_id" => $commentId,"image" => $image];
                 break;
         }
