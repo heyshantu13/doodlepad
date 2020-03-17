@@ -13,7 +13,7 @@ use App\User;
 
 class PostHelper
 {
-    static function createPostActivity($profile, $postId, $type)
+    static function createPostActivity($profile, $postId, $type,$comment=null)
     {
         $activity = new PostActivity();
         $activity->user_profile_id = $profile->id;
@@ -38,8 +38,39 @@ class PostHelper
                 break;
            
             case config('constants.POST_ACTIVITY_COMMENT'):
+
+            /*
+                    Check If User Mentioned Any User Or Not
+
+                    Author: Shantanu K
+
+                    Github: heyshantu13
+
+            */
+                 $isMentioned = preg_match_all('/@(\w+)|\s+([(\w+)\s|.|,|!|?]+)/', $comment, $result, PREG_PATTERN_ORDER);
+                 if($isMentioned)
+                    {
+                        for ($i = 0; $i < count($result[0]); $i++) {
+                        $mention[$i]= $result[1][$i];
+                                }
+                        for ($j = 0; $j< $i; $j++){
+                             $body =  "@".$username->username." mentioned you in comment";
+                                $data = ["post_id" => $postId,"image" => $image];
+                        $user = User::where('username',$mention[$j])->first(['id']);
+                        $fcm_token = UserProfile::where('user_id',$user->id)->first(['fcm_registration_id']);
+                            $activity = new PostActivity();
+                             $activity->user_profile_id = $profile->id;
+                            $activity->post_id = $postId;
+                            $activity->type = "MENTIONED";
+                            $activity->save();
+
+                          PushNotificationHelper::send($fcm_token->fcm_registration_id, $title, $body, $data);
+          
+                                }
+
+                    }
               
-                $body =  "@".$username->username. "commented on your doodlepad post";
+                $body =  "@".$username->username. " commented on your doodlepad post";
                 $data = ["post_id" => $postId,
                 "image" => $image
             ];
@@ -93,8 +124,7 @@ class PostHelper
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
           }
 
-        
-
-
     }
+
 }
+

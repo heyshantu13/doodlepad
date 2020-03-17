@@ -11,11 +11,13 @@
 |
 */
 
-
+use App\User;
+use App\UserProfile;
 
 Route::get('/', function(){
    
-
+        return "Github; @heyshantu13";
+         
 });
 
 
