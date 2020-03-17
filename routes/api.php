@@ -39,6 +39,7 @@ Route::group([
         Route::get('user', 'UserController@user');
         Route::get('getUserDetails/{id}', 'UserController@getUser');
         Route::get('activities', 'PostActivityController@index')->name('activities.index');
+          Route::get('requests', 'RequestActivityController@index')->name('activities.index');
        
     });
 

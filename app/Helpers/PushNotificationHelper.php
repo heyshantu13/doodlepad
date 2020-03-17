@@ -1,6 +1,11 @@
 <?php
-/**
-* AUthor: Shantanu Kulkarni
+ /*
+                   Send Push Notification To User
+
+                    Author: Shantanu Kulkarni
+
+                    Github: heyshantu13
+
  */
 
 namespace App\Helpers;

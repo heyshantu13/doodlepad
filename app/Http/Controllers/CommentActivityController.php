@@ -1,8 +1,9 @@
 <?php
 
-/**
-* AUthor: Shantanu Kulkarni
- */
+/*  Author:  Shantanu K
+    Git: heyshantu13
+    Description:  Authentication Management Controller
+*/
 
 
 namespace App\Http\Controllers;

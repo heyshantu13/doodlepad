@@ -1,7 +1,7 @@
 <?php
 
 /*  Author:  Shantanu K
-    Email: heyshantu13@gmail.com
+    Git: heyshantu13
     Description:  Authentication Management Controller
 */
 

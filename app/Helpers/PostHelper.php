@@ -1,7 +1,13 @@
 <?php
-/**
- * Created by Shantanu K.
- */
+
+    /*
+                   Create Post Activities
+
+                    Author: Shantanu Kulkarni
+
+                    Github: heyshantu13
+
+            */
 
 namespace App\Helpers;
 
@@ -42,7 +48,7 @@ class PostHelper
             /*
                     Check If User Mentioned Any User Or Not
 
-                    Author: Shantanu K
+                    Author: Shantanu Kulkarni
 
                     Github: heyshantu13
 
@@ -56,15 +62,20 @@ class PostHelper
                         for ($j = 0; $j< $i; $j++){
                              $body =  "@".$username->username." mentioned you in comment";
                                 $data = ["post_id" => $postId,"image" => $image];
+
                         $user = User::where('username',$mention[$j])->first(['id']);
-                        $fcm_token = UserProfile::where('user_id',$user->id)->first(['fcm_registration_id']);
+                        if($user){
+                             $fcm_token = UserProfile::where('user_id',$user->id)->first(['fcm_registration_id']);
                             $activity = new PostActivity();
                              $activity->user_profile_id = $profile->id;
                             $activity->post_id = $postId;
                             $activity->type = "MENTIONED";
                             $activity->save();
+                            PushNotificationHelper::send($fcm_token->fcm_registration_id, $title, $body, $data);
+                        }
+                       
 
-                          PushNotificationHelper::send($fcm_token->fcm_registration_id, $title, $body, $data);
+                          
           
                                 }
 
