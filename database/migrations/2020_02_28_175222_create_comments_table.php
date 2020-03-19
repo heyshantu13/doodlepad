@@ -18,7 +18,8 @@ class CreateCommentsTable extends Migration
             $table->integer('user_profile_id')->unsigned();
             $table->integer('post_id')->unsigned();
             $table->string('text')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->default('TEXT');
+             $table->string('media_url')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

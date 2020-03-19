@@ -53,7 +53,7 @@ class PostHelper
                     Github: heyshantu13
 
             */
-                 $isMentioned = preg_match_all('/@(\w+)|\s+([(\w+)\s|.|,|!|?]+)/', $comment, $result, PREG_PATTERN_ORDER);
+                /* $isMentioned = preg_match_all('/@(\w+)|\s+([(\w+)\s|.|,|!|?]+)/', $comment, $result, PREG_PATTERN_ORDER);
                  if($isMentioned)
                     {
                         for ($i = 0; $i < count($result[0]); $i++) {
@@ -79,7 +79,7 @@ class PostHelper
           
                                 }
 
-                    }
+                    }*/
               
                 $body =  "@".$username->username. " commented on your doodlepad post";
                 $data = ["post_id" => $postId,

@@ -49,7 +49,7 @@ class CommentController extends Controller
 
   
 
-    public function store(Post $post, CreateCommentRequest $request) {
+     public function store(Post $post, CreateCommentRequest $request) {
         $user = Auth::user();
         $profile = UserProfile::where('user_id', $user->id)->first();
         $comment = new Comment();
@@ -59,12 +59,16 @@ class CommentController extends Controller
         $comment->user_profile_id = $profile->id;
         $comment->save();
 
- 	if($post->user_profile_id == $profile->id) { return 1; }
-	
-        PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'),$request->text);
+    if($post->user_profile_id == $profile->id)
+    {
+        PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
 
-        return response()->json(Comment::find($comment->id),200);
+        return response()->json(Comment::find($comment->id));
     }
+    
+        
+    }
+
 
     public function destroy(Comment $comment) {
         $deleted = $comment->delete();

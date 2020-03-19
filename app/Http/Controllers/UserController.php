@@ -288,7 +288,8 @@ class UserController extends Controller
 
 // For Public Account
             $profile->followers()->attach(auth()->user()->id);
-           
+             
+
               FollowerHelper::FollowerActivity($user->id,$id,"FOLLOWING");
                  return "Follow Success";
 
