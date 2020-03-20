@@ -167,17 +167,14 @@ class UserController extends Controller
           );
 
          $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','is_private','bio']);
-
-         
-
          $collection = collect($profile);
-
          if($collection){
           return response()->json($collection->merge($profileDeatils)->merge($info), 200);
          }
          else{
           return response()->json(['status'=>false], 500);
          }
+         
       
     }
 
@@ -191,11 +188,29 @@ class UserController extends Controller
       $info = null;
      
       $profile = User::where('id',$id)->firstOrFail(['id','fullname','username','is_verified','active']);
-      $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['user_id','profile_picture_url','is_private','bio']);
+      $profileDeatils = UserProfile::where('user_id',$id)->firstOrFail(['profile_picture_url','is_private','bio']);
       if($profile){
+        $isFollowing = Follower::where('follower_id',Auth::user()->id)->where('user_id',$id)->first();
+        if($isFollowing)
+        {
+          $isFollowing = "1" ;//Following;
+        }
+        if(!$isFollowing){
+          $isrequestedOrNot = RequestActivity::where('follower_id',Auth::user()->id)
+          ->where('user_id',$id)
+          ->first();
+          if($isrequestedOrNot){
+             $isFollowing= 2 ;//Requested;
+           }
+           else{
+              $isFollowing= 0; //Not Following;
+           }
+        }
+
         $info = array(
             "follower_counts" => Follower::where('user_id',$id)->count(),
             "post_counts" => $profile->posts()->count(),
+            "following_status"=> $isFollowing,
           );
       }
 
