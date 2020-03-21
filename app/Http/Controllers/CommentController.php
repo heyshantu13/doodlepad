@@ -57,7 +57,7 @@ class CommentController extends Controller
             if(request()->hasFile('media_url')){
                      $file = request()->file('media_url');
             $name=time().$file->getClientOriginalName();
-            $filePath = 'comments/' . $name;
+            $filePath = 'comments/' .rand(11111,99999). $name;
               $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
             }
 
@@ -65,7 +65,7 @@ class CommentController extends Controller
         $comment->text = $request->text;
         $comment->type = $request->type;
         $comment->post_id = $post->id;
-        $comment->media_url = (request()->hasFile('media_url')) ?  $name : null;
+        $comment->media_url = (request()->hasFile('media_url')) ?   env('AWS_URL')."/".$filePath : null;
         $comment->user_profile_id = $profile->id;
         $comment->save();
 
