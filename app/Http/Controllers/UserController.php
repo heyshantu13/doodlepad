@@ -237,8 +237,8 @@ class UserController extends Controller
        else{
         $isPrivate = UserProfile::where('user_id',$id)->first(['is_private']);
         if(!$isFollowing && $isPrivate->is_private){
-           $message = "This Account is Private.";
-           $posts = array();
+           $message = false;
+           $posts = array("message"=>"This Account is Private.");
         }
         else{
            $message = true;
