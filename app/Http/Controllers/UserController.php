@@ -229,7 +229,7 @@ class UserController extends Controller
       $userID = Auth::user()->id;
       $isFollowing = Follower::where('follower_id',$userID)
        ->where('user_id',$id)
-          ->first();
+          ->firstOrFail();
        if($isFollowing){
           $message = true;
          $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
