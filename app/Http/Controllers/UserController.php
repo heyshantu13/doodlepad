@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use App\Follower;
 use App\Helpers\FollowerHelper;
 use App\RequestActivity;
+use App\Post;
 // use Aws\S3\S3Client;
 
 
@@ -221,6 +222,31 @@ class UserController extends Controller
       else{
        return response()->json(null, 404);
       }
+
+    }
+
+    public function userPosts($id){
+      $userID = Auth::user()->id;
+      $isFollowing = Follower::where('follower_id',$userID)
+       ->where('user_id',$id)
+          ->first();
+       if($isFollowing){
+          $message = true;
+         $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
+       }
+       else{
+        $isPrivate = UserProfile::where('user_id',$id)->first(['is_private']);
+        if(!$isFollowing && $isPrivate->is_private){
+           $message = "This Account is Private.";
+           $posts = array();
+        }
+        else{
+           $message = true;
+         $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
+        }
+
+       }   
+        return response()->json(["status" => $message,"posts"=>$posts], 200);
 
     }
 

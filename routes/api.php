@@ -43,6 +43,20 @@ Route::group([
        
     });
 
+     Route::group([
+       'middleware' => 'auth:api',
+        'prefix' => 'settings',
+    ], function() {
+        Route::get('status','SettingsController@status');
+        Route::post('privacy/status', 'SettingsController@updateStatus');
+        Route::post('account/username','SettingsController@updateUsername');
+        Route::post('account/password','SettingsController@updatePassword');
+        Route::post('notification/onLike','SettingsController@updateLikeStatus');
+         Route::post('notification/onComment','SettingsController@updateCommentStatus');
+
+       
+    });
+
 
      Route::group([
       'middleware' => 'auth:api'
@@ -71,6 +85,7 @@ Route::group([
     'prefix' => 'posts',
     'middleware'=>'auth:api',
 ],function(){
+   Route::get('{id}/get', 'UserController@userPosts');
     Route::post('new', 'PostController@createPost');
     Route::get('myposts','PostController@myPosts'); 
     Route::delete('{id}/delete','PostController@destroy');

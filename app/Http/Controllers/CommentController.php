@@ -18,6 +18,7 @@ use App\Post;
 use App\UserProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CommentController extends Controller
 {
@@ -52,10 +53,19 @@ class CommentController extends Controller
      public function store(Post $post, CreateCommentRequest $request) {
         $user = Auth::user();
         $profile = UserProfile::where('user_id', $user->id)->first();
+        $name = "";
+            if(request()->hasFile('media_url')){
+                     $file = request()->file('media_url');
+            $name=time().$file->getClientOriginalName();
+            $filePath = 'comments/' . $name;
+              $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            }
+
         $comment = new Comment();
         $comment->text = $request->text;
         $comment->type = $request->type;
         $comment->post_id = $post->id;
+        $comment->media_url = (request()->hasFile('media_url')) ?  $name : null;
         $comment->user_profile_id = $profile->id;
         $comment->save();
 
