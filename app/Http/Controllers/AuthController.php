@@ -76,8 +76,8 @@ class AuthController extends Controller
             }
             else{
                 return response()->json([
-                    'status'=>true,
-            'message' => 'Invalid Otp',
+                    'status'=>false,
+            'message' => 'Incorret Otp',
         ], 201);
             }
      }
