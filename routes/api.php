@@ -40,6 +40,8 @@ Route::group([
         Route::get('getUserDetails/{id}', 'UserController@getUser');
         Route::get('activities', 'PostActivityController@index')->name('activities.index');
           Route::get('requests', 'RequestActivityController@index')->name('activities.index');
+           Route::post('requests/accept', 'RequestActivityController@acceptRequest')->name('activities.accept');
+            Route::post('requests/reject', 'RequestActivityController@rejectRequest')->name('activities.reject');
        
     });
 

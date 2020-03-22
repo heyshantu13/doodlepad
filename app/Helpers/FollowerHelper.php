@@ -43,6 +43,12 @@ class FollowerHelper
                 $body =  "@".$username->username. " has requested to following you.";
                 $data = ["user_id" => $userid];
                 break;
+
+            case config('constants.USER_FOLLOW_APPROVED'):
+              
+                $body =  "@".$username->username. " has accepted your following request.";
+                $data = ["user_id" => $userid];
+                break;    
         }
 	$notifyUser = UserProfile::where('user_id',$userid)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);

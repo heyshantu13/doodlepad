@@ -48,7 +48,7 @@ class NotifyToPinnedPost extends Command
     {
        $results = DB::table('posts')->select('id','user_profile_id')
 ->where('is_pinned',0)
-->where('created_at', '<', Carbon::now()->subHours(22)->toDateTimeString())->get();
+->where('created_at', '<', Carbon::now()->subHours(1)->toDateTimeString())->get();
 
 foreach ($results as $result) {
    PostHelper::createNotifyActivity($result->user_profile_id,$result->id);
