@@ -30,6 +30,7 @@ class AuthController extends Controller
     public $auth;
     private $otp;
     private $firebase;
+//     private $defaulturl = "";
 
    public function __construct(){
     $this->auth = (new Factory)
@@ -116,15 +117,24 @@ class AuthController extends Controller
           if ($request->isMethod('post')) {
              $request->validate([
              'gender' => 'required|string|max:7',
-             'bio' => 'min:1|max:140|string|required',
+             'bio' => 'max:140|string',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'string',
-             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:4096'
+             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
-               $file = request()->file('profile_picture_url');
+              
+              if ($request->hasFile('profile_picture_url')) {
+      $file = request()->file('profile_picture_url');
             $name=time().$file->getClientOriginalName();
             $filePath = 'profiles/' . $name;
               $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+                  $imgpath = env('AWS_URL')."/".$filePath;
+}
+              else{
+                  $imgpath = "http://api.doodlepad.in/user.png";
+              }
+              
+             
          
             $profile = UserProfile::where('user_id', Auth::user()->id)
             ->first();
@@ -134,7 +144,7 @@ class AuthController extends Controller
             'bio' => request()->bio,
             'date_of_birth'=>request()->date_of_birth,
             'fcm_registration_id'=> request()->fcm_registration_id,
-            'profile_picture_url'=>env('AWS_URL')."/".$filePath,
+            'profile_picture_url'=>$imgpath,
             ]);
 
 
