@@ -212,6 +212,7 @@ class UserController extends Controller
             "follower_counts" => Follower::where('user_id',$id)->count(),
             "post_counts" => $profile->posts()->count(),
             "following_status"=> $isFollowing,
+            "current_user"=> (Auth::user()->id == $id) ? 1:0,
           );
       }
 
