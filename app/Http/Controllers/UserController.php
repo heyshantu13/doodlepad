@@ -227,26 +227,27 @@ class UserController extends Controller
     }
 
     public function userPosts($id){
-      $userID = Auth::user()->id;
-      $isFollowing = Follower::where('follower_id',$userID)
-       ->where('user_id',$id)
-          ->firstOrFail();
-       if($isFollowing){
-          $message = true;
-         $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
-       }
-       else{
-        $isPrivate = UserProfile::where('user_id',$id)->first(['is_private']);
-        if(!$isFollowing && $isPrivate->is_private){
-           $message = false;
-           $posts = array("message"=>"This Account is Private.");
-        }
-        else{
-           $message = true;
-         $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
-        }
+//       $userID = Auth::user()->id;
+//       $isFollowing = Follower::where('follower_id',$userID)
+//        ->where('user_id',$id)
+//           ->firstOrFail();
+//        if($isFollowing){
+//           $message = true;
+//          $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
+//        }
+//        else{
+//         $isPrivate = UserProfile::where('user_id',$id)->first(['is_private']);
+//         if(!$isFollowing && $isPrivate->is_private){
+//            $message = false;
+//            $posts = array("message"=>"This Account is Private.");
+//         }
+//         else{
+//            $message = true;
+//          $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
+//         }
 
-       }   
+//        }   
+           $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
         return response()->json(["status" => $message,"posts"=>$posts], 200);
 
     }
