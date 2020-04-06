@@ -248,7 +248,7 @@ class UserController extends Controller
 
 //        }   
            $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
-        return response()->json(["status" => $message,"posts"=>$posts], 200);
+        return response()->json(["status" => true,"posts"=>$posts], 200);
 
     }
 
