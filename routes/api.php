@@ -23,6 +23,7 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
+     Route::post('signin', 'AuthController@login');
     Route::post('sendOTP','AuthController@checkmobile');
     Route::post('verifyOTP','AuthController@verifyOTP');
     Route::post('create-user', 'AuthController@signup');
