@@ -79,6 +79,7 @@ Route::group([
     'middleware'=>'auth:api',
 ],function(){
     Route::post('{user}/follow', 'UserController@follow');
+  Route::delete('/picture/remove', 'UserController@removeProfilePic');
     Route::get('followers','UserController@followers');
     Route::get('following','UserController@following');
      Route::get('{id}/checkFollowing','UserController@checkFollowing');

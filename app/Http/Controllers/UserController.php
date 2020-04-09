@@ -23,6 +23,7 @@ use App\Helpers\FollowerHelper;
 use App\RequestActivity;
 use App\Post;
 // use Aws\S3\S3Client;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -119,33 +120,67 @@ class UserController extends Controller
 
 	}
 
+  public function removeProfilePic(){
+    $profile = UserProfile::where('user_id', Auth::user()->id)->firstOrFail();
+    $profile->profile_picture_url =  "http://api.doodlepad.in/user.png";
+    $profile->save();
+    return response()->json(['status'=>true],200);
+
+  }
+
 	public function updateProfile(Request $request){
 
-     $profile = UserProfile::where('user_id', Auth::user()->id)->firstOrFail();
-     $url = "http://api.doodlepad.in/"; //sample url
+     $profile = UserProfile::where('user_id', Auth::user()->id)->first();
+     // $url = "http://api.doodlepad.in/"; //sample url
 
 		$request->validate([
             
-             'profile_picture_url'=>'required|image|mimes:jpeg,png,jpg,gif|max:8096',
-             'bio' => 'string',
+             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif|max:8096',
+             'bio' => 'required|string',
         ]);
 
-       
+        if ($request->hasFile('profile_picture_url')) {
+          $file = request()->file('profile_picture_url');
+           $name="dpad2020".time().$file->getClientOriginalName();
+           $filePath = 'profiles/' . $name;
+           $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+             $imgpath = env('AWS_URL')."/".$filePath;
+             $profile->profile_picture_url = $imgpath;
 
-        try {
-          $imageName = rand(1111,9999).time().'.'.request()->profile_picture_url->getClientOriginalExtension();
-          request()->file('profile_picture_url')->move(public_path("/"),$imageName);
-         $profile->profile_picture_url = $url.$imageName;
-         $profile->save();
-         return response()->json([
+        }
+        $profile->bio = $request->bio;
+        $profile->save();
+
+        return response()->json([
           'status'=>true,
   'message' => 'Profile Updated Successfully.',
-  'profile_picture_url' => $url.$imageName,
+  'profile_picture_url' => $imgpath,
 ], 200);
-        }
-        catch(\Exception $ex) {
-          return response()->json(null,408);
-      }
+          
+
+//         try {
+         
+//                    if ($request->hasFile('profile_picture_url')) {
+//       $file = request()->file('profile_picture_url');
+//             $name=time().$file->getClientOriginalName();
+//             $filePath = 'profiles/' . $name;
+//               $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+//                   $imgpath = env('AWS_URL')."/".$filePath;
+//                    $profile->profile_picture_url = $imgpath;
+// }
+
+
+//         $profile->bio = $request->bio;
+//          $profile->save();
+//          return response()->json([
+//           'status'=>true,
+//   'message' => 'Profile Updated Successfully.',
+//   'profile_picture_url' => $imgpath,
+// ], 200);
+//         }
+//         catch(\Exception $ex) {
+//           return response()->json(null,408);
+//       }
 
        
 
