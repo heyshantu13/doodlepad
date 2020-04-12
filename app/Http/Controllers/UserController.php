@@ -202,7 +202,7 @@ class UserController extends Controller
             "post_counts" => $profile->posts()->count(),
           );
 
-         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','is_private','bio']);
+         $profileDeatils = UserProfile::where('user_id',$userID)->firstOrFail(['user_id','profile_picture_url','is_private','bio','date_of_birth']);
          $collection = collect($profile);
          if($collection){
           return response()->json($collection->merge($profileDeatils)->merge($info), 200);
