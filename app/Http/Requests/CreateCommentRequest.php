@@ -57,7 +57,7 @@ class CreateCommentRequest extends FormRequest
             return [
             
                 'media_url' => 'required|mimes:mp3,wav|',
-                'type' => ['required', Rule::in(['VIDEO'])],
+                'type' => ['required', Rule::in(['AUDIO'])],
                
             ];  
             
