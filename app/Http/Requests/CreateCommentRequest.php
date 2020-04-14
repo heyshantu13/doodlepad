@@ -56,7 +56,7 @@ class CreateCommentRequest extends FormRequest
              if(request()->type == "AUDIO")
             return [
             
-                'media_url' => 'required|mimes:application/octet-stream,audio/mpeg,mpga,mp3,wav',
+                'media_url' => 'required|',
                 'type' => ['required', Rule::in(['AUDIO'])],
                
             ];  
