@@ -73,8 +73,9 @@ class CommentController extends Controller
     {
         PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
 
-        return response()->json(Comment::find($comment->id));
+        
     }
+    return response()->json(Comment::find($comment->id),200);
     
         
     }

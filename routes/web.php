@@ -11,9 +11,6 @@
 |
 */
 
-use App\User;
-use App\UserProfile;
-
 Route::get('/', function(){
    
         return "Github; @heyshantu13";
@@ -34,5 +31,5 @@ Auth::routes([
 
 
 
-Route::get('/do','UserController@getinfo');
+
 
