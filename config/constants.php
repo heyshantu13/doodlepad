@@ -4,7 +4,7 @@
 
 const GENDER = ['MALE' => 'male', 'FEMALE' => 'female'];
 const POST_TYPE = ['TEXT' => 'text', 'IMAGE' => 'image', 'VIDEO' => 'video', 'AUDIO' => 'audio', 'DOODLE' => 'doodle'];
-const POST_ACTIVITY_TYPE = ['COMMENT' => 'comment', 'LIKE' => 'like', 'DISLIKE' => 'dislike', 'FOLLOW' => 'follow'];
+const POST_ACTIVITY_TYPE = ['COMMENT' => 'COMMENT', 'LIKE' => 'LIKE', 'DISLIKE' => 'dislike', 'FOLLOW' => 'follow'];
 const COMMENT_ACTIVITY_TYPE = ['LIKE' => 'like', 'REPLY' => 'reply'];
 const COMMENT_ACTIVITY_REPLY = ['REPLY'=>'reply'];
 const ALIGNMENT = ['left'=>'left','right'=>'right','center'=>'center'];

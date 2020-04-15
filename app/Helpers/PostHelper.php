@@ -122,7 +122,7 @@ class PostHelper
     {
         $isNotified = PostActivity::where('post_id',$postId)->where('user_profile_id',$profileid)->first(['id']);
          $title = "Doodlepad";
-         $body = "Your Post Will Disappear in few hour";
+         $body = "Your Post Will Disappear in 1 hour";
            $data = ["post_id" => $postId];
           
           if(!$isNotified){
