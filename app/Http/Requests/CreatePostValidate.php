@@ -71,8 +71,8 @@ class CreatePostValidate extends FormRequest
              if(request()->type == "AUDIO")
             return [
             
-                'media_url' => 'required|mimes:mp3,wav|',
-                'type' => ['required', Rule::in(['VIDEO'])],
+                'media_url' => 'required|',
+                'type' => ['required', Rule::in(['AUDIO'])],
                 'caption'=>'string|max:140',
                 'text_location'=>'string|max:30',
                     'longitude'=>'string',
