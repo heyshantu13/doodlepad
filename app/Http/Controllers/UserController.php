@@ -324,6 +324,12 @@ class UserController extends Controller
         $isFollowingOrNot = Follower::where('follower_id',$user->id)->where('user_id',$id)->first();
         $is_private = UserProfile::where('user_id',$id)->first(['is_private']);
 
+        if(!$is_private){
+          return "User not found.";
+          
+        }
+       
+
         if ($isFollowingOrNot) {
             $isFollowingOrNot->delete();
              return "Unfollow Success";
