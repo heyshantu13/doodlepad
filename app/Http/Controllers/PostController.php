@@ -206,20 +206,12 @@ class PostController extends Controller
     }
 
 
-   public function destroy($id)
+   public function destroy(Post $id)
     {
+       
+       return $id;
 
-        $user_id = Auth::user->id();
-        $user_profile_id = UserProfile::where('user_id',$user_id)->first(['id']);
-        $post = Post::where('id',$id)->where('user_profile_id',$user_profile_id)->first();
-        if($post){
-            $deleted = $post->delete();
-            $status = $deleted ? 200 : 400;
-            return response()->json(null, $status);
-        }
-        else{
-            return response()->json(null, 404);
-        }
+      
        
     }
 
