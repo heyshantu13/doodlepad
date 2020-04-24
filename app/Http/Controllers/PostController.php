@@ -209,7 +209,9 @@ class PostController extends Controller
    public function destroy(Post $id)
     {
        
-       return $id;
+       $deleted = $id->delete();
+       $status = ($deleted)?true:false;
+       return response()->json(null,$status);
 
       
        
