@@ -210,25 +210,17 @@ class PostController extends Controller
     {
        
        $deleted = $id->delete();
-       $status = ($deleted)?true:false;
+       $status = ($deleted)?200:400;
        return response()->json(null,$status);
 
       
        
     }
 
-    public function pinned(Post $post)
+    public function pinned(Post $id)
     {
-       if($post->is_pinned){
-        $post->is_pinned = 0;
-        $status = $post->save();
-         $status = $deleted ? 200 : 400;
-        return response()->json(null, $status);
-       }
-       $post->is_pinned = 1;
-        $status = $post->save();
-         $status = $deleted ? 200 : 400;
-        return response()->json(null, $status);
+       
+        return response()->json($id->is_pinned);
        
     }
 
