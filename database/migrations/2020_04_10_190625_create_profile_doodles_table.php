@@ -14,8 +14,9 @@ class CreateProfileDoodlesTable extends Migration
     public function up()
     {
         Schema::create('profile_doodles', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-            $table->integer('by_user_id')->unsigned();
+             $table->bigIncrements('id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('by_user_id')->unsigned();
             $table->text('media_url')->nullable();
             $table->timestamps();
 

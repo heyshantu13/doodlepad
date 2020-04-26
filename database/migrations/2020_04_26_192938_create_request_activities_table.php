@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFollowerActivitiesTable extends Migration
+class CreateRequestActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,21 @@ class CreateFollowerActivitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('follower_activities', function (Blueprint $table) {
+        Schema::create('request_activities', function (Blueprint $table) {
+          
             $table->bigIncrements('id');
-            $table->bigInteger('follower_id')->unsigned();
+        $table->bigInteger('follower_id')->unsigned();
         $table->bigInteger('user_id')->unsigned();
+        $table->text('media_url')->nullable();
+          $table->enum('type', config('constants.enums.request_activities'));
+
+            $table->softDeletes();
+
         $table->timestamps();
 
         $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->timestamps();
-            $table->softDeletes();
+          
         });
     }
 
@@ -33,6 +38,6 @@ class CreateFollowerActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('follower_activities');
+        Schema::dropIfExists('request_activities');
     }
 }

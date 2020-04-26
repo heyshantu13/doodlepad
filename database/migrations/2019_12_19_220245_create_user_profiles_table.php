@@ -30,7 +30,7 @@ class CreateUserProfilesTable extends Migration
             //     ->onDelete('cascade');
 
 
-          $table->increments('id');
+          $table->bigIncrements('id');
             $table->string('user_id');
            $table->mediumText('bio')->nullable();
             $table->longText('profile_picture_url')->nullable();

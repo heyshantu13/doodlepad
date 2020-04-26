@@ -49,6 +49,11 @@ class PostController extends Controller
                 $query->where('user_profile_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             }
+
+             'post as pinned' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('is_pinned', 1);
+            },
         ];
         if ($request->treding === "1") {
             $posts = Post::orderBy('created_at', 'desc');
@@ -86,7 +91,7 @@ class PostController extends Controller
                      $file = request()->file('media_url');
             $name=time().$file->getClientOriginalName();
             $filePath = 'posts/' . $name;
-              $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+             $strg = Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
             }
        
                

@@ -14,9 +14,9 @@ class CreateCommentActivitiesTable extends Migration
     public function up()
     {
         Schema::create('comment_activities', function (Blueprint $table) {
-             $table->increments('id');
-            $table->integer('user_profile_id')->unsigned();
-            $table->integer('comment_id')->unsigned();
+             $table->bigIncrements('id');
+            $table->bigInteger('user_profile_id')->unsigned();
+            $table->bigInteger('comment_id')->unsigned();
             $table->enum('type', config('constants.enums.comment_activities'));
             $table->softDeletes();
             $table->timestamps();

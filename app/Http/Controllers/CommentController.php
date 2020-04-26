@@ -69,14 +69,11 @@ class CommentController extends Controller
         $comment->user_profile_id = $profile->id;
         $comment->save();
 
-    if($post->user_profile_id == $profile->id)
-    {
-        PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
-
-        
-    }
-    return response()->json(Comment::find($comment->id),200);
+    if($post->user_profile_id == $profile->id) { return 1; }
     
+        PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
+    
+    return response()->json(Comment::find($comment->id),200);
         
     }
 

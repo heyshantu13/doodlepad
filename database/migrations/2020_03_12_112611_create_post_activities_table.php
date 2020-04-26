@@ -14,9 +14,9 @@ class CreatePostActivitiesTable extends Migration
     public function up()
     {
         Schema::create('post_activities', function (Blueprint $table) {
-        //  $table->increments('id');
-            $table->integer('user_profile_id')->unsigned();
-            $table->integer('post_id')->unsigned();
+         $table->bigIncrements('id');
+            $table->bigInteger('user_profile_id')->unsigned();
+            $table->bigInteger('post_id')->unsigned();
             $table->enum('type', config('constants.enums.post_activities'));
             $table->softDeletes();
             $table->timestamps();
