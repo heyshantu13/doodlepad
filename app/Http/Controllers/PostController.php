@@ -255,11 +255,31 @@ class PostController extends Controller
 
       $is_pinned = Post::where('id',$id)
       ->where('user_id',Auth::user()->id)
-      ->first();
+      ->first(['id','is_pinned','user_profile_id']);
+
+      if($is_pinned)
+      {
+        if($is_pinned->is_pinned == 1)
+        {
+            $is_pinned->is_pinned = 0;
+            $is_saved = $is_pinned->save();
+            $status =  ($is_saved)?200:400;
+            $msg = false;
+        }
+
+        if($is_pinned->is_pinned == 0)
+        {
+            $is_pinned->is_pinned = 1;
+            $is_saved = $is_pinned->save();
+            $status =  ($is_saved)?200:400;
+            $msg = true;
+        }
+
+        return response()->json($msg,$status);
+      }
 
 
-
-        return response()->json($is_pinned);
+       
        
     }
 
