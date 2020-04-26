@@ -39,7 +39,7 @@ class PostHelper
         switch($type) {
             case config('constants.POST_ACTIVITY_LIKE'):
                 
-                $body =  "@".$username->username." liked your doodlepad post";
+                $body =  "@".$username->username." Liked your doodlepad post";
                 $data = ["post_id" => $postId,"image" => $image];
                 break;
            

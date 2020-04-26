@@ -4,7 +4,7 @@
 
 const GENDER = ['MALE' => 'male', 'FEMALE' => 'female'];
 const POST_TYPE = ['TEXT' => 'text', 'IMAGE' => 'image', 'VIDEO' => 'video', 'AUDIO' => 'audio', 'DOODLE' => 'doodle'];
-const POST_ACTIVITY_TYPE = ['COMMENT' => 'COMMENT', 'LIKE' => 'LIKE', 'DISLIKE' => 'dislike', 'FOLLOW' => 'follow'];
+const POST_ACTIVITY_TYPE = ['COMMENT' => 'COMMENT', 'LIKE' => 'LIKE', 'DISLIKE' => 'dislike', 'FOLLOW' => 'FOLLOW','PINNED'=>'PINNED'];
 const COMMENT_ACTIVITY_TYPE = ['LIKE' => 'like', 'REPLY' => 'reply'];
 const COMMENT_ACTIVITY_REPLY = ['REPLY'=>'reply'];
 const ALIGNMENT = ['left'=>'left','right'=>'right','center'=>'center'];
@@ -19,6 +19,7 @@ return [
     'POST_TYPE_DOODLE' => POST_TYPE['DOODLE'],
     'POST_ACTIVITY_LIKE' => POST_ACTIVITY_TYPE['LIKE'],
     'POST_ACTIVITY_COMMENT' => POST_ACTIVITY_TYPE['COMMENT'],
+    'POST_ACTIVITY_COMMENT' => POST_ACTIVITY_TYPE['PINNED'],
     'COMMENT_ACTIVITY_LIKE' => COMMENT_ACTIVITY_TYPE['LIKE'],
     'COMMENT_ACTIVITY_REPLY' => COMMENT_ACTIVITY_TYPE['REPLY'],
     'USER_FOLLOW_REQUESTED' => FOLLOWTYPE['REQUESTED'],

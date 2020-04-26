@@ -33,6 +33,11 @@ class PostController extends Controller
         $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
 
         $countsQuery = [
+
+          'post_activities as pinned_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_PINNED'));
+            },
+
             'post_activities as like_count' => function ($query) {
                 $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
             },
@@ -44,17 +49,22 @@ class PostController extends Controller
                 $query->where('user_profile_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_LIKE'));
             },
+
            
             'post_activities as commented' => function ($query) use ($profile) {
                 $query->where('user_profile_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-            }
-
-             'post as pinned' => function ($query) use ($profile) {
-                $query->where('user_profile_id', $profile->id)
-                    ->where('is_pinned', 1);
             },
+
+
+
+
+
+
         ];
+
+       
+
         if ($request->treding === "1") {
             $posts = Post::orderBy('created_at', 'desc');
         } else {
@@ -75,6 +85,17 @@ class PostController extends Controller
             $posts = $posts->where('user_profile_id', $request->user_profile_id)
             ->orderBy('created_at', 'desc');
         }
+
+        $comment_deletable = [
+          'comments_deletabel' => Post::where('user_profile_id',$profile->id)
+          ->whereIn('id', $posts->pluck('id'))->count(),
+        ];
+
+         
+
+
+
+
         $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
         return response()->json($posts,200);
 
@@ -205,6 +226,11 @@ class PostController extends Controller
             'post_activities as commented' => function ($query) use ($profile) {
                 $query->where('user_profile_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            },
+
+             'post as is_pinned' => function ($query) use ($profile) {
+                $query->where('user_profile_id', $profile->id)
+                    ->where('is_pinned', 1);
             }
         ];
         return response()->json(Post::where('id', $post->id)->withCount($countsQuery)->first());
@@ -222,10 +248,18 @@ class PostController extends Controller
        
     }
 
-    public function pinned(Post $id)
+    public function pinned($id)
     {
        
-        return response()->json($id->is_pinned);
+      
+
+      $is_pinned = Post::where('id',$id)
+      ->where('user_id',Auth::user()->id)
+      ->first();
+
+
+
+        return response()->json($is_pinned);
        
     }
 
