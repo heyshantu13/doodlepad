@@ -7,21 +7,21 @@
 
 
 
-  namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
 
-  use Illuminate\Http\Request;
-  use Illuminate\Support\Facades\Auth;
-  use Carbon\Carbon;
-  use App\User;
-  use App\UserProfile;
-  use App\Post;
-  use App\Http\Requests\CreatePostValidate;
-  use Illuminate\Support\Facades\Storage;
-  use App\Helpers\PostHelper;
-  use App\PostActivity;
-  use Illuminate\Support\Collection;
-  use App\SavePost;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\User;
+use App\UserProfile;
+use App\Post;
+use App\Http\Requests\CreatePostValidate;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\PostHelper;
+use App\PostActivity;
+use Illuminate\Support\Collection;
+use App\SavePost;
 
 
   class PostController extends Controller
