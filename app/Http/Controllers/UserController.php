@@ -319,8 +319,11 @@ class UserController extends Controller
 
         private function FollowUnfollowUser(int $id)
     {
+
         $user = Auth::user();
-         $profile = User::where('id', $id)->firstOrFail();
+         $profile = User::where('id', $id)->first();
+         if(!$profile){return "User Not Found";}
+         if($user->id == $id){return 0;}
         $isFollowingOrNot = Follower::where('follower_id',$user->id)->where('user_id',$id)->first();
         $is_private = UserProfile::where('user_id',$id)->first(['is_private']);
 
@@ -328,33 +331,23 @@ class UserController extends Controller
           return "User not found.";
           
         }
-       
 
-        if ($isFollowingOrNot) {
+
+      if ($isFollowingOrNot) {
             $isFollowingOrNot->delete();
              return "Unfollow Success";
 
         }
 
-        //  if(!$isFollowingOrNot && $is_private){
-        //   $isrequestedOrNot = RequestActivity::where('follower_id',$user->id)
-        //   ->where('user_id',$id)
-        //   ->first();
-        //   if($isrequestedOrNot){
-        //     $isrequestedOrNot->delete();
-        //      return "Requested Cancelled";
-        //   }
-        //    FollowerHelper::FollowerActivity($user->id,$id,"REQUESTED");
-        //          return "Requested";
-        // }
+       
 
         
         else{
           // if account is private
           if($is_private->is_private){
 
-// Check If Already Requested Or Not
-               $isrequestedOrNot = RequestActivity::where('follower_id',$user->id)
+      // Check If Already Requested Or Not
+      $isrequestedOrNot = RequestActivity::where('follower_id',$user->id)
           ->where('user_id',$id)
           ->first();
 
@@ -370,19 +363,20 @@ class UserController extends Controller
 
           }
 
-// For Public Account
+        // For Public Account
             $profile->followers()->attach(auth()->user()->id);
-             
-
-              FollowerHelper::FollowerActivity($user->id,$id,"FOLLOWING");
-                 return "Follow Success";
-
+            FollowerHelper::FollowerActivity($user->id,$id,"FOLLOWING");
+            return "Follow Success";
         }
-      
+
+    
 
 
        
-    }
+
+
+     
+    } /* End Follow Unfollow Function*/
 
   
    

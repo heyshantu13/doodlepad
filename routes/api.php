@@ -83,6 +83,8 @@ Route::group([
     Route::get('followers','UserController@followers');
     Route::get('following','UserController@following');
      Route::get('{id}/checkFollowing','UserController@checkFollowing');
+     Route::get('{id?}/doodles','DoodleController@getDoodles');
+    Route::post('{id?}/doodles','DoodleController@storeDoodles');
 });
 
       Route::group([
