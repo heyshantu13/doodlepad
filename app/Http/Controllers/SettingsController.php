@@ -104,9 +104,6 @@ class SettingsController extends Controller
 
 
 
-            
-      // if(!Auth::attempt($credentials))
-
-		}
+         
 
 }

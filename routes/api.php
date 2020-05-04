@@ -85,6 +85,7 @@ Route::group([
      Route::get('{id}/checkFollowing','UserController@checkFollowing');
      Route::get('{id?}/doodles','DoodleController@getDoodles');
     Route::post('{id?}/doodles','DoodleController@storeDoodles');
+     Route::get('suggetions','UserSuggetions@index');
 });
 
       Route::group([
