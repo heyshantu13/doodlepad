@@ -50,12 +50,12 @@ Route::group([
        'middleware' => 'auth:api',
         'prefix' => 'settings',
     ], function() {
-        Route::get('status','SettingsController@status');
-        Route::post('privacy/status', 'SettingsController@updateStatus');
-        Route::post('account/username','SettingsController@updateUsername');
-        Route::post('account/password','SettingsController@updatePassword');
-        Route::post('notification/onLike','SettingsController@updateLikeStatus');
-         Route::post('notification/onComment','SettingsController@updateCommentStatus');
+        Route::get('privacy/status','SettingsController@getPrivacy');
+        Route::post('privacy/status', 'SettingsController@setPrivacy');
+        Route::get('privacy/username','SettingsController@getUsername');
+      Route::get('privacy/checkUsername','SettingsController@checkUsername');
+        Route::post('privacy/username','SettingsController@setUsername');
+        Route::post('account/password','SettingsController@setNewPassword');
 
        
     });
