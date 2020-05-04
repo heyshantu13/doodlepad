@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class PostActivity extends Model
 {
@@ -20,5 +21,11 @@ class PostActivity extends Model
     // public function user(){
     // 	return $this->belongsTo(User::class, 'posts', 'user_id','id');
     // }
+
+       public function getCreatedAtAttribute($date)
+{
+    return Carbon::create($date)->diffForHumans();
+}
+    
 
 }
