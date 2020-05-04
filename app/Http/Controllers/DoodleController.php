@@ -57,7 +57,7 @@ class DoodleController extends Controller
             	  $profile_doodle = new ProfileDoodle();
             	  $profile_doodle->user_id = Auth::user()->id;
             	  $profile_doodle->by_user_id = $id;
-            	   $profile_doodle->media_url = 
+            	   $profile_doodle->media_url = $doodle_url;
             	  $profile_doodle->save();
             	 return response()->json(["status"=>true,"msg"=> "Doodle Request Sent.",],201);
 

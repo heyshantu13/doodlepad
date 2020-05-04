@@ -398,7 +398,6 @@ class PostController extends Controller
          return response()->json($notifications,200);
         }
         else{
-
           return response()->json(['status'=>false],404);
         }
 
