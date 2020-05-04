@@ -17,7 +17,7 @@ class CreatePostActivitiesTable extends Migration
          $table->bigIncrements('id');
             $table->bigInteger('user_profile_id')->unsigned();
             $table->bigInteger('post_id')->unsigned();
-            $table->bigInteger('on_user_id')->unsigned();
+           // $table->bigInteger('on_user_id')->unsigned();
             $table->enum('type', config('constants.enums.post_activities'));
             $table->softDeletes();
             $table->timestamps();

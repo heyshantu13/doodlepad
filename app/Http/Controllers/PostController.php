@@ -22,6 +22,7 @@ use App\Helpers\PostHelper;
 use App\PostActivity;
 use Illuminate\Support\Collection;
 use App\SavePost;
+use DB;
 
 
 class PostController extends Controller
@@ -378,6 +379,34 @@ class PostController extends Controller
 
 
        
+    }
+
+
+    public function likes($id){
+
+      $isPostAvailable = Post::where('id',$id)->first(['id','user_profile_id','user_id']);
+
+    if($isPostAvailable){
+
+
+      $profile_id = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
+
+       $notifications = DB::table('post_activities as pa')
+        ->join('user_profiles as up','up.id','=','pa.user_profile_id')
+        ->join('users as u','u.id','=','up.user_id')
+        ->select('u.id as user_id','u.username as username','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at')
+        ->where('pa.post_id',$id)
+        ->paginate(config('constants.paginate_per_page'));
+         return response()->json($notifications,404);
+
+        }
+        else{
+
+          return response()->json(['status'=>false],404);
+        }
+
+      //$posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
+
     }
 
 
