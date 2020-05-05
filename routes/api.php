@@ -104,7 +104,7 @@ Route::group([
     Route::get('view/{post}/like','PostController@viewLikes');
     Route::get('{post}/comments', 'CommentController@index');
     Route::post('{post}/comments', 'CommentController@store');
-    Route::post('comments/{comment}/like', 'CommentController@like');
+    Route::post('{comment}/comments/like', 'CommentController@like');
     Route::get('{id}/likes','PostController@likes');
 
 });
