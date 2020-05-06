@@ -33,7 +33,8 @@ class CommentController extends Controller
         $cid = Comment::where('post_id',$post)->first(['id']);
         if(!$cid){ return response()->json("no comments",404);}
 
-        $comments = Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at as posted as')
+        $comments = 
+            Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url')
         ->join('user_profiles as up','up.id','=','comments.user_profile_id')
         ->join('posts','posts.id','=','comments.post_id')
         ->join('users','users.id','=','up.user_id')
