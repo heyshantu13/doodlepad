@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
 class CommentController extends Controller
 {
       public function index($post) {
-       
+           $user = Auth::user();
            $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
         $profile = UserProfile::where('user_id', $user->id)->first(['id','profile_picture_url','user_id']);
 
