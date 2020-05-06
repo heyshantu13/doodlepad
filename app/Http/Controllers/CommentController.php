@@ -23,24 +23,39 @@ use Illuminate\Support\Facades\Storage;
 class CommentController extends Controller
 {
       public function index($post) {
-        $user = Auth::user();
-        $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
+       
+           $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
+        $profile = UserProfile::where('user_id', $user->id)->first(['id','profile_picture_url','user_id']);
 
-        $countsQuery = [
-            'comment_activities as like_count' => function ($query) {
-                $query->where('type', config('constants.COMMENT_ACTIVITY_LIKE'));
-            },
-        
-            'comment_activities as liked' => function ($query) use ($profile) {
-                $query->where('user_profile_id', $profile->id)
-                    ->where('type', config('constants.COMMENT_ACTIVITY_LIKE'));
-            },
-            
-        ];
 
-        $comments = Comment::where('post_id', $post)->orderBy('created_at', 'desc')
-        ->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
-        return response()->json($comments,200);
+        $pid = Post::where('id',$post)->first(['id']);
+        if(!$pid){ return response()->json(null,404);}
+        $cid = Comment::where('post_id',$post)->first(['id']);
+        if(!$cid){ return response()->json("no comments",404);}
+
+        $comments = Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at as posted as')
+        ->join('user_profiles as up','up.id','=','comments.user_profile_id')
+        ->join('posts','posts.id','=','comments.post_id')
+        ->join('users','users.id','=','up.user_id')
+        ->where('comments.post_id',$post)
+            ->orderByRaw('FIELD (comments.user_profile_id, ' .$profile->id. ') ASC')
+        ->orderBy('comments.created_at','DESC');
+
+          $countsQuery = [
+           'comment_activities as like_count' => function ($query) use($cid) {
+                 $query->where('comment_id', $cid->id)
+               ->where('type', 'like');
+           },
+
+            'comment_activities as reply_count' => function ($query) use($cid) {
+
+            $query->where('comment_id', $cid->id)
+               ->where('type', 'reply');
+           },
+
+       ];
+
+             return response()->json($comments->withCount($countsQuery)->paginate(config('constants.paginate_per_page')), 200);
     }
 
     public function like(Comment $comment) {
