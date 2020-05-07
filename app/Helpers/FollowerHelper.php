@@ -54,7 +54,7 @@ class FollowerHelper
               
                 $body =  "@".$username->username. " has accepted your following request.";
                 $data = ["user_id" => $userid];
-                $follower_activity->TYPE = "ACEEPTED";
+                $follower_activity->TYPE = "ACEPTED";
                 $follower_activity->save();
                 break;    
         }
