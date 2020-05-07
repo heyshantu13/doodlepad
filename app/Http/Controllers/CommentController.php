@@ -172,10 +172,10 @@ class CommentController extends Controller
             $comment_replies->save();   
 
             if($comment_replies->user_profile_id == $profile->id) { 
-            return response()->json("Replied...",200);
+                return response()->json(CommentReply::find($comment_replies->id),200);
 
              }
-             PostHelper::createPostActivity($profile, $post->id, config('constants.COMMENT_ACTIVITY_REPLY'));
+             PostHelper::createPostActivity($profile, $comment_replies->id, config('constants.COMMENT_ACTIVITY_REPLY'));
             return response()->json(CommentReply::find($comment_replies->id),200);
 
 
