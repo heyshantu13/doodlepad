@@ -21,6 +21,10 @@ class FollowerHelper
     static function FollowerActivity($followerid, $userid, $type)
     {
          $username = User::where('id',$followerid)->first(['username']);
+
+         $follower_activity = new FollowerActivity();
+         $follower_activity->follower_id = $followerid;
+         $follower_activity->user_id = $userid;
    
 
         $title = "Doodlepad";
@@ -31,6 +35,8 @@ class FollowerHelper
                 
                 $body =  "@".$username->username." started following you.";
                 $data = ["user_id" => $userid];
+                $follower_activity->TYPE = "FOLLOW";
+                $follower_activity->save();
                 break;
            
             case config('constants.USER_FOLLOW_REQUESTED'):
@@ -48,6 +54,8 @@ class FollowerHelper
               
                 $body =  "@".$username->username. " has accepted your following request.";
                 $data = ["user_id" => $userid];
+                $follower_activity->TYPE = "ACEEPTED";
+                $follower_activity->save();
                 break;    
         }
 	$notifyUser = UserProfile::where('user_id',$userid)->first(['fcm_registration_id']);

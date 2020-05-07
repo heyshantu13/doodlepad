@@ -45,8 +45,7 @@ WHEREIN p1.user_profile_id = 11,12
         ->join('users as u','u.id','=','up.user_id')
         ->select('u.id as user_id','u.username as username','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at')
         ->where('u.id',$user->id)
-
-
+        ->orderBy('pa.created_at','DESC')
         ->paginate(config('constants.paginate_per_page'));
      return response()->json($notifications,200);
  }

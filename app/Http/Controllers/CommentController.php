@@ -179,11 +179,17 @@ class CommentController extends Controller
             return response()->json(CommentReply::find($comment_replies->id),200);
 
 
-            
+    }
 
 
-       
+    // Delete Replies
 
+    public function deleteReplies(Comment $comment_id,CommentReply $reply_id){
+
+        
+        $deleted = $reply_id->delete();
+        $status = $deleted ? 200 : 400;
+        return response()->json(null, $status);
 
     }
 }
