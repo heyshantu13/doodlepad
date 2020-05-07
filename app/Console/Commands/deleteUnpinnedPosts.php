@@ -45,7 +45,7 @@ class deleteUnpinnedPosts extends Command
         ->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString())
         ->delete();
 
-      PostActivity::where('type', "PINNED")
+      PostActivity::where('type', "DISAPPEAR")
       ->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString())
         ->delete();
     }

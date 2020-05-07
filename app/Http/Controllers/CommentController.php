@@ -14,6 +14,7 @@ use App\Helpers\PostHelper;
 use App\Http\Requests\CreateCommentRequest;
 use App\Comment;
 use App\CommentActivity;
+use App\CommentReply;
 use App\Post;
 use App\UserProfile;
 use App\Http\Controllers\Controller;
@@ -122,5 +123,67 @@ class CommentController extends Controller
 
         PostHelper::createCommentActivity($profile, $comment->id, $type);
         return 1;
+    }
+
+    public function getReplies(Comment $comment_id){
+
+
+            if($comment_id){
+
+                $user = Auth::user();
+             $profile = UserProfile::where('user_id', $user->id)->first(['id','profile_picture_url','user_id']);
+
+             $replies = 
+             CommentReply::select('users.id as uid','users.username','user_profiles.id as upid','user_profiles.profile_picture_url','comments.id','comment_replies.id','comment_replies.type','comment_replies.text','comment_replies.media_url','comment_replies.created_at')
+             ->join('comments','comments.id','=','comment_replies.comment_id')
+             ->join('user_profiles','user_profiles.id','=','comment_replies.user_profile_id')
+             ->join('users','users.id','=','user_profiles.user_id')
+             ->orderBy('comment_replies.created_at','DESC')
+             ->where('comment_replies.comment_id',$comment_id->id)
+             ->paginate(5);
+
+                
+             return response()->json([$replies],200);
+
+            }
+            return response()->json(null,200);
+    }
+
+
+    public function storeReplies(Comment $comment_id,CreateCommentRequest $request){
+
+
+        $user = Auth::user();
+        $profile = UserProfile::where('user_id', $user->id)->first(['id']);
+        $name = "";
+            if(request()->hasFile('media_url')){
+                     $file = request()->file('media_url');
+            $name=time().$file->getClientOriginalName();
+            $filePath = 'comment_replies/' .rand(11111,99999). $name;
+              $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            }
+        
+            $comment_replies = new CommentReply();
+            $comment_replies->text = $request->text;
+            $comment_replies->type = $request->type;
+            $comment_replies->comment_id = $comment_id->id;
+            $comment_replies->media_url = (request()->hasFile('media_url')) ?   env('AWS_URL')."/".$filePath : null;
+            $comment_replies->user_profile_id = $profile->id;
+            $comment_replies->save();   
+
+            if($comment_replies->user_profile_id == $profile->id) { 
+            return response()->json("Replied...",200);
+
+             }
+             PostHelper::createPostActivity($profile, $post->id, config('constants.COMMENT_ACTIVITY_REPLY'));
+            return response()->json(CommentReply::find($comment_replies->id),200);
+
+
+            
+
+
+       
+
+
     }
 }

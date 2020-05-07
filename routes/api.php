@@ -107,8 +107,9 @@ Route::group([
     Route::post('{comment}/comments/like', 'CommentController@like');
     Route::get('{id}/likes','PostController@likes');
     Route::delete('/{id}/delete/comment','CommentController@destroy');
-    Route::get('/{id}/replies/comment','CommentController@getReplies');
-    Route::post('/{id}/replies/comment','CommentController@storeReplies');
+    Route::get('comment/{comment_id}/replies','CommentController@getReplies');
+    Route::post('comment/{comment_id}/replies/','CommentController@storeReplies');
+    Route::delete('comment/{comment_id}/replies/{reply_id}','CommentController@deleteReplies');
 
 
 });
