@@ -28,7 +28,7 @@ Route::group([
     Route::post('verifyOTP','AuthController@verifyOTP');
     Route::post('create-user', 'AuthController@signup');
     Route::post('create-profile', 'AuthController@createProfile')->middleware('auth:api');
-    Route::post('reset', 'AuthController@resetPassword')->middleware('throttle:5,5');
+    Route::post('reset', 'AuthController@resetPassword');
     Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,5');
     Route::get('user', 'AuthController@user')->middleware('auth:api');
     Route::get('checksession','AuthController@checksession')->middleware('auth:api');
@@ -106,6 +106,7 @@ Route::group([
     Route::post('{post}/comments', 'CommentController@store');
     Route::post('{comment}/comments/like', 'CommentController@like');
     Route::get('{id}/likes','PostController@likes');
+    Route::delete('/{id}/delete/comment','CommentController@destroy');
 
 });
 
