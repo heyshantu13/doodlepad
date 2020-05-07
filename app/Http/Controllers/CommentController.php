@@ -94,8 +94,8 @@ class CommentController extends Controller
     }
 
 
-    public function destroy(Comment $comment) {
-        $deleted = $comment->delete();
+    public function destroy(Comment $id) {
+        $deleted = $id->delete();
         $status = $deleted ? 200 : 400;
         return response()->json(null, $status);
     }
