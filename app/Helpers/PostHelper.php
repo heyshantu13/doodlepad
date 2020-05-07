@@ -129,11 +129,18 @@ class PostHelper
                 $activity = new PostActivity();
          $activity->user_profile_id = $profileid;
         $activity->post_id = $postId;
-        $activity->type = "PINNED";
+        $activity->type = "DISAPPEAR";
         $activity->save();
         $notifyUser = UserProfile::where('id',$profileid)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
           }
+
+    }
+
+
+    static function createReplyActivity($profileid, $commentId,$type){
+
+
 
     }
 

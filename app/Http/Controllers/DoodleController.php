@@ -12,7 +12,7 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\PostHelper;
 use App\PostActivity;
-use Intervention\Image\ImageManager;
+
 
 
 class DoodleController extends Controller
