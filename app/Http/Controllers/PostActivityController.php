@@ -28,7 +28,7 @@ class PostActivityController extends Controller
        $user = Auth::user();
        $profile_id = UserProfile::where('user_id',$user->id)->first(['id','user_id']);
 
-  $posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
+     $posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
 
 
        /*
