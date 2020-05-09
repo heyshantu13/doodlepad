@@ -39,7 +39,7 @@ class RequestActivityController extends Controller
         $follower->user_id = $requestData->user_id;
         $follower->save();
         $requestData->delete();
-          FollowerHelper::FollowerActivity($follower->follower_id,$follower->user_id,"APPROVED");
+        FollowerHelper::FollowerActivity($follower->follower_id,$follower->user_id,"APPROVED");
         return response()->json(["status"=>true],200);
 
     }

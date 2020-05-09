@@ -25,6 +25,7 @@ use App\Post;
 use App\BioLike;
 // use Aws\S3\S3Client;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\LvCount;
 
 
 
@@ -198,10 +199,11 @@ class UserController extends Controller
     {
          $userID = Auth::user()->id;
          $profile = User::where('id',$userID)->first(['id','fullname','username','is_verified','active']);
+         $lvcounts = new LvCount();
         $info = array(
-            "follower_counts" => Follower::where('user_id',$userID)->count(),
+            "follower_counts" => $lvcounts->lv_count(100),
             "post_counts" => $profile->posts()->count(),
-             "bio_likes"=> BioLike::where('profile_id',$profile->id)->count(),
+             "bio_likes_count"=> BioLike::where('profile_id',$profile->id)->count(),
             "is_bio_liked"=>BioLike::where('profile_id',$profile->id)->where('user_id',$profile->id)->count(),
           );
 
@@ -251,7 +253,7 @@ class UserController extends Controller
             "post_counts" => $profile->posts()->count(),
             "following_status"=> $isFollowing,
             "current_user"=> (Auth::user()->id == $id) ? 1:0,
-            "bio_likes"=> BioLike::where('profile_id',$id)->count(),
+            "bio_likes_count"=> BioLike::where('profile_id',$id)->count(),
             "is_bio_liked"=>BioLike::where('profile_id',$id)->where('user_id',Auth::user()->id)->count(),
           );
       }
@@ -386,36 +388,7 @@ class UserController extends Controller
   
    
 
-    public function likeProfileBio($id){
-
-      $like_profile = UserProfile::where('user_id',$id)->first(['id','user_id']);
-      $is_liked = BioLike::where('user_id',Auth::user()->id)
-      ->where('profile_id')->first();
-
-      if($is_liked){
-
-        $is_liked = $is_liked->delete();
-        $status = -1;
-
-      }
-      else{
-
-           $bio_liked = new BioLike();
-      $bio_liked->profile_id = $like_profile->id;
-      $bio_liked->user_id = Auth::user()->id;
-      $bio_liked->save();
-      $status = 1;
-
-      }
-
-      return response()->json(['message'=>true,'staus'=>$status],200);
-
-
-     
-
-
-
-    }
+    
 
 
 
