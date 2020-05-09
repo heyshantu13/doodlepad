@@ -143,7 +143,7 @@ class CommentController extends Controller
              ->paginate(5);
 
                 
-             return response()->json([$replies],200);
+             return response()->json($replies,200);
 
             }
             return response()->json(null,200);
