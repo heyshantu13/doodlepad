@@ -26,14 +26,14 @@ class BioLikesController extends Controller
         {
            
             $bioliked->delete();
-            return response()->json(-1,200);
+            return response()->json(["status"=>-1],200);
            
         }
         $bioliked = new BioLike();
         $bioliked->profile_id = $profile_id->id;
         $bioliked->user_id = $user_id;
         $bioliked->save();
-        return response()->json(1,200);
+        return response()->json(["status"=>1],200);
        
     }
 }
