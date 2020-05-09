@@ -15,7 +15,6 @@ use App\UserProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use DB;
-use App\Post;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use App\FollowActivity;
@@ -28,7 +27,7 @@ class PostActivityController extends Controller
        $user = Auth::user();
        $profile_id = UserProfile::where('user_id',$user->id)->first(['id','user_id']);
 
-  $posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
+    // $posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
 
 
        /*
@@ -43,7 +42,7 @@ WHEREIN p1.user_profile_id = 11,12
 
        */
 
-      $currentPage = LengthAwarePaginator::resolveCurrentPage();
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
     $notifications = DB::table('post_activities as pa')
         ->join('user_profiles as up','up.id','=','pa.user_profile_id')

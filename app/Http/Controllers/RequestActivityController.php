@@ -23,6 +23,7 @@ class RequestActivityController extends Controller
         ->join('users', 'request_activities.follower_id', '=', 'users.id')
         ->join('user_profiles','request_activities.follower_id','=','user_profiles.user_id')
         ->select('users.fullname','users.username','request_activities.type','user_profiles.profile_picture_url','request_activities.created_at','request_activities.id as RequestID')
+        ->where('request_activities.user_id','=',auth()->user()->id)
         ->paginate(config('constants.paginate_per_page'));
      return response()->json($users,200);
 
@@ -38,7 +39,7 @@ class RequestActivityController extends Controller
         $follower->user_id = $requestData->user_id;
         $follower->save();
         $requestData->delete();
-          FollowerHelper::FollowerActivity($follower->follower_id,$follower->user_id,"APPROVED");
+        FollowerHelper::FollowerActivity($follower->follower_id,$follower->user_id,"APPROVED");
         return response()->json(["status"=>true],200);
 
     }

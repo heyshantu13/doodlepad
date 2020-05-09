@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Http\Request;
 
 /*
@@ -86,7 +87,8 @@ Route::group([
      Route::get('{id?}/doodles','DoodleController@getDoodles');
     Route::post('{id?}/doodles','DoodleController@storeDoodles');
      Route::get('suggetions','UserSuggetions@index');
-     Route::post('{id}/like/bio','UserController@likeProfileBio');
+     Route::post('suggetions','UserSuggetions@index');
+    Route::post('{id}/bio/like','BioLikesController');
 });
 
       Route::group([

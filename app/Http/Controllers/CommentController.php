@@ -32,7 +32,7 @@ class CommentController extends Controller
         $pid = Post::where('id',$post)->first(['id']);
         if(!$pid){ return response()->json(null,404);}
         $cid = Comment::where('post_id',$post)->first(['id']);
-        if(!$cid){ return response()->json("no comments",404);}
+        if(!$cid){ return response()->json(["msg"=>"No Comments"],404);}
 
         $comments = 
             Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url')
@@ -40,7 +40,7 @@ class CommentController extends Controller
         ->join('posts','posts.id','=','comments.post_id')
         ->join('users','users.id','=','up.user_id')
         ->where('comments.post_id',$post)
-            ->orderByRaw('FIELD (comments.user_profile_id, ' .$profile->id. ') ASC')
+        ->orderByRaw('FIELD (comments.user_profile_id, ' .$profile->id. ') ASC')
         ->orderBy('comments.created_at','DESC');
 
           $countsQuery = [
