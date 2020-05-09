@@ -201,7 +201,7 @@ class UserController extends Controller
          $profile = User::where('id',$userID)->first(['id','fullname','username','is_verified','active']);
          $lvcounts = new LvCount();
         $info = array(
-            "follower_counts" => $lvcounts->lv_count(100),
+            "follower_counts" => $lvcounts->lv_count(Follower::where('user_id',$userID)->count()),
             "post_counts" => $profile->posts()->count(),
              "bio_likes_count"=> BioLike::where('profile_id',$profile->id)->count(),
             "is_bio_liked"=>BioLike::where('profile_id',$profile->id)->where('user_id',$profile->id)->count(),
