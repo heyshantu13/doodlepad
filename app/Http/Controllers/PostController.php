@@ -208,14 +208,14 @@ class PostController extends Controller
     
         }
         
-        if($profile->user_id == $post->user_id){
+       /* if($profile->user_id == $post->user_id){
             if ($previousActivity->type == $type) {
                 return -1; // unlike or undislike
             }
             else{
                 return 1;
             }
-        }
+        }*/
 
         PostHelper::createPostActivity($profile, $post->id, $type);
         return 1; // like or dislike
