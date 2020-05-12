@@ -80,6 +80,8 @@ class PostHelper
                                 }
 
                     }
+
+                    if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
               
                 $body =  "@".$username->username. " commented on your doodlepad post";
                 $data = ["post_id" => $postId,
@@ -87,6 +89,7 @@ class PostHelper
             ];
                 break;
         }
+        
 	$notifyUser = UserProfile::where('id',Post::find($postId)->user_profile_id)->first(['fcm_registration_id']);
         PushNotificationHelper::send($notifyUser->fcm_registration_id, $title, $body, $data);
     }

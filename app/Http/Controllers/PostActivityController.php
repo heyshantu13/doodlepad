@@ -56,7 +56,7 @@ WHEREIN p1.user_profile_id = 11,12
     $follower_activity = DB::table('follower_activities')
     ->join('users as u','u.id','=','follower_activities.follower_id')
     ->join('user_profiles as up','up.user_id','=','follower_activities.follower_id')
-    ->select('follower_activities.id','follower_activities.follower_id as user_id','follower_activities.type','u.username','up.profile_picture_url')
+    ->select('follower_activities.id','follower_activities.follower_id as user_id','follower_activities.type','u.username','up.profile_picture_url','follower_activities.created_at')
     ->where('follower_activities.user_id',$user->id)
     ->orderBy('follower_activities.created_at','DESC')
     ->get();
@@ -67,7 +67,7 @@ WHEREIN p1.user_profile_id = 11,12
     $activities = array_merge($notifications->toArray(), $follower_activity->toArray());
     
     $currentPage = LengthAwarePaginator::resolveCurrentPage();
-    $perPage = 8;
+    $perPage = 10;
 
     $currentItems = array_slice($activities, $perPage * ($currentPage - 1), $perPage);
 
