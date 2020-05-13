@@ -51,7 +51,7 @@ class AuthController extends Controller
         ]);      
              
               $isOTPSend =  $this->otp->sendOTP($request->mobile);
-              if($isOTPSend->type == 'success'){
+              if($isOTPSend->type != 'success'){
                return response()->json([
                     'status'=>true,
                     'message' => 'Otp Sent Successfully.',
