@@ -120,7 +120,7 @@ class AuthController extends Controller
              'bio' => 'max:140|string',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'string',
-             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif|max:4096'
+             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif'
         ]);
               
               if ($request->hasFile('profile_picture_url')) {
