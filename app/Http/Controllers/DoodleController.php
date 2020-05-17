@@ -33,69 +33,65 @@ class DoodleController extends Controller
 
     public function storeDoodles(Request $request,$id){
 
+		
 
+		//return $by_user_profile;   OK
+
+		$name = "";
+		
 
     	$request->validate([
-             'doodle' => 'required|image|mimes:png|max:6096',
-        ]);
+             'doodle' => 'required|image|mimes:png,jpeg,jpg|max:6096',
+		]);
 
-     
+		$user_id = Auth::user()->id;
+		//$user_profile = UserProfile::where('user_id',$user_id)->first();
 
-        $user = User::where('id',$id)->first(['id','username']);
-        if($user->id == Auth::user()->id){ return 0;}
+		$by_user_profile = UserProfile::where('user_id',$id)->first(['id','user_id','is_private','profile_picture_url']);
+		
+		if($by_user_profile && $id != $user_id){
 
-        if(!$user){ return response()->json(["status"=>false,"doodle_url"=>null],404);}
+			if(request()->hasFile('doodle')){
+				$file = request()->file('doodle');
+	   			$name=time().$file->getClientOriginalName();
+	   			$filePath = 'posts/' . $name;
+				Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
+	   		}
 
-         $name = "";
-            if(request()->hasFile('doodle')){
-            	 $file = request()->file('doodle');
-            	  $name=uniqid().time().$file->getClientOriginalName();
-            	  $filePath = 'profile_doodles/' . $name;
-            	  $strg = Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
-            	  $doodle_url = env('AWS_URL')."/".$filePath;
+			$newdoodle = new ProfileDoodle();
+			$newdoodle->user_id = $user_id;
+			$newdoodle->by_user_id = $by_user_profile->user_id;
+			$newdoodle->media_url = env('AWS_URL')."/".$filePath;
+			$saved = $newdoodle->save();
+			if($saved){
+			return response()->json(['status'=>true,'message'=>'Profile Doodle Request Sent.'],201);
+			}
+			return response()->json(['status'=>false,'message'=>'Something Went Wrong'],403);
+		}
 
-            	  $profile_doodle = new ProfileDoodle();
-            	  $profile_doodle->user_id = Auth::user()->id;
-            	  $profile_doodle->by_user_id = $id;
-            	   $profile_doodle->media_url = $doodle_url;
-            	  $profile_doodle->save();
-            	 return response()->json(["status"=>true,"msg"=> "Doodle Request Sent.",],201);
+		return response()->json(['status'=>false,'message'=>'Unable to create doodle'],404);
 
-            }
-            else
-            {
-            	return response()->json(["status"=>false,"msg"=> "invalid request",],403);
-            }
-
-
+       
 
 
 
 
     }
 
-    public function getDoodles($id = NULL){
+    public function getDoodles($id){    	
 
-    	if(!$id){$id = Auth::user()->id;}
+		if($id){
+			$doodles = ProfileDoodle::select(['by_user_id','media_url','created_at'])
+			->where('user_id',$id)->paginate(10);
+			if($doodles){
+				return response()->json(['status'=>true,'doodles'=>$doodles],200);
+			}
+			else{
+				return response()->json(['status'=>true,'doodles'=>null],200);
+			}
+		}
 
-    	$this->user = User::where('id',$id)
-    	->orWhere('username',$id)
-    	->first(['id','username']);
-
-    	if($this->user)
-    	{
-    		
-    		$doodle_data = ProfileDoodle::where('user_id',$id)->paginate(10);
-    		return response()->json(["status"=>true,"data"=>$doodle_data],200);
-    	}
-    	else{
-    		return response()->json(["status"=>false,"data"=>null],404);
-    	}
-
-
-
-
-    	
+		return response()->json(['status'=>false,'doodles'=>null],403);
 
     }
 
