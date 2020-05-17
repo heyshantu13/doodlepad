@@ -44,23 +44,21 @@ class DoodleController extends Controller
              'doodle' => 'required|image|mimes:png,jpeg,jpg|max:6096',
 		]);
 
-		$user_id = Auth::user()->id;
-		//$user_profile = UserProfile::where('user_id',$user_id)->first();
+		$by_user_id = Auth::user()->id;
 
-		$by_user_profile = UserProfile::where('user_id',$id)->first(['id','user_id','is_private','profile_picture_url']);
+		$user_profile = UserProfile::where('user_id',$id)->first(['id','user_id']);
+
+		//$by_user_profile = UserProfile::where('user_id',$by_user_id)->first(['id','user_id','is_private','profile_picture_url']);
 		
-		if($by_user_profile && $id != $user_id){
+		if($user_profile && $id != $by_user_id){
 
-			if(request()->hasFile('doodle')){
-				$file = request()->file('doodle');
-	   			$name=time().$file->getClientOriginalName();
-	   			$filePath = 'posts/' . $name;
-				Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
-	   		}
-
+			$file = request()->file('doodle');
+			$name=time().$file->getClientOriginalName();
+			$filePath = 'posts/' . $name;
+		 	Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
 			$newdoodle = new ProfileDoodle();
-			$newdoodle->user_id = $user_id;
-			$newdoodle->by_user_id = $by_user_profile->user_id;
+			$newdoodle->user_id = $id;
+			$newdoodle->by_user_id = $by_user_id;
 			$newdoodle->media_url = env('AWS_URL')."/".$filePath;
 			$saved = $newdoodle->save();
 			if($saved){
