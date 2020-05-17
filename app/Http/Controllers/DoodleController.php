@@ -12,6 +12,7 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\PostHelper;
 use App\PostActivity;
+use App\RequestActivity;
 
 
 
@@ -45,9 +46,7 @@ class DoodleController extends Controller
 		]);
 
 		$by_user_id = Auth::user()->id;
-
 		$user_profile = UserProfile::where('user_id',$id)->first(['id','user_id']);
-
 		//$by_user_profile = UserProfile::where('user_id',$by_user_id)->first(['id','user_id','is_private','profile_picture_url']);
 		
 		if($user_profile && $id != $by_user_id){
@@ -91,6 +90,15 @@ class DoodleController extends Controller
 
 		return response()->json(['status'=>false,'doodles'=>null],403);
 
-    }
+	}
+	
+	public function doodleRequests(){
+
+		$user_id = Auth::user()->id;
+
+		$activities = RequestActivity::select('request_activities.follower_id as by_user_id','request_activities.user_id','request_activities.type','users.username')
+		->join('users','users.id','=','by_user_id');
+
+	}
 
 }
