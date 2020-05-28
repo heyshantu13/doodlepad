@@ -342,7 +342,12 @@ public function newPassword(Request $request){
 
 
     public function checksession(){
-        return response()->json(['message'=>true],200);
+        $is_created = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
+        if($is_created){
+            return response()->json(['message'=>true,'profile_created'=>true],200);
+        }
+        return response()->json(['message'=>true,'profile_created'=>false],200);
+       
     }
 
  
