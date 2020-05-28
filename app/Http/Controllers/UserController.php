@@ -132,6 +132,8 @@ class UserController extends Controller
 
 	public function updateProfile(Request $request){
 
+    $imgpath = null;
+
      $profile = UserProfile::where('user_id', Auth::user()->id)->first();
      // $url = "http://api.doodlepad.in/"; //sample url
 
