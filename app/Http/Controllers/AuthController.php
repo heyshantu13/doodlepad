@@ -349,9 +349,9 @@ public function newPassword(Request $request){
             $app_version = $app_config->app_version;
         }
         if($is_created){
-            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>$app_version],200);
+            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>(float)$app_version],200);
         }
-        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>$app_version],200);
+        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>(float)$app_version],200);
        
     }
 
