@@ -135,6 +135,7 @@ class PostController extends Controller
         $post->longitude = $request->longitude;
         $post->latitude = $request->latitude;
         $post->user_id =  $user->id;
+        $post->color = $request->color;
 
         $post->media_url = (request()->hasFile('media_url')) ?  env('AWS_URL')."/".$filePath : NULL;
         $post->filename = (request()->hasFile('media_url')) ?  $name : "";

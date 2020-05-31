@@ -21,6 +21,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\AuthError;
 use Illuminate\Support\Facades\Storage;
+use App\AppConfig;
 
 
 class AuthController extends Controller
@@ -343,10 +344,11 @@ public function newPassword(Request $request){
 
     public function checksession(){
         $is_created = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
+        $app_version = AppConfig::all()->get();
         if($is_created){
-            return response()->json(['message'=>true,'profile_created'=>true],200);
+            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>$app_version->app_version],200);
         }
-        return response()->json(['message'=>true,'profile_created'=>false],200);
+        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>$app_version->app_version],200);
        
     }
 
