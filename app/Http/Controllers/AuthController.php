@@ -344,7 +344,7 @@ public function newPassword(Request $request){
 
     public function checksession(){
         $is_created = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-        $app_version = AppConfig::all()->get();
+        $app_version = AppConfig::all();
         if($is_created){
             return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>$app_version->app_version],200);
         }
