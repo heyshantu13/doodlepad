@@ -344,11 +344,14 @@ public function newPassword(Request $request){
 
     public function checksession(){
         $is_created = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-        $app_version = AppConfig::all();
-        if($is_created){
-            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>$app_version->app_version],200);
+        $app_configs = AppConfig::all();
+        foreach($app_configs as $app_config){
+            $app_version = $app_config->app_version;
         }
-        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>$app_version->app_version],200);
+        if($is_created){
+            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>$app_version],200);
+        }
+        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>$app_version],200);
        
     }
 
