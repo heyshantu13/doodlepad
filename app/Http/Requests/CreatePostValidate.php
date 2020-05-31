@@ -61,7 +61,7 @@ class CreatePostValidate extends FormRequest
              if(request()->type == "VIDEO")
             return [
             
-                'media_url' => 'required|mimes:mp4,3gp,gif|',
+                'media_url' => 'required|mimes:mp4,3gp,gif,avi,mpeg|',
                 'type' => ['required', Rule::in(['VIDEO'])],
                 'caption'=>'string|max:140',
                 'text_location'=>'string|max:30',
