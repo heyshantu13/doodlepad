@@ -95,9 +95,15 @@ class DoodleController extends Controller
 	public function doodleRequests(){
 
 		$user_id = Auth::user()->id;
+		
+		$activities = RequestActivity::select('request_activities.id as rid', 'request_activities.follower_id','request_activities.user_id','request_activities.media_url','users.username as username','user_profiles.profile_picture_url')
+		->join('users','users.id','=','request_activities.follower_id')
+		->join('user_profiles','user_profiles.user_id','=','request_activities.follower_id')
+		->where('request_activities.user_id',$user_id)
+		->where('request_activities.type','DOODLE')
+		->paginate(10);
 
-		$activities = RequestActivity::select('request_activities.follower_id as by_user_id','request_activities.user_id','request_activities.type','users.username')
-		->join('users','users.id','=','by_user_id');
+		return response()->json(['status'=>true,'data'=>$activities],200);
 
 	}
 

@@ -44,6 +44,7 @@ Route::group([
           Route::get('requests', 'RequestActivityController@index')->name('activities.index');
            Route::post('requests/accept', 'RequestActivityController@acceptRequest')->name('activities.accept');
             Route::post('requests/reject', 'RequestActivityController@rejectRequest')->name('activities.reject');
+            Route::get('doodle/requests','DoodleController@doodleRequests');
        
     });
 
