@@ -21,7 +21,6 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\AuthError;
 use Illuminate\Support\Facades\Storage;
-use App\AppConfig;
 
 
 class AuthController extends Controller
@@ -41,6 +40,9 @@ class AuthController extends Controller
      $this->firebase = (new Factory())
     ->withServiceAccount(base_path('doodlepadfirebaseindia-3f2e8d93da3a.json'))
     ->createDatabase();
+
+    $this->middleware('throttle:3,1')->only('sendOTP');
+
    }
 
 
@@ -49,9 +51,10 @@ class AuthController extends Controller
         if ($request->isMethod('post')) {
              $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
+             'country_code'=>'required|min:1|max:3',
         ]);      
              
-              $isOTPSend =  $this->otp->sendOTP($request->mobile);
+              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->country_code);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -69,7 +72,7 @@ class AuthController extends Controller
              'otp' => 'required|min:4'
         ]);
        $validateOTP = new MSG91();
-       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->country_code);
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -78,7 +81,7 @@ class AuthController extends Controller
             }
             else{
                 return response()->json([
-                    'status'=>true,
+                    'status'=>false,
             'message' => 'Incorret Otp',
         ], 201);
             }
@@ -95,6 +98,7 @@ class AuthController extends Controller
                 'fullname' => $request->fullname,
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
+                'country_code'=>$request->country_code,
                 'password'=>bcrypt($request->password),
             ]);
                  $createUser->save();
@@ -121,7 +125,7 @@ class AuthController extends Controller
              'bio' => 'max:140|string',
              'date_of_birth' => 'required',
              'fcm_registration_id'=> 'string',
-             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif'
+             'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif|max:4096'
         ]);
               
               if ($request->hasFile('profile_picture_url')) {
@@ -151,7 +155,7 @@ class AuthController extends Controller
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
-            'phoneNumber'=>'+91'.Auth::user()->mobile,
+            'phoneNumber'=>Auth::user()->country_code.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
             'photoUrl' =>env('AWS_URL')."/".$filePath,
@@ -343,16 +347,7 @@ public function newPassword(Request $request){
 
 
     public function checksession(){
-        $is_created = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-        $app_configs = AppConfig::all();
-        foreach($app_configs as $app_config){
-            $app_version = $app_config->app_version;
-        }
-        if($is_created){
-            return response()->json(['message'=>true,'profile_created'=>true,'app_version'=>(float)$app_version],200);
-        }
-        return response()->json(['message'=>true,'profile_created'=>false,'app_version'=>(float)$app_version],200);
-       
+        return response()->json(['message'=>true],200);
     }
 
  
