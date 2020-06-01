@@ -54,12 +54,20 @@ class DoodleController extends Controller
 			$file = request()->file('doodle');
 			$name=time().$file->getClientOriginalName();
 			$filePath = 'posts/' . $name;
-		 	Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
-			$newdoodle = new ProfileDoodle();
-			$newdoodle->user_id = $id;
-			$newdoodle->by_user_id = $by_user_id;
-			$newdoodle->media_url = env('AWS_URL')."/".$filePath;
-			$saved = $newdoodle->save();
+			 Storage::disk('s3')->put($filePath, fopen($file, 'r+'),'public');
+			 
+			$createrequest = new RequestActivity();
+			$createrequest->follower_id = $by_user_id;
+			$createrequest->user_id = $user_profile->user_id;
+			$createrequest->type = "DOODLE";
+			$createrequest->media_url = env('AWS_URL')."/".$filePath;
+			$saved = $createrequest->save();
+
+			// $newdoodle = new ProfileDoodle();
+			// $newdoodle->user_id = $id;
+			// $newdoodle->by_user_id = $by_user_id;
+			// $newdoodle->media_url = env('AWS_URL')."/".$filePath;
+			// $saved = $newdoodle->save();
 			if($saved){
 			return response()->json(['status'=>true,'message'=>'Profile Doodle Request Sent.'],201);
 			}
@@ -105,6 +113,16 @@ class DoodleController extends Controller
 
 		return response()->json(['status'=>true,'data'=>$activities],200);
 
+
+
+	}
+
+	public function acceptdoodle(){
+
+	}
+
+	public function rejectdoodle(){
+		
 	}
 
 }
