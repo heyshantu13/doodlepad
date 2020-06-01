@@ -18,12 +18,12 @@ class MSG91 {
     }
 
     
- public static function sendOTP($mobile){
+ public static function sendOTP($mobile,$countrycode){
 
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.msg91.com/api/v5/otp?invisible=1&userip=IPV4 User IP&authkey=308630AjqDL3wsLHmS5df877fb&email=Email ID&mobile=".$mobile."&template_id=5df87792d6fc05218a127fad&otp_expiry=10",
+  CURLOPT_URL => "https://api.msg91.com/api/v5/otp?invisible=1&userip=IPV4 User IP&authkey=308630AjqDL3wsLHmS5df877fb&email=Email ID&mobile=".$mobile."&template_id=5df87792d6fc05218a127fad&otp_expiry=10&country=".$countrycode,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
@@ -48,12 +48,12 @@ return json_decode($response);
     }
 
 
-public static function verifyOTP($mobile,$otp){
+public static function verifyOTP($mobile,$otp,$countrycode){
 
     $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.msg91.com/api/v5/otp/verify?otp=".$otp."&authkey=308630AjqDL3wsLHmS5df877fb&mobile=".$mobile,
+  CURLOPT_URL => "https://api.msg91.com/api/v5/otp/verify?otp=".$otp."&authkey=308630AjqDL3wsLHmS5df877fb&mobile=".$countrycode.$mobile,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
