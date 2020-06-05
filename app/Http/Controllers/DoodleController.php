@@ -117,7 +117,17 @@ class DoodleController extends Controller
 
 	}
 
-	public function acceptdoodle(){
+	public function acceptdoodle($id){
+		$user_id =  Auth::user()->id;
+		$request_id = $id;
+		$is_valid_request = App\RequestActivity::where('id',$request_id,'user_id',$user_id)->first();
+
+		if($is_valid_request){
+			
+		}
+		else{
+			return response()->json(['status'=>false,'message']);
+		}
 
 	}
 
