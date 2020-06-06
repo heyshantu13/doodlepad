@@ -18,7 +18,7 @@ class MSG91 {
     }
 
     
- public static function sendOTP($mobile,$countrycode){
+ public static function sendOTP($mobile,$countrycode=null){
 
 $curl = curl_init();
 
@@ -48,7 +48,7 @@ return json_decode($response);
     }
 
 
-public static function verifyOTP($mobile,$otp,$countrycode){
+public static function verifyOTP($mobile,$otp,$countrycode = null){
 
     $curl = curl_init();
 
