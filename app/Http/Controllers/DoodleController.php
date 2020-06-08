@@ -124,14 +124,32 @@ class DoodleController extends Controller
 
 		if($is_valid_request){
 			
+				$newdoodle = new ProfileDoodle();
+			$newdoodle->user_id = $user_id;
+			$newdoodle->by_user_id = $is_valid_request->user_id;
+			$newdoodle->media_url = $is_valid_request->media_url;
+			$saved = $newdoodle->save();
+			return response()->json(['status'=>true,'message'=>'doodle request accept']);
 		}
 		else{
-			return response()->json(['status'=>false,'message']);
+			return response()->json(['status'=>false,'message'=>'something went wrong']);
 		}
 
 	}
 
 	public function rejectdoodle(){
+		$user_id =  Auth::user()->id;
+		$request_id = $id;
+		$is_valid_request = App\RequestActivity::where('id',$request_id,'user_id',$user_id)->first();
+
+		if($is_valid_request){
+				$is_valid_request->delete();
+				return response()->json(['status'=>true,'message'=>'request cancelled.']);
+		}
+
+		else{
+				return response()->json(['status'=>false,'message'=>'something went wrong.']);
+		}
 		
 	}
 
