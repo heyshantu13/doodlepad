@@ -45,7 +45,7 @@ Route::group([
            Route::post('requests/accept', 'RequestActivityController@acceptRequest')->name('activities.accept');
             Route::post('requests/reject', 'RequestActivityController@rejectRequest')->name('activities.reject');
             Route::get('doodle/requests','DoodleController@doodleRequests');
-             Route::get('getUserforEditScreen','UserController@getUser');
+             Route::get('userinfo','UserController@getUserforEditScreen');
        
     });
 
