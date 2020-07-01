@@ -394,7 +394,7 @@ class UserController extends Controller
 
       $user_id = Auth::user()->id;
 
-      $user = User::where('id',$user_id)->first(['id','username']);
+      $user = User::where('id',$user_id)->first(['id','username','fullname']);
 
       return response()->json([
         'status'=>true,
