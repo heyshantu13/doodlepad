@@ -387,6 +387,22 @@ class UserController extends Controller
      
     } /* End Follow Unfollow Function*/
 
+
+
+
+    public function getUser(){
+
+      $user_id = Auth::user()->id;
+
+      $user = User::where('id',$user_id)->first(['id','username']);
+
+      return response()->json([
+        'status'=>true,
+        'user'=> $user,
+      ]);
+
+    }
+
   
    
 
