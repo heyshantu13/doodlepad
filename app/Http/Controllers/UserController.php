@@ -390,7 +390,7 @@ class UserController extends Controller
 
 
 
-    public function getUser(){
+    public function getUserforEditScreen(){
 
       $user_id = Auth::user()->id;
 
