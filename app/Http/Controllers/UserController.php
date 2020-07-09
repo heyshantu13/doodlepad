@@ -396,10 +396,7 @@ class UserController extends Controller
 
       $user = User::where('id',$user_id)->first(['id','username','fullname']);
 
-      return response()->json([
-        'status'=>true,
-        'user'=> $user,
-      ]);
+      return response()->json($user);
 
     }
 
