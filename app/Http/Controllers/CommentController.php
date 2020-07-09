@@ -35,7 +35,7 @@ class CommentController extends Controller
         if(!$cid){ return response()->json(["msg"=>"No Comments"],404);}
 
         $comments = 
-            Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url')
+            Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url','comment.text')
         ->join('user_profiles as up','up.id','=','comments.user_profile_id')
         ->join('posts','posts.id','=','comments.post_id')
         ->join('users','users.id','=','up.user_id')
@@ -86,7 +86,7 @@ class CommentController extends Controller
         $comment->user_profile_id = $profile->id;
         $comment->save();
 
-    if($post->user_profile_id == $profile->id) { return 1; }
+    if($post->user_profile_id == $profile->id) { return response()->json(Comment::find($comment->id),200); }
     
         PostHelper::createPostActivity($profile, $post->id, config('constants.POST_ACTIVITY_COMMENT'));
     
