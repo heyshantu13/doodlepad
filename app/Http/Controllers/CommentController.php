@@ -35,7 +35,7 @@ class CommentController extends Controller
         if(!$cid){ return response()->json(["msg"=>"No Comments"],404);}
 
         $comments = 
-            Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url','comment.text')
+            Comment::select('users.id as user_id','users.username','up.profile_picture_url','comments.id as cid','comments.type','comments.post_id','comments.created_at','comments.media_url as comment_media_url','comments.text')
         ->join('user_profiles as up','up.id','=','comments.user_profile_id')
         ->join('posts','posts.id','=','comments.post_id')
         ->join('users','users.id','=','up.user_id')
@@ -57,7 +57,7 @@ class CommentController extends Controller
 
        ];
 
-             return response()->json($comments->withCount($countsQuery)->paginate(config('constants.paginate_per_page')), 200);
+             return response()->json($comments->withCount($countsQuery)->paginate(10), 200);
     }
 
     public function like(Comment $comment) {
