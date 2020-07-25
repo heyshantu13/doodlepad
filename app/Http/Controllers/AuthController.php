@@ -154,7 +154,7 @@ class AuthController extends Controller
             'phoneNumber'=>'+91'.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
-            'photoUrl' =>env('AWS_URL'),
+            'photoUrl' =>env('AWS_URL')."/".$filePath,
             'disabled' => false,
             ];
            try{
