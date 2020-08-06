@@ -335,9 +335,9 @@ class PostController extends Controller
       $isPostAvailable = Post::where('id',$id)->first();
 
       if($isPostAvailable){
-           $likesdata = PostActivity::select('post_activities.*','users.*','user_profiles.*')
+           $likesdata = PostActivity::select('post_activities.*','users.*','user_profiles.*','users.id as user_id')
            ->join('user_profiles','user_profile_id','=','post_activities.user_profile_id')
-           ->join('users','users_id','=','user_profiles.user_id')
+           ->join('users','user_id','=','user_profiles.user_id')
            ->where('post_activities.type','=','LIKE')
             ->paginate(config('constants.paginate_per_page'));
             return response($likedata,200); 
