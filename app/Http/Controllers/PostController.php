@@ -332,26 +332,19 @@ class PostController extends Controller
 
     public function likes($id){
 
-      $isPostAvailable = Post::where('id',$id)->first(['id','user_profile_id','user_id']);
+      $isPostAvailable = Post::where('id',$id)->first();
 
-    if($isPostAvailable){
-      $profile_id = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-    $notifications = DB::table('post_activities as pa')
-    ->select('u.id as user_id','u.username as username','u.fullname','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at','followers.*')
-        ->join('user_profiles as up','up.id','=','pa.user_profile_id')
-        ->join('users as u','u.id','=','up.user_id')
-        ->leftJoin('followers', 'u.id', '=', 'followers.follower_id')
-        ->where('pa.post_id',$id)
-        ->paginate(config('constants.paginate_per_page'));
-         return response()->json($notifications,200);
-        }
-        else{
-          return response()->json(['status'=>false],404);
-        }
+      if($isPostAvailable){
+           $likesdata = PostActivity::select('post_activities.*','users.id as user_id','users.username','user_profiles.profile_picture_url','user_profiles.id as user_profile_id','user_profiles.user_id')
+           ->join('user_profiles','user_profile_id','=','post_activities.user_profile_id')
+           ->where('post_activities.type','=','LIKE')
+            ->paginate(config('constants.paginate_per_page'));
+            return response($likedata,200); 
+      }
 
-      //$posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
 
     }
+
 
 
        
