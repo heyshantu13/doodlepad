@@ -335,13 +335,23 @@ class PostController extends Controller
       $isPostAvailable = Post::where('id',$id)->first();
 
       if($isPostAvailable){
-           $likesdata = PostActivity::select('post_activities.*','users.*','user_profiles.*','users.id as user_id')
+         /*  $likesdata = PostActivity::select('post_activities.*','users.*','user_profiles.*','users.id as user_id')
            ->join('user_profiles','user_profile_id','=','post_activities.user_profile_id')
            ->join('users','user_id','=','user_profiles.user_id')
            ->where('post_activities.type','=','LIKE')
            ->where('post_activities.post_id','=',$id)
             ->paginate(config('constants.paginate_per_page'));
-            return response($likesdata,200); 
+            return response($likesdata,200); */
+
+            DB::table('post_activities as pa')
+    ->select('u.id as user_id','u.username as username','u.fullname','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at')
+        ->join('user_profiles as up','up.id','=','pa.user_profile_id')
+        ->join('users as u','u.id','=','up.user_id')
+        ->where('pa.post_id',$id)
+        ->paginate(config('constants.paginate_per_page'));
+
+
+
       }
 
 
