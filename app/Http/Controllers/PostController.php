@@ -209,14 +209,7 @@ class PostController extends Controller
     
         }
         
-       if($profile->user_id == $post->user_id){
-            if ($previousActivity->type == $type) {
-                return -1; // unlike or undislike
-            }
-            else{
-                return 1;
-            }
-        }
+      
 
         PostHelper::createPostActivity($profile, $post->id, $type);
         return 1; // like or dislike
@@ -341,6 +334,7 @@ class PostController extends Controller
         ->join('user_profiles as up','up.id','=','pa.user_profile_id')
         ->join('users as u','u.id','=','up.user_id')
         ->where('pa.post_id',$id)
+
         ->paginate(config('constants.paginate_per_page'));
          return response()->json($notifications,200);
         }

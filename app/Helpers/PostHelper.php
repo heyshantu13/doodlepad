@@ -28,7 +28,15 @@ class PostHelper
         $activity->save();
         $username = User::where('id',$profile->user_id)->first(['username']);
         $image = $profile->profile_picture_url;
+
+        $postdetail = Post::find($postId)->user_profile_id;
+
+        // if($postdetail == $profile->id)
+        // {
+        //     return 1;
+        // }
        
+
      
 
 	if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
