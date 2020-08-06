@@ -286,107 +286,44 @@ class PostController extends Controller
     {
        
 
-      $user_profile_id = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-      $msg = 0;
-      $status = 404;
+      $userid = Auth::user()->id;
+      $userprofile = UserProfile::where('user_id',$userid)->first();
+      $post = Post::where('id',$id)
+      ->where('user_profile_id',$userprofile->id)
+      ->first();
 
-
-      // Check post
-
-      $is_pinned = Post::where('id',$id)
-      //->where('user_id',Auth::user()->id)
-      ->first(['id','is_pinned','user_profile_id','user_id']);
-
-
-/*
-    Check post if exist or not
-*/
-
-      if($is_pinned)
+      if($post)
       {
 
-        /*
-            If post exist then check pinned request by post owner or user
-        */
-        if($is_pinned->is_pinned && $is_pinned->user_id == $user_profile_id->id  )
-        {
-            $is_pinned->is_pinned = 0;
-            $is_saved = $is_pinned->save();
-            $status =  ($is_saved)?200:400;
-            $msg = (int) -1;
-        }
-
-
-        /*
-            If post exist then check pinned request by post owner or user
-        */
-
-        else if(!$is_pinned->is_pinned && $is_pinned->user_id == $user_profile_id->id)
-        {
-            $is_pinned->is_pinned = 1;
-            $is_saved = $is_pinned->save();
-            $status =  ($is_saved)?200:400;
-            $msg = (int) 1;
-        }
-
-        /*
-            If request not by owner(By Follower)
-        */
-
-        else if($is_pinned->user_id != $user_profile_id->id)
-        {
-
-
-            /*
-                Check for already saved or not
-            */
-
-            $is_exist = SavePost::where('user_profile_id',$user_profile_id->id)
-            ->where('post_id',$id)->first();
-
-            if(!$is_exist)
-            {
-              /*
-                  IF Not Saved
-              */
-                 $saved = new SavePost();
-            $saved->user_profile_id = $user_profile_id->id;
-            $saved->post_id = $id;
-            $saved->save();
+          if($post->is_pinned)
+          {
+            $post->is_pinned = 0;
+            $post->save();
             $status = 200;
-            $msg = 1;
-            }
-            else
-            {
+             return response()->json(["status"=>"Post Unpinned Succesfully"],200);
+          }
+          elseif(!$post->is_pinned){
 
-              /*
-                If Saved
-              */
+            $post->is_pinned = 1;
+            $post->save();
+            $status = 200;
+             return response()->json(["status"=>"Post Pinned Succesfully"],200);
 
-              $is_exist->delete();
-               $status = 200;
-            $msg = -1;
-            }
-        }
+          }
+          else{
+            $status = 400;
+             return response()->json(["status"=>"Something Went Wrong"],404);
 
+          }
 
-        /*
-              Return Response
-        */
-
-        return response()->json(["status"=>$msg],$status);
       }
-
-        /*
-            If post not found then return 400
-        */
 
       else{
 
- return response()->json(["status"=>$msg],$status);
-       
+        return response()->json(["status"=>"Post Not Found"],404);
 
       }
+        
 
 
        
