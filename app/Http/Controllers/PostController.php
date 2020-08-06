@@ -340,7 +340,7 @@ class PostController extends Controller
            ->join('users','user_id','=','user_profiles.user_id')
            ->where('post_activities.type','=','LIKE')
             ->paginate(config('constants.paginate_per_page'));
-            return response($likedata,200); 
+            return response($likesdata,200); 
       }
 
 
