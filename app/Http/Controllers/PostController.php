@@ -335,7 +335,7 @@ class PostController extends Controller
       $isPostAvailable = Post::where('id',$id)->first();
 
       if($isPostAvailable){
-           $likesdata = PostActivity::select('post_activities.*','users.id as user_id','users.username','user_profiles.profile_picture_url','user_profiles.id as user_profile_id')
+           $likesdata = PostActivity::select('post_activities.*','users.*','user_profiles.*')
            ->join('user_profiles','user_profile_id','=','post_activities.user_profile_id')
            ->join('users','users_id','=','user_profiles.user_id')
            ->where('post_activities.type','=','LIKE')
