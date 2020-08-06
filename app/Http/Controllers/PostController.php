@@ -337,7 +337,7 @@ class PostController extends Controller
     if($isPostAvailable){
       $profile_id = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
     $notifications = DB::table('post_activities as pa')
-    ->select('u.id as user_id','u.username as username','u.fullname','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at','followers.*')
+    ->select('u.id as user_id','u.username as username','u.fullname','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at')
         ->join('user_profiles as up','up.id','=','pa.user_profile_id')
         ->join('users as u','u.id','=','up.user_id')
         ->where('pa.post_id',$id)
