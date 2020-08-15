@@ -92,6 +92,9 @@ Route::group([
      Route::post('suggetions','UserSuggetions@index');
     Route::post('{id}/bio/like','BioLikesController');
       Route::post('sync', 'UserSuggetionController@store');
+      Route::get('view/followers/{id}','UserController@seeFollowers');
+      Route::get('view/following/{id}','UserController@seeFollowing');
+
 });
 
       Route::group([
