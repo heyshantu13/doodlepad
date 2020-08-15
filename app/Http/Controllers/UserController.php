@@ -36,30 +36,30 @@ class UserController extends Controller
 
   
 
-  public function checkFollowing(int $id){
-     $user = Auth::user()->id;
+    public function checkFollowing(int $id){
+       $user = Auth::user()->id;
 
-    $isFollowing = Follower::where('follower_id',$user)->where('user_id',$id)->first();
-    if($isFollowing){
-       return response()->json([
-          'status'=>true,
-          'message'=>'Following',
-        ],200);
-    }
-    else if(!$isFollowing){
-      return response()->json([
-          'status'=>true,
-          'message'=>'Follow',
-        ],200);
-    }
-    else{
-       return response()->json([
-          'status'=>true,
-          'message'=>'Requested',
-        ],200);
-    }
-    
-}
+      $isFollowing = Follower::where('follower_id',$user)->where('user_id',$id)->first();
+      if($isFollowing){
+         return response()->json([
+            'status'=>true,
+            'message'=>'Following',
+          ],200);
+      }
+      else if(!$isFollowing){
+        return response()->json([
+            'status'=>true,
+            'message'=>'Follow',
+          ],200);
+      }
+      else{
+         return response()->json([
+            'status'=>true,
+            'message'=>'Requested',
+          ],200);
+      }
+      
+  }
 
 
 
@@ -68,6 +68,19 @@ class UserController extends Controller
           $user_id = Auth::user()->id;
           // $profile = User::with('userprofiles')->where('id', $user_id)->firstOrFail();
           $followings = User::find($user_id)->followings()->with('userprofiles')->paginate(10);
+
+
+      if($followings)
+      {
+
+          foreach ($followings as $key => $value) {
+            
+            $followings[$key]->following_status = Follower::where('user_id',$followings[$key]->id)->where('follower_id',Auth::user()->id)->get()->count();
+
+         }
+      } 
+
+
         return response()->json([
           'message'=>true,
           'followings'=>$followings,
@@ -76,21 +89,38 @@ class UserController extends Controller
       }
 
           public function followers()
-{
+          {
+
           $user_id = Auth::user()->id;
           $followers = User::find($user_id)->followers()->with('userprofiles')->paginate(10);
+        
+         if($followers)
+         {
+
+         foreach ($followers as $key => $value) {
+            
+            $followers[$key]->following_status = Follower::where('follower_id',$followers[$key]->id)->where('user_id',Auth::user()->id)->get()->count();
+
+         }
+         
+         }
+
+
+
         return response()->json([
           'message'=>true,
           'followers'=>$followers,
 
         ],200);
+
+       
     
-}
+        }
 
 
 
-	public function search(Request $request){
-		 
+  public function search(Request $request){
+     
         $request->validate([
           'q' =>'required|string'
         ]);
@@ -120,7 +150,7 @@ class UserController extends Controller
 
 
 
-	}
+  }
 
   public function removeProfilePic(){
     $profile = UserProfile::where('user_id', Auth::user()->id)->firstOrFail();
@@ -130,14 +160,14 @@ class UserController extends Controller
 
   }
 
-	public function updateProfile(Request $request){
+  public function updateProfile(Request $request){
 
     $imgpath = null;
 
      $profile = UserProfile::where('user_id', Auth::user()->id)->first();
      // $url = "http://api.doodlepad.in/"; //sample url
 
-		$request->validate([
+    $request->validate([
             
              'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif|max:8096',
              'bio' => 'required|string',
@@ -162,31 +192,6 @@ class UserController extends Controller
 ], 200);
           
 
-//         try {
-         
-//                    if ($request->hasFile('profile_picture_url')) {
-//       $file = request()->file('profile_picture_url');
-//             $name=time().$file->getClientOriginalName();
-//             $filePath = 'profiles/' . $name;
-//               $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
-//                   $imgpath = env('AWS_URL')."/".$filePath;
-//                    $profile->profile_picture_url = $imgpath;
-// }
-
-
-//         $profile->bio = $request->bio;
-//          $profile->save();
-//          return response()->json([
-//           'status'=>true,
-//   'message' => 'Profile Updated Successfully.',
-//   'profile_picture_url' => $imgpath,
-// ], 200);
-//         }
-//         catch(\Exception $ex) {
-//           return response()->json(null,408);
-//       }
-
-       
 
 
 
@@ -399,6 +404,62 @@ class UserController extends Controller
       return response()->json($user);
 
     }
+
+
+    public function seeFollowers($id){
+
+      $followers = User::find($id)->followers()->with('userprofiles')->paginate(10);
+
+     
+        /*
+
+      Use this query for check I'm following that user or not
+
+      Follower::where('user_id',$id)->where('follower_id',Auth::user()->id)->get();
+
+
+      */
+
+     
+
+
+      if($followers)
+      {
+        foreach ($followers as $key => $value) {
+            $followers[$key]->following_status = Follower::where('user_id',$value->id)->where('follower_id',Auth::user()->id)->get()->count();
+            unset($value->mobile);
+
+         }
+      }
+
+        return response()->json([
+          'message'=>true,
+          'followers'=>$followers,
+        ],200);
+
+    }
+
+
+    public function seeFollowing($id){
+
+      $followings = User::find($id)->followings()->with('userprofiles')->paginate(10);
+
+      if($following)
+      {
+        foreach ($followings as $key => $value) {
+            
+            $followings[$key]->following_status = Follower::where('user_id',$followings[$key]->id)->where('follower_id',Auth::user()->id)->get()->count();
+
+        }
+      }
+
+        
+
+
+         return response()->json([
+          'message'=>true,
+          'followers'=>$followings,
+        ],200);
 
   
    
