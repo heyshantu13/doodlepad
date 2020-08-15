@@ -90,7 +90,7 @@ class PostController extends Controller
                 # code...
 
               //Check Logged In user Like or Not
-               $posts[$key]->is_liked = PostActivity::where('post_id',$value->id)
+               $posts[$key]->liked = PostActivity::where('post_id',$value->id)
                ->where('user_profile_id',$profile->id)
                ->where('type','LIKE')
                ->get()
@@ -136,6 +136,12 @@ class PostController extends Controller
                ->where('user_profile_id',$profile->id)
                ->get()
                ->count();
+
+
+               // pinned_counts
+
+                 $posts[$key]->pinned_counts = 0;
+
 
                
 
