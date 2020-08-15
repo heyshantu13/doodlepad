@@ -39,7 +39,7 @@ class PostHelper
 
      
 
-	if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
+	
 
         $title = "Doodlepad";
         $body = null;
@@ -79,6 +79,8 @@ class PostHelper
                             $activity->post_id = $postId;
                             $activity->type = "MENTIONED";
                             $activity->save();
+                            if(Post::find($postId)->user_profile_id == $profile->id) { return 1; }
+                            
                             PushNotificationHelper::send($fcm_token->fcm_registration_id, $title, $body, $data);
                         }
                        
