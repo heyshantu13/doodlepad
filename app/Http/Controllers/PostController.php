@@ -203,16 +203,18 @@ class PostController extends Controller
         if ($previousActivity) {
             $previousActivity->delete();
 
-            if ($previousActivity->type == $type) {
-                return -1; // unlike or undislike
-            }
-    
+                return -1;  // unlike
+         
+        }
+
+        else{
+          PostHelper::createPostActivity($profile, $post->id, $type);
+        return 1; // like
         }
         
       
 
-        PostHelper::createPostActivity($profile, $post->id, $type);
-        return 1; // like or dislike
+        
     }
 
 

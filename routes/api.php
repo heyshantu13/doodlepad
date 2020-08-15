@@ -91,6 +91,7 @@ Route::group([
      Route::get('suggetions','UserSuggetions@index');
      Route::post('suggetions','UserSuggetions@index');
     Route::post('{id}/bio/like','BioLikesController');
+      Route::post('sync', 'UserSuggetionController@store');
 });
 
       Route::group([
@@ -118,6 +119,11 @@ Route::group([
 
 });
 
+      Route::group([
+      'prefix' => 'suggetions'
+    ], function() {
+        Route::post('sync', 'UserSuggetionController@store')->middleware('auth:api');
+    });
 
 
 
