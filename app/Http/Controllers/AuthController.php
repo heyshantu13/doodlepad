@@ -49,9 +49,10 @@ class AuthController extends Controller
         if ($request->isMethod('post')) {
              $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
+             'countrycode' => 'required|min:1|max:4',
         ]);      
              
-              $isOTPSend =  $this->otp->sendOTP($request->mobile);
+              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->countrycode);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -66,10 +67,11 @@ class AuthController extends Controller
     {
        $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
-             'otp' => 'required|min:4'
+             'otp' => 'required|min:4',
+              'countrycode' => 'required|min:1|max:4'
         ]);
        $validateOTP = new MSG91();
-       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->countrycode);
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -96,19 +98,34 @@ class AuthController extends Controller
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
+                'country_code' => $request->countrycode
+
             ]);
-                 $createUser->save();
-                $tokenResult = $createUser->createToken('Doodlepad Access Token');
-                $token = $tokenResult->token;  
-                      return response()->json([
+         $createUser->save();
+         $tokenResult = $createUser->createToken('Doodlepad Access Token');
+         $token = $tokenResult->token;  
+
+          try {
+                
+                 return response()->json([
                     'status'=>true,
-            'message' => 'Account Successfully Created.',
-             'access_token' => $tokenResult->accessToken,
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->getPreciseTimestamp(3)
-        ], 200);
-                 }
+                    'message' => 'Account Successfully Created.',
+                    'access_token' => $tokenResult->accessToken,
+                    'expires_at' => Carbon::parse(
+                    $tokenResult->token->expires_at
+                    )->getPreciseTimestamp(3)
+                ], 200);
+
+
+        } catch (Throwable $e) {
+        report($e);
+
+        return false;
+        }
+                  
+
+        }
+
     }
 
 
@@ -151,7 +168,7 @@ class AuthController extends Controller
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
-            'phoneNumber'=>'+91'.Auth::user()->mobile,
+            'phoneNumber'=>Auth::user()->country_code.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
             'photoUrl' =>env('AWS_URL')."/".$filePath,

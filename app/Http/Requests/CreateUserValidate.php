@@ -30,7 +30,8 @@ class CreateUserValidate extends FormRequest
              'mobile' => 'required|string|min:10|max:10|unique:users',
             'fullname' => 'required|string|max:50',
             'password' => 'required|min:8|max:12',
-           'username' => 'required|string|unique:users|alpha_dash|max:16'
+           'username' => 'required|string|unique:users|alpha_dash|max:16',
+           'countrycode' => 'required|max:3'
          
 
         ];
