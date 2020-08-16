@@ -49,10 +49,10 @@ class AuthController extends Controller
         if ($request->isMethod('post')) {
              $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
-             'countrycode' => 'required|max:3'
+             'country_code' => 'required|max:3'
         ]);      
              
-              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->countrycode);
+              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->country_code);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -71,7 +71,7 @@ class AuthController extends Controller
              'countrycode' => 'required|max:3'
         ]);
        $validateOTP = new MSG91();
-       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->countrycode);
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->country_code);
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -98,7 +98,7 @@ class AuthController extends Controller
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
-                'country_code' => $request->countrycode,
+                'country_code' => $request->country_code,
             ]);
                  $createUser->save();
                 $tokenResult = $createUser->createToken('Doodlepad Access Token');
@@ -282,6 +282,7 @@ class AuthController extends Controller
 
           $request->validate([
              'mobile' => 'required|string|min:10|max:10',
+             'country_code' => 'required|max:3'
             
         ]);      
 
@@ -296,7 +297,7 @@ class AuthController extends Controller
          }
          else{
           
-              $isOTPSend = $this->otp->sendOTP($request->mobile);
+              $isOTPSend = $this->otp->sendOTP($request->mobile,$request->country_code);
 
               if($isOTPSend->type == 'success'){
 
