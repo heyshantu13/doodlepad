@@ -49,9 +49,10 @@ class AuthController extends Controller
         if ($request->isMethod('post')) {
              $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
+             'countrycode' => 'required|max:3'
         ]);      
              
-              $isOTPSend =  $this->otp->sendOTP($request->mobile);
+              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->countrycode);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -66,10 +67,11 @@ class AuthController extends Controller
     {
        $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
-             'otp' => 'required|min:4'
+             'otp' => 'required|min:4',
+             'countrycode' => 'required|max:3'
         ]);
        $validateOTP = new MSG91();
-       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->countrycode);
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -96,6 +98,7 @@ class AuthController extends Controller
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
+                'country_code' => $request->countrycode,
             ]);
                  $createUser->save();
                 $tokenResult = $createUser->createToken('Doodlepad Access Token');
@@ -151,7 +154,7 @@ class AuthController extends Controller
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
-            'phoneNumber'=>'+91'.Auth::user()->mobile,
+            'phoneNumber'=>Auth::user()->country_id.Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
             'photoUrl' =>env('AWS_URL')."/".$filePath,
@@ -279,6 +282,7 @@ class AuthController extends Controller
 
           $request->validate([
              'mobile' => 'required|string|min:10|max:10',
+            
         ]);      
 
          $profile = User::where('mobile', $request->mobile)->first();
