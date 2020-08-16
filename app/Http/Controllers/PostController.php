@@ -23,6 +23,8 @@ use App\PostActivity;
 use Illuminate\Support\Collection;
 use App\SavePost;
 use DB;
+use App\Comment;
+use App\Helpers\LvCount;
 
 
 class PostController extends Controller
@@ -33,47 +35,14 @@ class PostController extends Controller
     Get all posts on Home Screen
 */
 
+   
+
    public function index(Request $request)
     {
+         $lv_count = new LvCount;
         $user = Auth::user();
         $profile = UserProfile::where('user_id', $user->id)->firstOrFail();
 
-        $countsQuery = [
-
-          'post_activities as pinned_count' => function ($query) {
-                $query->where('type', config('constants.POST_ACTIVITY_PINNED'));
-            },
-
-            'post_activities as like_count' => function ($query) {
-                $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
-            },
-           
-            'post_activities as comment_count' => function ($query) {
-                $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-            },
-            'post_activities as liked' => function ($query) use ($profile) {
-                $query->where('user_profile_id', $profile->id)
-                    ->where('type', config('constants.POST_ACTIVITY_LIKE'));
-            },
-
-           
-            'post_activities as commented' => function ($query) use ($profile) {
-                $query->where('user_profile_id', $profile->id)
-                    ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-            },
-
-
-
-
-
-
-        ];
-
-       
-
-        if ($request->treding === "1") {
-            $posts = Post::orderBy('created_at', 'desc');
-        } else {
       
           $following =  User::find($user->id)->followings()->pluck('user_id');
           
@@ -81,28 +50,86 @@ class PostController extends Controller
             ->with('user')
             ->with('userprofile')
             ->orWhere('user_id',$user->id)
-            // ->inRandomOrder()
-            ->orderBy('created_at', 'desc');
-        }
-        if ($request->type) {
-            $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
-        }
-        if ($request->user_profile_id) {
-            $posts = $posts->where('user_profile_id', $request->user_profile_id)
-            ->orderBy('created_at', 'desc');
-        }
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('constants.paginate_per_page'));
 
-       /* $comment_deletable = [
-          'comments_deletabel' => Post::where('user_profile_id',$profile->id)
-          ->whereIn('id', $posts->pluck('id'))->count(),
-        ];*/
 
+            if($posts){
+              foreach ($posts as $key => $value) {
+                # code...
+
+              //Check Logged In user Like or Not
+               $posts[$key]->liked = PostActivity::where('post_id',$value->id)
+               ->where('user_profile_id',$profile->id)
+               ->where('type','LIKE')
+               ->get()
+               ->count();
+
+
+               // Check Total Number Of Likes
+
+               $totalLikeCounts = PostActivity::where('post_id',$value->id)
+               ->where('type','LIKE')
+               ->get()
+               ->count();
+
+               $posts[$key]->like_count = $lv_count->lv_count($totalLikeCounts);
+
+
+               // Check Commentef Or Not
+
+                $posts[$key]->commented = PostActivity::where('post_id',$value->id)
+               ->where('user_profile_id',$profile->id)
+               ->where('type','COMMENT')
+               ->get()
+               ->count();
+
+
+               // Check Comment Counts
+              
+               $totalCommentCounts = Comment::where('post_id',$value->id)
+               ->get()
+               ->count();
+
+
+               $posts[$key]->comment_count = $lv_count->lv_count($totalCommentCounts);
+
+
+
+               // Check Is Pined
+
+                $posts[$key]->is_pinned = Post::where('id',$value->id)
+               ->where('is_pinned','1')
+               ->get()
+               ->count();
+
+               
+
+               //comments deletable 
+                $posts[$key]->comments_deletable = Post::where('id',$value->id)
+               ->where('user_profile_id',$profile->id)
+               ->get()
+               ->count();
+
+
+               // pinned_counts
+
+                $posts[$key]->pinned_counts = 0;
+
+
+               
+
+               
+              }
+            
+            }
+     
          
 
 
 
 
-        $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+        
         return response()->json($posts,200);
 
 
@@ -325,26 +352,9 @@ class PostController extends Controller
     }
 
 
-    public function likes($id){
+    public function likes(Post $id){
 
-      $isPostAvailable = Post::where('id',$id)->first(['id','user_profile_id','user_id']);
-
-    if($isPostAvailable){
-      $profile_id = UserProfile::where('user_id',Auth::user()->id)->first(['id']);
-    $notifications = DB::table('post_activities as pa')
-    ->select('u.id as user_id','u.username as username','u.fullname','up.profile_picture_url as profile_picture_url','pa.id','pa.user_profile_id as user_profile_id','pa.type as type','pa.post_id','pa.created_at')
-        ->join('user_profiles as up','up.id','=','pa.user_profile_id')
-        ->join('users as u','u.id','=','up.user_id')
-        ->where('pa.post_id',$id)
-
-        ->paginate(config('constants.paginate_per_page'));
-         return response()->json($notifications,200);
-        }
-        else{
-          return response()->json(['status'=>false],404);
-        }
-
-      //$posts =  Post::where('user_profile_id',$profile_id->id)->pluck('id');
+      $checkpost = Post::where('id',$id)->first(['id','user_profile_id','user_id']);
 
     }
 

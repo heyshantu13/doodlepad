@@ -90,6 +90,8 @@ use Illuminate\Http\Request;
     Route::get('sync/lists','UserSuggetions@synclist');
     Route::post('{id}/bio/like','BioLikesController');
     Route::post('sync', 'UserSuggetionController@store');
+    
+
 });
 
       Route::group([

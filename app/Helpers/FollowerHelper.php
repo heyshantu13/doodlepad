@@ -1,13 +1,6 @@
 <?php
 
- /*
-                   Create Follower Activity
 
-                    Author: Shantanu Kulkarni
-
-                    Github: heyshantu13
-
-            */
 
 namespace App\Helpers;
 
