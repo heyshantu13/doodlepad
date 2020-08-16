@@ -31,7 +31,6 @@ Route::group([
     Route::post('create-profile', 'AuthController@createProfile')->middleware('auth:api');
     Route::post('reset', 'AuthController@resetPassword');
     Route::post('new-password', 'AuthController@newPassword')->middleware('throttle:5,5');
-    Route::get('user', 'AuthController@user')->middleware('auth:api');
     Route::get('checksession','AuthController@checksession')->middleware('auth:api');
 
     Route::group([

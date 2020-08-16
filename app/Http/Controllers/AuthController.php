@@ -51,7 +51,7 @@ class AuthController extends Controller
              'mobile' => 'required|string|min:10|max:10|unique:users',
         ]);      
              
-              $isOTPSend =  $this->otp->sendOTP($request->mobile);
+              $isOTPSend =  $this->otp->sendOTP($request->mobile,$request->country_code);
               if($isOTPSend->type == 'success'){
                return response()->json([
                     'status'=>true,
@@ -66,21 +66,25 @@ class AuthController extends Controller
     {
        $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
-             'otp' => 'required|min:4'
+             'otp' => 'required|min:4|max:4'
         ]);
+
        $validateOTP = new MSG91();
        $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
+
          if($isOTPVerified->type == 'success'){
                return response()->json([
                     'status'=>true,
-            'message' => 'Otp Verified Successfully.',
-        ], 201);
+                    'message' => 'Otp Verified Successfully.',
+            ], 201);
             }
+            
             else{
                 return response()->json([
-                    'status'=>true,
+                    'status'=>false,
             'message' => 'Incorret Otp',
-        ], 201);
+            ], 201);
+
             }
      }
 
@@ -97,16 +101,16 @@ class AuthController extends Controller
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
             ]);
-                 $createUser->save();
+                $createUser->save();
                 $tokenResult = $createUser->createToken('Doodlepad Access Token');
                 $token = $tokenResult->token;  
-                      return response()->json([
-                    'status'=>true,
-            'message' => 'Account Successfully Created.',
-             'access_token' => $tokenResult->accessToken,
-            'expires_at' => Carbon::parse(
+                return response()->json([
+                'status'=>true,
+                'message' => 'Account Successfully Created.',
+                'access_token' => $tokenResult->accessToken,
+                'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->getPreciseTimestamp(3)
+                )->getPreciseTimestamp(3)
         ], 200);
                  }
     }
@@ -114,8 +118,8 @@ class AuthController extends Controller
 
 
 
-    public function createProfile(Request $request){
-          if ($request->isMethod('post')) {
+    public function createProfile(Request $request)
+    if ($request->isMethod('post')) {
              $request->validate([
              'gender' => 'required|string|max:7',
              'bio' => 'max:140|string',
@@ -124,16 +128,16 @@ class AuthController extends Controller
              'profile_picture_url'=>'image|mimes:jpeg,png,jpg,gif'
         ]);
               
-              if ($request->hasFile('profile_picture_url')) {
-      $file = request()->file('profile_picture_url');
+        if ($request->hasFile('profile_picture_url')) {
+            $file = request()->file('profile_picture_url');
             $name=time().$file->getClientOriginalName();
             $filePath = 'profiles/' . $name;
-              $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
-                  $imgpath = env('AWS_URL')."/".$filePath;
-}
-              else{
+            $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $imgpath = env('AWS_URL')."/".$filePath;
+            }
+            else{
                   $imgpath = "http://api.doodlepad.in/user.png";
-              }
+            }
               
              
          
@@ -160,22 +164,6 @@ class AuthController extends Controller
            try{
             $createdUser = $this->auth->createUser($userProperties);
             $isSaved = $profile->save();
-//             if($isSaved){
-                 
-//                       $userdetails = array(
-//             'UserName'=> Auth::user()->username,
-//             'Image_url'=> env('AWS_URL')."/".$filePath,
-//             'id'=> Auth::user()->id,
-            
-//     );
-// //                       $userData->Fullname= Auth::user()->fullname;
-
-
-//    $this->firebase->getReference('users')->getChild(Auth::user()->id)->set($userdetails);
-
-//             }
-
-
 
 
 
