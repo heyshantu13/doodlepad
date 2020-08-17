@@ -76,16 +76,37 @@ class UserController extends Controller
       }
 
           public function followers()
-{
-          $user_id = Auth::user()->id;
+          {
+           $user_id = Auth::user()->id;
           $followers = User::find($user_id)->followers()->with('userprofiles')->paginate(10);
-        return response()->json([
-          'message'=>true,
-          'followers'=>$followers,
+        
+         if($followers)
+         {
 
-        ],200);
+         foreach ($followers as $key => $value) {
+            
+            $followers[$key]->following_status = Follower::where('follower_id',$value->id)->where('user_id',Auth::user()->id)->get()->count();
+
+        }
     
-}
+        }
+
+
+        public function checkFollowers($id){
+
+          $user = User::where('id',$id)->first();
+          if($user){
+            $userprofile = UserProfile::where('user_id',$id)->first();
+          
+
+            if($userprofile)
+            {
+
+            }
+
+          }
+
+        }
 
 
 

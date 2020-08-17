@@ -286,7 +286,7 @@ class AuthController extends Controller
             
         ]);      
 
-         $profile = User::where('mobile', $request->mobile)->first();
+         $profile = User::where('mobile', $request->mobile,91)->first();
 
          if(!$profile)
          {
@@ -297,7 +297,7 @@ class AuthController extends Controller
          }
          else{
           
-              $isOTPSend = $this->otp->sendOTP($request->mobile,$request->country_code);
+              $isOTPSend = $this->otp->sendOTP($request->mobile,91);
 
               if($isOTPSend->type == 'success'){
 
@@ -338,7 +338,7 @@ public function newPassword(Request $request){
             }
             else{
                 return response()->json([
-                    'status'=>true,
+                    'status'=>false,
             'message' => 'Invalid Otp',
         ], 201);
             }
