@@ -53,7 +53,7 @@ public static function verifyOTP($mobile,$otp,$countrycode=91){
     $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.msg91.com/api/v5/otp/verify?otp=".$otp."&authkey=308630AjqDL3wsLHmS5df877fb&mobile=".$countrycode.$mobile,
+  CURLOPT_URL => "https://api.msg91.com/api/v5/otp/verify?otp=".$otp."&authkey=308630AjqDL3wsLHmS5df877fb&mobile=".$mobile,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,

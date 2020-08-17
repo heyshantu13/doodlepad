@@ -282,7 +282,6 @@ class AuthController extends Controller
 
           $request->validate([
              'mobile' => 'required|string|min:10|max:10',
-             'country_code' => 'required|max:3'
             
         ]);      
 
@@ -321,27 +320,50 @@ public function newPassword(Request $request){
 
         ]);     
 
-      $validateOTP = new MSG91();
-       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp);
-         if($isOTPVerified->type == 'success'){
-             $user = User::where('mobile', $request->mobile)->first();
+   //  dd($request);
 
-              if($user){
+     $user = User::where('mobile',$request->mobile)->first(['id','mobile']);
+
+     if($user)
+     {
+        $validateOTP = new MSG91();
+       $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,91);
+
+      // dd($isOTPVerified);
+
+       if($isOTPVerified->type == "success")
+       {
             $user->password = bcrypt($request->password);
             $user->save();
-             return response()->json([
+            return response()->json([
                     'status'=>true,
-            'message' => 'Password Changed Successfully.',
+            'message' => 'Password Changed Succesfully',
         ], 201);
-         }
 
-            }
-            else{
-                return response()->json([
+       }
+       else{
+            return response()->json([
                     'status'=>false,
-            'message' => 'Invalid Otp',
+            'message' => 'Incorrect OTP',
         ], 201);
-            }
+       }
+
+      
+       
+     }
+
+     else
+     {
+         
+
+       return response()->json([
+                    'status'=>false,
+            'message' => 'Mobile Numeber Not Registered',
+        ], 201);
+     }
+
+     
+
 
 
       }
