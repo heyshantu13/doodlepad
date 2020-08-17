@@ -90,10 +90,11 @@ class UserController extends Controller
         }
     
         }
+      }
 
 
         public function checkFollowers($id){
-
+/*
           $user = User::where('id',$id)->first();
           if($user){
             $userprofile = UserProfile::where('user_id',$id)->first();
@@ -104,7 +105,7 @@ class UserController extends Controller
 
             }
 
-          }
+          }*/
 
         }
 
