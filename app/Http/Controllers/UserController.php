@@ -94,7 +94,7 @@ class UserController extends Controller
 
 
         public function checkFollowers($id){
-/*
+
           $user = User::where('id',$id)->first();
           if($user){
             $userprofile = UserProfile::where('user_id',$id)->first();
@@ -105,7 +105,7 @@ class UserController extends Controller
 
             }
 
-          }*/
+          }
 
         }
 
@@ -183,33 +183,6 @@ class UserController extends Controller
   'profile_picture_url' => $imgpath,
 ], 200);
           
-
-//         try {
-         
-//                    if ($request->hasFile('profile_picture_url')) {
-//       $file = request()->file('profile_picture_url');
-//             $name=time().$file->getClientOriginalName();
-//             $filePath = 'profiles/' . $name;
-//               $strg = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
-//                   $imgpath = env('AWS_URL')."/".$filePath;
-//                    $profile->profile_picture_url = $imgpath;
-// }
-
-
-//         $profile->bio = $request->bio;
-//          $profile->save();
-//          return response()->json([
-//           'status'=>true,
-//   'message' => 'Profile Updated Successfully.',
-//   'profile_picture_url' => $imgpath,
-// ], 200);
-//         }
-//         catch(\Exception $ex) {
-//           return response()->json(null,408);
-//       }
-
-       
-
 
 
   }
@@ -293,26 +266,7 @@ class UserController extends Controller
     }
 
     public function userPosts($id){
-//       $userID = Auth::user()->id;
-//       $isFollowing = Follower::where('follower_id',$userID)
-//        ->where('user_id',$id)
-//           ->firstOrFail();
-//        if($isFollowing){
-//           $message = true;
-//          $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
-//        }
-//        else{
-//         $isPrivate = UserProfile::where('user_id',$id)->first(['is_private']);
-//         if(!$isFollowing && $isPrivate->is_private){
-//            $message = false;
-//            $posts = array("message"=>"This Account is Private.");
-//         }
-//         else{
-//            $message = true;
-//          $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
-//         }
 
-//        }   
            $posts = Post::where('user_id',$id)->paginate(config('constants.paginate_per_page'));
         return response()->json(["status" => true,"posts"=>$posts], 200);
 

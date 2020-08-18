@@ -68,7 +68,7 @@ class AuthController extends Controller
        $request->validate([
              'mobile' => 'required|string|min:10|max:10|unique:users',
              'otp' => 'required|min:4',
-             'countrycode' => 'required|max:3'
+             'country_code' => 'required|max:3'
         ]);
        $validateOTP = new MSG91();
        $isOTPVerified = $this->otp->verifyOTP($request->mobile,$request->otp,$request->country_code);
