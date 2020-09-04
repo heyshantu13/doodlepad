@@ -98,7 +98,7 @@ class AuthController extends Controller
                 'username'=> $request->username,
                 'mobile'=> $request->mobile,
                 'password'=>bcrypt($request->password),
-                'country_code' => $request->country_code,
+                'country_code' => 91,
             ]);
                  $createUser->save();
                 $tokenResult = $createUser->createToken('Doodlepad Access Token');
