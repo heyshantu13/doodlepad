@@ -154,7 +154,7 @@ class AuthController extends Controller
 
            $profile->user_id = Auth::user()->id;
            $userProperties = [
-            'phoneNumber'=>Auth::user()->country_id.Auth::user()->mobile,
+            'phoneNumber'=>"+91".Auth::user()->mobile,
             'uid'=>Auth::user()->id ,
             'displayName' => Auth::user()->username,
             'photoUrl' =>env('AWS_URL')."/".$filePath,
